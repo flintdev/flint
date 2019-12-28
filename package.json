@@ -1,0 +1,48 @@
+{
+  "name": "flint",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.tsx",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-dev": "cross-env NODE_ENV=development webpack --config webpack.config.js -w",
+    "build-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",
+    "start-prod": "cross-env NODE_ENV=production platform=darwin electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flintdev/flint.git"
+  },
+  "author": "naitianliu",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/flintdev/flint/issues"
+  },
+  "homepage": "https://github.com/flintdev/flint#readme",
+  "devDependencies": {
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-redux": "^7.1.5",
+    "cross-env": "^6.0.3",
+    "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
+    "raw-loader": "^4.0.0",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.4",
+    "url-loader": "^3.0.0",
+    "webpack": "^4.41.5",
+    "webpack-bundle-tracker": "^0.4.3",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "immutability-helper": "^3.0.1",
+    "lodash": "^4.17.15",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0"
+  }
+}

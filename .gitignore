@@ -1,0 +1,10 @@
+.idea/
+.idea/.gitignore
+.idea/flint.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+node_modules/
+package-lock.json
+dist/
+webpack-stats.json
