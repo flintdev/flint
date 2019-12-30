@@ -1,13 +1,14 @@
-// entry - starter
+// entries - starter
 
 import * as React from "react";
 import {render} from "react-dom";
 import {Provider} from 'react-redux';
-import {store} from "../redux/store";
+import {store} from "src/redux/store";
+import StarterContainer from "../containers/starter/StarterContainer";
 
 render(
     <Provider store={store}>
-        <h1>TEST HELLO</h1>
+        <StarterContainer/>
     </Provider>,
     document.getElementById('rootContainer'),
 );
