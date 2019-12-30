@@ -5,10 +5,10 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = env => {
     const environment = process.env.NODE_ENV;
-    let filename, processEnv, filePath, mode, target, nodeConfig;
+    let filename, processEnv, filePath, mode, target;
     if (environment === 'development') {
         filePath = './dist/bundles/';
-        filename = '[name].development.js';
+        filename = '[name].js';
         processEnv = {
             NODE_ENV: 'development'
         };
@@ -16,7 +16,7 @@ module.exports = env => {
         target = 'electron-renderer';
     } else if (environment === 'production') {
         filePath = './dist/bundles/';
-        filename = '[name].production.js';
+        filename = '[name].js';
         processEnv = {
             NODE_ENV: 'production'
         };
@@ -29,17 +29,17 @@ module.exports = env => {
         mode: mode,
         devtool: 'source-map',
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+            extensions: ['.ts', '.tsx', '.js'],
             modules: [
                 'node_modules',
-                // path.resolve('./src')
+                path.resolve('./src')
             ],
             alias: {
                 src: path.resolve('./src')
             }
         },
         entry: {
-            main: './src/index.tsx'
+            starter: './src/entry/starter.tsx'
         },
         output: {
             path: path.resolve(filePath),
@@ -79,7 +79,7 @@ module.exports = env => {
             }),
             new webpack.EnvironmentPlugin(processEnv)
         ],
-        target: target,
+        // target: target,
         stats: {
             errorDetails: true,
             errors: true,
