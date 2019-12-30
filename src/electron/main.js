@@ -21,12 +21,7 @@ function createStarterWindow() {
         starterWindow.show();
     });
     starterWindow.on('close', event => {
-        if (!app.quiting) {
-            event.preventDefault();
-            starterWindow.hide();
-        } else {
-            starterWindow = null;
-        }
+        starterWindow = null;
     });
     if (environment === 'development') {
         starterWindow.webContents.openDevTools();

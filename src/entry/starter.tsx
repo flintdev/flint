@@ -7,7 +7,7 @@ import {store} from "../redux/store";
 
 render(
     <Provider store={store}>
-        <div/>
+        <h1>TEST HELLO</h1>
     </Provider>,
     document.getElementById('rootContainer'),
 );
