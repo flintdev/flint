@@ -8,15 +8,18 @@
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
-      "src": ["src"]
+      "src": ["src"],
+      "resources": ["resources"]
     }
   },
   "exclude": [
     "node_modules",
-    "src/electron"
+    "src/electron",
+    "dist"
   ],
   "include": [
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.d.ts"
   ]
 }

@@ -35,7 +35,8 @@ module.exports = env => {
                 // path.resolve('./src')
             ],
             alias: {
-                src: path.resolve(__dirname, 'src')
+                src: path.resolve(__dirname, 'src'),
+                resources: path.resolve(__dirname, 'resources')
             }
         },
         entry: {

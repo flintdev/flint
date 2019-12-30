@@ -6,11 +6,11 @@ const path = require('path');
 let starterWindow, editorWindow;
 
 function createStarterWindow() {
-    const iconPath = path.join(__dirname, 'img/icon.png');
+    // const iconPath = path.join(__dirname, 'img/icon.png');
     starterWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        icon: iconPath,
+        // icon: iconPath,
         webPreferences: {
             nodeIntegration: true
         }
