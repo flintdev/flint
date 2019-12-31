@@ -5,11 +5,13 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es2017",
+    "resolveJsonModule": true,
     "jsx": "react",
     "baseUrl": "./",
     "paths": {
       "src": ["src"],
-      "resources": ["resources"]
+      "resources": ["resources"],
+      "pjson": ["package.json"]
     }
   },
   "exclude": [

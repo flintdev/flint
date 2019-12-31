@@ -36,7 +36,8 @@ module.exports = env => {
             ],
             alias: {
                 src: path.resolve(__dirname, 'src'),
-                resources: path.resolve(__dirname, 'resources')
+                resources: path.resolve(__dirname, 'resources'),
+                pjson: path.resolve(__dirname, 'package.json'),
             }
         },
         entry: {
@@ -71,7 +72,11 @@ module.exports = env => {
                 {
                     test: /\.(png|jpg)$/,
                     use: 'url-loader?limit=30720'
-                }
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
             ]
         },
         plugins: [
