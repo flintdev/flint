@@ -3,11 +3,16 @@
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
 import ActionView from "./ActionView";
+import { Row, Col } from 'antd';
 
 const styles = createStyles({
     root: {
         width: '100%',
         height: '100%'
+    },
+    projectsContainer: {
+        borderLeft: '1px solid lightgrey',
+        height: '100vh'
     }
 });
 
@@ -19,7 +24,16 @@ function StarterContainer(props: Props) {
     const {classes} = props;
     return (
         <div className={classes.root}>
-            <ActionView/>
+            <Row>
+                <Col span={12}>
+                    <ActionView/>
+                </Col>
+                <Col span={12}>
+                    <div className={classes.projectsContainer}>
+
+                    </div>
+                </Col>
+            </Row>
         </div>
     )
 }
