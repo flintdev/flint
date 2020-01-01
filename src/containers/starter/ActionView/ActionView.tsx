@@ -6,6 +6,10 @@ import logoImg from 'resources/img/logo-md.png';
 import { Button } from 'antd';
 import {StarterConfig} from "../../../constants/starter";
 import { Typography } from 'antd';
+import { connect } from 'react-redux';
+import {Dispatch} from "redux";
+import {StoreState} from "../../../redux/state";
+import * as actions from "../../../redux/modules/starter/actions";
 
 const styles = createStyles({
     root: {
@@ -85,4 +89,15 @@ class ActionView extends React.Component<Props, object> {
     }
 }
 
-export default withStyles(styles)(ActionView);
+const mapStateToProps = (state: StoreState) => {
+    return state.starter;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
+    return {
+        createProjectDialogOpen: () => dispatch(actions.createProjectDialogOpen()),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ActionView));
+
