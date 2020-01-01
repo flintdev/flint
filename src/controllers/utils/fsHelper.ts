@@ -6,7 +6,6 @@ const homedir = window.require('os').homedir();
 export enum ErrorType {
     DirExists,
     DirNotExists,
-
 }
 
 export class FSHelper {
