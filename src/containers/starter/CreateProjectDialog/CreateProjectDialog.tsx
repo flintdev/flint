@@ -8,6 +8,7 @@ import { StoreState } from "src/redux/state";
 import * as actions from "src/redux/modules/starter/actions";
 import { Modal, Button } from 'antd';
 import {LOADING_STATUS} from "../../../constants";
+import ParamForm from "./ParamForm";
 
 const styles = createStyles({
     root: {
@@ -25,12 +26,24 @@ class CreateProjectDialog extends React.Component<Props, object> {
         submitLoading: false,
     };
 
+    formRef: any;
+
     componentDidMount(): void {
 
     }
 
     handleSubmitButtonClick = () => {
-        this.setState({submitLoading: true});
+        const {form} = this.formRef.props;
+        form.validateFields((err: any, values: Array<object>) => {
+            if (!!err) return;
+            console.log(err, values);
+            this.setState({submitLoading: true});
+        });
+
+    };
+
+    saveFormRef = (formRef: any) => {
+        this.formRef = formRef;
     };
 
     render() {
@@ -46,7 +59,9 @@ class CreateProjectDialog extends React.Component<Props, object> {
                     confirmLoading={submitLoading}
                     onCancel={this.props.createProjectDialogClose}
                 >
-
+                    <ParamForm
+                        wrappedComponentRef={this.saveFormRef}
+                    />
                 </Modal>
             </div>
         )
