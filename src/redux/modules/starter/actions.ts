@@ -15,15 +15,13 @@ export interface CreateProjectDialogClose {
 }
 
 export type StarterAction =
-    | CreateProjectDialogOpen
-    | CreateProjectDialogClose
     | DefaultType;
 
-export function createProjectDialogOpen(): CreateProjectDialogOpen {
+export function createProjectDialogOpen(): DefaultType {
     return { type: types.CREATE_PROJECT_DIALOG_OPEN }
 }
 
-export function createProjectDialogClose(): CreateProjectDialogClose {
+export function createProjectDialogClose(): DefaultType {
     return { type: types.CREATE_PROJECT_DIALOG_CLOSE };
 }
 

@@ -1,7 +1,9 @@
 // redux/state.ts
 
 export interface StoreState {
-    starter: object
+    starter: {
+        createProjectDialog: object
+    }
 }
 
 export const initState = {

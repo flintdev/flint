@@ -4,6 +4,7 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
 import ActionView from "./ActionView";
 import { Row, Col } from 'antd';
+import CreateProjectDialog from "./CreateProjectDialog";
 
 const styles = createStyles({
     root: {
@@ -34,6 +35,8 @@ function StarterContainer(props: Props) {
                     </div>
                 </Col>
             </Row>
+
+            <CreateProjectDialog/>
         </div>
     )
 }

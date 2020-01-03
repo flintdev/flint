@@ -46,7 +46,7 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>{
-
+    createProjectDialogOpen: () => void,
 }
 
 class ActionView extends React.Component<Props, object> {
@@ -59,7 +59,7 @@ class ActionView extends React.Component<Props, object> {
     }
 
     handleCreateButtonClick = () => {
-
+        this.props.createProjectDialogOpen();
     };
 
     handleOpenButtonClick = () => {
@@ -80,7 +80,14 @@ class ActionView extends React.Component<Props, object> {
                     <Typography.Text className={classes.descriptionText}>{StarterConfig.ActionView.description}</Typography.Text>
                 </div>
                 <div className={classes.actionsContainer}>
-                    <Button icon={"plus"} size={"large"} className={classes.actionButton}>{StarterConfig.ActionView.action.create}</Button><br/>
+                    <Button
+                        icon={"plus"}
+                        size={"large"}
+                        className={classes.actionButton}
+                        onClick={this.handleCreateButtonClick}
+                    >
+                        {StarterConfig.ActionView.action.create}
+                    </Button><br/>
                     <Button icon={"folder-open"} size={"large"} className={classes.actionButton}>{StarterConfig.ActionView.action.open}</Button><br/>
                     <Button icon={"download"} size={"large"} className={classes.actionButton}>{StarterConfig.ActionView.action.checkout}</Button><br/>
                 </div>
