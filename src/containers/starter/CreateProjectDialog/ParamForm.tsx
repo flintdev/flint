@@ -22,16 +22,18 @@ class ParamForm extends React.Component<Props, object> {
 
     componentDidMount(): void {
         const defaultLocation = new FSHelper().getDefaultPath();
-
+        this.setState({defaultLocation});
     }
 
     render() {
         const {classes, form} = this.props;
+        const {defaultLocation} = this.state;
         return (
             <div className={classes.root}>
                 <Form layout={"vertical"}>
                     <Form.Item label={"Location"}>
                         {form.getFieldDecorator('location', {
+                            initialValue: defaultLocation,
                             rules: [{
                                 required: true,
                                 message: StarterConfig.CreateProjectDialog.location.errorMessage
