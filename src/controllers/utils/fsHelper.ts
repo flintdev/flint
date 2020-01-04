@@ -14,7 +14,7 @@ export class FSHelper {
             if (fs.existsSync(path)) {
                 reject(ErrorType.DirExists);
             } else {
-                fs.mkdirSync(path);
+                fs.mkdirSync(path, {recursive: true});
                 resolve();
             }
         });
