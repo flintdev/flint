@@ -4,6 +4,8 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
 import {Form, Input} from 'antd';
 import {FormComponentProps} from 'antd/lib/form/Form';
+import {FSHelper} from "../../../controllers/utils/fsHelper";
+import {StarterConfig} from "../../../constants/starter";
 
 const styles = createStyles({
     root: {},
@@ -14,9 +16,12 @@ export interface Props extends WithStyles<typeof styles>, FormComponentProps {
 }
 
 class ParamForm extends React.Component<Props, object> {
-    state = {};
+    state = {
+        defaultLocation: '',
+    };
 
     componentDidMount(): void {
+        const defaultLocation = new FSHelper().getDefaultPath();
 
     }
 
@@ -29,7 +34,7 @@ class ParamForm extends React.Component<Props, object> {
                         {form.getFieldDecorator('location', {
                             rules: [{
                                 required: true,
-                                message: 'Please input valid location of new project'
+                                message: StarterConfig.CreateProjectDialog.location.errorMessage
                             }],
                         })(<Input/>)}
                     </Form.Item>

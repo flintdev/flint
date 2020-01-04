@@ -11,5 +11,10 @@ export const StarterConfig = {
             open: 'Open Existing Project',
             checkout: 'Checkout from Github',
         }
+    },
+    CreateProjectDialog: {
+        location: {
+            errorMessage: 'Please input valid location of new project',
+        }
     }
 };
