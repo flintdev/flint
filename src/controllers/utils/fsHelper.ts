@@ -31,7 +31,7 @@ export class FSHelper {
 
     getDefaultPath = () => {
         return `${homedir}/Flint/untitled`;
-    };
+};
 
     getFileTree = (rootDirPath: string) => {
 

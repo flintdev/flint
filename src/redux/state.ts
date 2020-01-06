@@ -3,7 +3,10 @@
 export interface StoreState {
     starter: {
         createProjectDialog: object
-    }
+    },
+    config: {
+        projectDir: string,
+    },
 }
 
 export const initState = {
@@ -12,4 +15,7 @@ export const initState = {
             open: false
         }
     },
+    config: {
+        projectDir: '',
+    }
 };
