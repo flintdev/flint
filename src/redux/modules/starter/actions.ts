@@ -15,7 +15,8 @@ export interface CreateProjectDialogClose {
 }
 
 export type StarterAction =
-    | DefaultType;
+    CreateProjectDialogOpen |
+    CreateProjectDialogClose;
 
 export function createProjectDialogOpen(): DefaultType {
     return { type: types.CREATE_PROJECT_DIALOG_OPEN }
