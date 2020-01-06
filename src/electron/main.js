@@ -3,6 +3,7 @@
 const {app, BrowserWindow, Menu, ipcMain, Tray} = require('electron');
 const path = require('path');
 
+const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow, editorWindow;
 
 function createStarterWindow() {
@@ -15,8 +16,7 @@ function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
-    starterWindow.loadFile(path.join(__dirname, 'views/starter.html'));
+    starterWindow.loadFile(path.join(__dirname, 'views/starter.html')).then(r => {});
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
@@ -26,6 +26,27 @@ function createStarterWindow() {
     if (environment === 'development') {
         starterWindow.webContents.openDevTools();
     }
+}
+
+function createEditorWindow() {
+    editorWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+    editorWindow.loadFile(path.join(__dirname, 'view/editor.html')).then(r => {
+        editorWindow.setFullScreen(true);
+    });
+    editorWindow.on('ready-to-show', () => {
+        editorWindow.show();
+    });
+    editorWindow.on('close', event => {
+        editorWindow = null;
+    });
+    if (environment === 'development') {
+        editorWindow.webContents.openDevTools();
+    }
+
 }
 
 app.on('ready', async () => {

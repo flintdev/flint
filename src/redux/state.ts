@@ -7,6 +7,7 @@ export interface StoreState {
     config: {
         projectDir: string,
     },
+    editor: object
 }
 
 export const initState = {
@@ -17,5 +18,8 @@ export const initState = {
     },
     config: {
         projectDir: '',
+    },
+    editor: {
+
     }
 };

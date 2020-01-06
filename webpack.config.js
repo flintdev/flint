@@ -32,7 +32,6 @@ module.exports = env => {
             extensions: ['.ts', '.tsx', '.js'],
             modules: [
                 'node_modules',
-                // path.resolve('./src')
             ],
             alias: {
                 src: path.resolve(__dirname, 'src'),
@@ -41,7 +40,8 @@ module.exports = env => {
             }
         },
         entry: {
-            starter: './src/entries/Starter.tsx'
+            starter: './src/entries/Starter.tsx',
+            editor: './src/entries/Editor.tsx'
         },
         output: {
             path: path.resolve(filePath),
