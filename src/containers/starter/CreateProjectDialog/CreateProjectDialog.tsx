@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/starter/actions";
+import * as configActions from 'src/redux/modules/config/actions';
 import {Modal, Button} from 'antd';
 import {LOADING_STATUS} from "../../../constants";
 import ParamForm from "./ParamForm";
@@ -19,6 +20,7 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles> {
     open?: boolean,
     createProjectDialogClose?: () => void,
+    setProjectDir?: (value: string) => void,
 }
 
 class CreateProjectDialog extends React.Component<Props, object> {
@@ -42,6 +44,7 @@ class CreateProjectDialog extends React.Component<Props, object> {
                 .then(() => {
                     this.setState({submitLoading: false});
                     this.props.createProjectDialogClose();
+                    this.props.setProjectDir(location);
                 })
                 .catch(err => {
                     console.error('create dir by path', err)
@@ -80,9 +83,10 @@ const mapStateToProps = (state: StoreState) => {
     return state.starter.createProjectDialog;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction | configActions.ConfigAction>) => {
     return {
         createProjectDialogClose: () => dispatch(actions.createProjectDialogClose()),
+        setProjectDir: (value: string) => dispatch(configActions.setProjectDir(value)),
     }
 };
 
