@@ -85,7 +85,7 @@ module.exports = env => {
             }),
             new webpack.EnvironmentPlugin(processEnv)
         ],
-        // target: target,
+        target: target,
         stats: {
             errorDetails: true,
             errors: true,

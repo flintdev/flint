@@ -12,6 +12,7 @@ import {LOADING_STATUS} from "../../../constants";
 import ParamForm from "./ParamForm";
 import {FormValues} from "./typings";
 import {FSHelper} from "../../../controllers/utils/fsHelper";
+import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {},
@@ -45,6 +46,8 @@ class CreateProjectDialog extends React.Component<Props, object> {
                     this.setState({submitLoading: false});
                     this.props.createProjectDialogClose();
                     this.props.setProjectDir(location);
+                    new MainProcessCommunicator().switchFromStarterToEditorWindow()
+                        .then(() => {});
                 })
                 .catch(err => {
                     console.error('create dir by path', err)

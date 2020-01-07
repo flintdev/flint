@@ -1,6 +1,7 @@
 // electron - main.js
 
 const {app, BrowserWindow, Menu, ipcMain, Tray} = require('electron');
+const {CHANNEL} = require('./constants');
 const path = require('path');
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
@@ -34,8 +35,9 @@ function createEditorWindow() {
             nodeIntegration: true
         }
     });
-    editorWindow.loadFile(path.join(__dirname, 'view/editor.html')).then(r => {
-        editorWindow.setFullScreen(true);
+    editorWindow.loadFile(path.join(__dirname, 'views/editor.html')).then(r => {
+        editorWindow.maximize();
+        if (!!starterWindow) starterWindow.close();
     });
     editorWindow.on('ready-to-show', () => {
         editorWindow.show();
@@ -51,6 +53,10 @@ function createEditorWindow() {
 
 app.on('ready', async () => {
     await createStarterWindow();
+    ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
+        console.log('OPEN_EDITOR_AND_CLOSE_STARTER');
+        createEditorWindow();
+    });
 });
 
 app.on('window-all-closed', () => {
