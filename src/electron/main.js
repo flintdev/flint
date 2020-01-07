@@ -1,6 +1,6 @@
 // electron - main.js
 
-const {app, BrowserWindow, Menu, ipcMain, Tray} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, Tray, dialog} = require('electron');
 const {CHANNEL} = require('./constants');
 const path = require('path');
 
@@ -54,8 +54,13 @@ function createEditorWindow() {
 app.on('ready', async () => {
     await createStarterWindow();
     ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
-        console.log('OPEN_EDITOR_AND_CLOSE_STARTER');
         createEditorWindow();
+    });
+    ipcMain.on(CHANNEL.SELECT_DIRECTORY, (event, args) => {
+        dialog.showOpenDialog(starterWindow, {properties: ['openDirectory']})
+            .then(result => {
+                event.reply(CHANNEL.SELECT_DIRECTORY_REPLY, result.filePaths);
+            });
     });
 });
 

@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "../../../redux/state";
 import * as actions from "../../../redux/modules/starter/actions";
+import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
+import * as configActions from "../../../redux/modules/config/actions";
 
 const styles = createStyles({
     root: {
@@ -46,7 +48,8 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>{
-    createProjectDialogOpen: () => void,
+    createProjectDialogOpen?: () => void,
+    setProjectDir?: (value: string) => void,
 }
 
 class ActionView extends React.Component<Props, object> {
@@ -63,7 +66,19 @@ class ActionView extends React.Component<Props, object> {
     };
 
     handleOpenButtonClick = () => {
+        const communicator = new MainProcessCommunicator();
+        communicator.selectDirectory()
+            .then((filePath: string) => {
+                console.log(filePath);
+                this.props.setProjectDir(filePath);
+                communicator.switchFromStarterToEditorWindow()
+                    .then(() => {
 
+                    });
+            })
+            .catch(err => {
+
+            });
     };
 
     handleCheckoutButtonClick = () =>{
@@ -88,7 +103,14 @@ class ActionView extends React.Component<Props, object> {
                     >
                         {StarterConfig.ActionView.action.create}
                     </Button><br/>
-                    <Button icon={"folder-open"} size={"large"} className={classes.actionButton}>{StarterConfig.ActionView.action.open}</Button><br/>
+                    <Button
+                        icon={"folder-open"}
+                        size={"large"}
+                        className={classes.actionButton}
+                        onClick={this.handleOpenButtonClick}
+                    >
+                        {StarterConfig.ActionView.action.open}
+                    </Button><br/>
                     <Button icon={"download"} size={"large"} className={classes.actionButton}>{StarterConfig.ActionView.action.checkout}</Button><br/>
                 </div>
             </div>
@@ -100,9 +122,10 @@ const mapStateToProps = (state: StoreState) => {
     return state.starter;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction | configActions.ConfigAction>) => {
     return {
         createProjectDialogOpen: () => dispatch(actions.createProjectDialogOpen()),
+        setProjectDir: (value: string) => dispatch(configActions.setProjectDir(value)),
     }
 };
 
