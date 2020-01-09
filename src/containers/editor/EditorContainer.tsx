@@ -2,21 +2,30 @@
 
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
+import {Layout} from 'antd';
+import NavigationSidebar from "./NavigationSidebar";
+
+const {Header, Footer, Sider, Content} = Layout;
 
 const styles = createStyles({
     root: {
-
+        width: '100%',
+        height: '100%'
     },
+    sider: {
+        height: '100vh',
+    },
+    contentContainer: {
+        height: '100vh'
+    }
 });
 
-export interface Props extends WithStyles<typeof styles>{
+export interface Props extends WithStyles<typeof styles> {
 
 }
 
 class EditorContainer extends React.Component<Props, object> {
-    state = {
-
-    };
+    state = {};
 
     componentDidMount(): void {
 
@@ -26,7 +35,22 @@ class EditorContainer extends React.Component<Props, object> {
         const {classes} = this.props;
         return (
             <div className={classes.root}>
-
+                <Layout>
+                    <Sider
+                        className={classes.sider}
+                        width={60}
+                        theme={"light"}
+                    >
+                        <NavigationSidebar/>
+                    </Sider>
+                    <Layout>
+                        <Content>
+                            <div className={classes.contentContainer}>
+                                Content
+                            </div>
+                        </Content>
+                    </Layout>
+                </Layout>
             </div>
         )
     }

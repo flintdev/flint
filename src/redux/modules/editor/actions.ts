@@ -10,4 +10,15 @@ export function initializeEditor(): InitializeEditor {
     return {type: types.INITIALIZE_EDITOR}
 }
 
-export type EditorAction = InitializeEditor;
+export interface SetCurrentPage {
+    type: typeof types.SET_CURRENT_PAGE,
+    pageIndex: number
+}
+
+export function setCurrentPage(pageIndex: number): SetCurrentPage {
+    return { type: types.SET_CURRENT_PAGE, pageIndex }
+}
+
+
+
+export type EditorAction = InitializeEditor | SetCurrentPage;

@@ -10,6 +10,10 @@ export function reducer(state: object, action: EditorAction) {
             return update(state, {
 
             });
+        case types.SET_CURRENT_PAGE:
+            return update(state, {
+                currentPageIndex: {$set: action.pageIndex}
+            });
         default:
             return state;
     }

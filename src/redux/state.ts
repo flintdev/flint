@@ -7,7 +7,9 @@ export interface StoreState {
     config: {
         projectDir: string,
     },
-    editor: object
+    editor: {
+        currentPageIndex: number
+    }
 }
 
 export const initState = {
@@ -20,6 +22,6 @@ export const initState = {
         projectDir: '',
     },
     editor: {
-
+        currentPageIndex: 0,
     }
 };
