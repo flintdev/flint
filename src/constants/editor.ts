@@ -21,7 +21,7 @@ export const NavigationPages = [
         name: 'Plugins',
     },
     {
-        key: Page.Editor,
+        key: Page.Delivery,
         name: 'Delivery',
     },
 ];

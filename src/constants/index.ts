@@ -1,5 +1,9 @@
 // src/constants/index.ts
 
+export const themeColor = {
+    primary: '#416CED',
+};
+
 export enum LOADING_STATUS {
     NOT_STARTED,
     LOADING,

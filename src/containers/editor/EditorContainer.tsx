@@ -14,6 +14,7 @@ const styles = createStyles({
     },
     sider: {
         height: '100vh',
+        borderRight: '1px solid #ddd'
     },
     contentContainer: {
         height: '100vh'
@@ -46,7 +47,7 @@ class EditorContainer extends React.Component<Props, object> {
                     <Layout>
                         <Content>
                             <div className={classes.contentContainer}>
-                                Content
+
                             </div>
                         </Content>
                     </Layout>
