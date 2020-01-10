@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import {Tabs, Icon} from 'antd';
+import {Tabs, Icon, Button} from 'antd';
 import {MVC, MVCViews} from "../../../constants/editor";
 
 const {TabPane} = Tabs;

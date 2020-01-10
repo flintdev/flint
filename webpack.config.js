@@ -77,6 +77,26 @@ module.exports = env => {
                     test: /\.css$/,
                     use: ['style-loader', 'css-loader']
                 },
+                {
+                    test: /\.less$/,
+                    use: [
+                        {
+                            loader: 'style-loader',
+                        }, {
+                            loader: 'css-loader',
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                modifyVars: {
+                                    'primary-color': '#416CED',
+                                    'link-color': '#416CED',
+                                },
+                                javascriptEnabled: true,
+                            }
+                        },
+                    ]
+                }
             ]
         },
         plugins: [
