@@ -8,6 +8,8 @@ import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Tabs, Icon, Button} from 'antd';
 import {MVC, MVCViews} from "../../../constants/editor";
+import ModelEditor from '@flintdev/model-editor';
+import {editorDataSample1} from './exampleData';
 
 const {TabPane} = Tabs;
 
@@ -66,7 +68,13 @@ class MVCEditor extends React.Component<Props, object> {
                                 key={view.key}
                             >
                                 <div className={classes.tabContentContainer}>
-                                    {view.name}
+                                    {view.key === MVC.Model &&
+                                    <ModelEditor
+                                        modelName="TestModel"
+                                        editorData={editorDataSample1}
+                                        onSaved={(schemaData: object, editorData: object) => {}}
+                                    />
+                                    }
                                 </div>
                             </TabPane>
                         )
