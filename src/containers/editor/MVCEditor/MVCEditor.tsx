@@ -14,6 +14,7 @@ import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import HeaderView from "./HeaderView/HeaderView";
 
 const styles = createStyles({
     root: {
@@ -53,16 +54,17 @@ class MVCEditor extends React.Component<Props, object> {
         const {currentTabIndex} = this.state;
         return (
             <div className={classes.root}>
-                <Tabs
-                    value={currentTabIndex}
-                    onChange={this.handleTabChange}
-                >
-                    {MVCViews.map((view, i) => {
-                        return (
-                            <Tab label={view.name} key={i} />
-                        )
-                    })}
-                </Tabs>
+                {/*<Tabs*/}
+                {/*    value={currentTabIndex}*/}
+                {/*    onChange={this.handleTabChange}*/}
+                {/*>*/}
+                {/*    {MVCViews.map((view, i) => {*/}
+                {/*        return (*/}
+                {/*            <Tab label={view.name} key={i} />*/}
+                {/*        )*/}
+                {/*    })}*/}
+                {/*</Tabs>*/}
+                <HeaderView/>
                 <div className={classes.tabContentContainer}>
                     {currentTabIndex === 0 &&
                     <ModelEditor

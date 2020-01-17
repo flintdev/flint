@@ -47,7 +47,7 @@ class EditorContainer extends React.Component<Props, object> {
     state = {};
 
     componentDidMount(): void {
-
+        // TODO: sync project info from local storage to state
     }
 
     render() {

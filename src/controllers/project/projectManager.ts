@@ -16,6 +16,11 @@ export class ProjectManager {
 
     };
 
+    getProjectName = () => {
+        const projectName: string = this.rootDir.split('/')[-1];
+        return projectName;
+    };
+
     private createConfigFile = () => {
 
     };
