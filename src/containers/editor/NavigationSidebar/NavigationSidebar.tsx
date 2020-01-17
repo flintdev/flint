@@ -10,7 +10,7 @@ import {Page, NavigationPages} from "../../../constants/editor";
 import {themeColor} from "../../../constants";
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-import ExtensionOutlinedIcon from '@material-ui/icons/ExtensionOutlined';
+import AppsIcon from '@material-ui/icons/Apps';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 
 const styles = createStyles({
@@ -59,7 +59,7 @@ const ItemIcon = (props: Props) => {
     return {
         [Page.Editor]: <DashboardOutlinedIcon className={currentPageIndex === 0 ? classes.iconActive : classes.icon}/>,
         [Page.Files]: <FileCopyOutlinedIcon className={currentPageIndex === 1 ? classes.iconActive : classes.icon}/>,
-        [Page.Plugins]: <ExtensionOutlinedIcon className={currentPageIndex === 2 ? classes.iconActive : classes.icon}/>,
+        [Page.Plugins]: <AppsIcon className={currentPageIndex === 2 ? classes.iconActive : classes.icon}/>,
         [Page.Delivery]: <CloudUploadOutlinedIcon className={currentPageIndex === 3 ? classes.iconActive : classes.icon}/>,
     }
 };
