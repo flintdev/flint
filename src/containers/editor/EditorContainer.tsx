@@ -1,7 +1,7 @@
 // src/containers/editor/EditorContainer.tsx
 
 import * as React from 'react';
-import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
+import {withStyles, WithStyles, createStyles, ThemeProvider} from '@material-ui/core/styles';
 import NavigationSidebar from "./NavigationSidebar";
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
@@ -9,6 +9,7 @@ import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
+import {theme} from "../../constants";
 
 const styles = createStyles({
     root: {
@@ -52,22 +53,24 @@ class EditorContainer extends React.Component<Props, object> {
     render() {
         const {classes, currentPageIndex} = this.props;
         return (
-            <div className={classes.root}>
-                <table className={classes.table}>
-                    <tbody>
-                    <tr>
-                        <td className={classes.tdLeft} valign={"top"}>
-                            <NavigationSidebar/>
-                        </td>
-                        <td valign={"top"}>
-                            <div className={classes.contentContainer}>
-                                {currentPageIndex === Page.Editor && <MVCEditor/>}
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+            <ThemeProvider theme={theme}>
+                <div className={classes.root}>
+                    <table className={classes.table}>
+                        <tbody>
+                        <tr>
+                            <td className={classes.tdLeft} valign={"top"}>
+                                <NavigationSidebar/>
+                            </td>
+                            <td valign={"top"}>
+                                <div className={classes.contentContainer}>
+                                    {currentPageIndex === Page.Editor && <MVCEditor/>}
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ThemeProvider>
         )
     }
 }

@@ -1,10 +1,10 @@
 // containers/starter/StarterContainer.tsx
 
 import * as React from 'react';
-import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
+import {withStyles, WithStyles, createStyles, ThemeProvider} from '@material-ui/core/styles';
 import ActionView from "./ActionView";
 import CreateProjectDialog from "./CreateProjectDialog";
-import Grid from '@material-ui/core/Grid';
+import {theme} from "../../constants";
 
 const styles = createStyles({
     root: {
@@ -49,23 +49,25 @@ export interface Props extends WithStyles<typeof styles> {
 function StarterContainer(props: Props) {
     const {classes} = props;
     return (
-        <div className={classes.root}>
-            <table className={classes.table}>
-                <tbody>
-                <tr>
-                    <td valign={"top"} className={classes.tdLeft}>
-                        <ActionView/>
-                    </td>
-                    <td valign={"top"} className={classes.tdRight}>
-                        <div className={classes.projectsContainer}>
+        <ThemeProvider theme={theme}>
+            <div className={classes.root}>
+                <table className={classes.table}>
+                    <tbody>
+                    <tr>
+                        <td valign={"top"} className={classes.tdLeft}>
+                            <ActionView/>
+                        </td>
+                        <td valign={"top"} className={classes.tdRight}>
+                            <div className={classes.projectsContainer}>
 
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <CreateProjectDialog/>
-        </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <CreateProjectDialog/>
+            </div>
+        </ThemeProvider>
     )
 }
 

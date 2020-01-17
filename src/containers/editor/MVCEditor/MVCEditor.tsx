@@ -1,7 +1,7 @@
 // src/containers/editor/MVCEditor/MVCEditor.tsx
 
 import * as React from 'react';
-import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
+import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";

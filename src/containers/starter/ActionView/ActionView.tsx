@@ -1,7 +1,7 @@
 // containers/starter/ActionView/ActionView.tsx
 
 import * as React from 'react';
-import { withStyles, WithStyles, createStyles } from '@material-ui/styles';
+import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import logoImg from 'resources/img/logo-md.png';
 import {StarterConfig} from "../../../constants/starter";
 import { connect } from 'react-redux';
