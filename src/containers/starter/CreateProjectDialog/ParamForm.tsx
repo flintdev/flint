@@ -1,50 +1,67 @@
 // src/containers/starter/CreateProjectDialog/ParamForm.tsx
 
 import * as React from 'react';
-import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
-import {Form, Input} from 'antd';
-import {FormComponentProps} from 'antd/lib/form/Form';
+import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
 import {FSHelper} from "../../../controllers/utils/fsHelper";
-import {StarterConfig} from "../../../constants/starter";
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 
 const styles = createStyles({
     root: {},
 });
 
-export interface Props extends WithStyles<typeof styles>, FormComponentProps {
-
+export interface Props extends WithStyles<typeof styles> {
+    onChange: (params: object) => void,
 }
 
 class ParamForm extends React.Component<Props, object> {
     state = {
-        defaultLocation: '',
+        location: '',
     };
 
     componentDidMount(): void {
         const defaultLocation = new FSHelper().getDefaultPath();
-        this.setState({defaultLocation});
+        this.setState({location: defaultLocation});
+        this.handleFormChange();
     }
 
+    handleFormChange = () => {
+        const {location} = this.state;
+        const params = {location};
+        this.props.onChange(params);
+    };
+
+    private handleLocationInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const location = event.target.value;
+        this.setState({location});
+        this.handleFormChange();
+    };
+
     render() {
-        const {classes, form} = this.props;
-        const {defaultLocation} = this.state;
+        const {classes} = this.props;
+        const {location} = this.state;
         return (
             <div className={classes.root}>
-                <Form layout={"vertical"}>
-                    <Form.Item label={"Location"}>
-                        {form.getFieldDecorator('location', {
-                            initialValue: defaultLocation,
-                            rules: [{
-                                required: true,
-                                message: StarterConfig.CreateProjectDialog.location.errorMessage
-                            }],
-                        })(<Input/>)}
-                    </Form.Item>
-                </Form>
+                <TextField
+                    fullWidth
+                    label="Project Location"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <FolderOpenIcon/>
+                            </InputAdornment>
+                        ),
+                    }}
+                    value={location}
+                    onChange={this.handleLocationInputChange}
+                />
             </div>
         )
     }
 }
 
-
-export default withStyles(styles)(Form.create({name: 'new_project_form'})(ParamForm));
+export default withStyles(styles)(ParamForm);

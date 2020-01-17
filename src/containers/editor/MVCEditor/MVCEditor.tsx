@@ -6,12 +6,14 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import {Tabs, Icon, Button} from 'antd';
 import {MVC, MVCViews} from "../../../constants/editor";
 import ModelEditor from '@flintdev/model-editor';
 import {editorDataSample1} from './exampleData';
-
-const {TabPane} = Tabs;
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
+import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
+import ControlCameraIcon from '@material-ui/icons/ControlCamera';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 const styles = createStyles({
     root: {
@@ -28,58 +30,48 @@ export interface Props extends WithStyles<typeof styles> {
 }
 
 const TabIcon = {
-    [MVC.Model]: <Icon type={"table"}/>,
-    [MVC.View]: <Icon type={"layout"}/>,
-    [MVC.Controller]: <Icon type={"cluster"}/>,
+    [MVC.Model]: <AccountTreeIcon/>,
+    [MVC.View]: <ViewQuiltIcon/>,
+    [MVC.Controller]: <ControlCameraIcon/>,
 };
 
 class MVCEditor extends React.Component<Props, object> {
     state = {
-        currentTabKey: MVC.Model
+        currentTabIndex: 0
     };
 
     componentDidMount(): void {
 
     }
 
-    handleTabChange = (key: string) => {
-        this.setState({currentTabKey: key});
+    handleTabChange = (event: React.ChangeEvent, index: number) => {
+        this.setState({currentTabIndex: index});
     };
 
     render() {
         const {classes} = this.props;
+        const {currentTabIndex} = this.state;
         return (
             <div className={classes.root}>
                 <Tabs
+                    value={currentTabIndex}
                     onChange={this.handleTabChange}
-                    type={"card"}
-                    tabBarGutter={10}
-                    tabBarStyle={{paddingLeft: 10}}
                 >
                     {MVCViews.map((view, i) => {
                         return (
-                            <TabPane
-                                tab={
-                                    <span>
-                                        {TabIcon[view.key]}
-                                        {view.name}
-                                    </span>
-                                }
-                                key={view.key}
-                            >
-                                <div className={classes.tabContentContainer}>
-                                    {view.key === MVC.Model &&
-                                    <ModelEditor
-                                        modelName="TestModel"
-                                        editorData={editorDataSample1}
-                                        onSaved={(schemaData: object, editorData: object) => {}}
-                                    />
-                                    }
-                                </div>
-                            </TabPane>
+                            <Tab label={view.name} key={i} />
                         )
                     })}
                 </Tabs>
+                <div className={classes.tabContentContainer}>
+                    {currentTabIndex === 0 &&
+                    <ModelEditor
+                        modelName="TestModel"
+                        editorData={editorDataSample1}
+                        onSaved={(schemaData: object, editorData: object) => {}}
+                    />
+                    }
+                </div>
             </div>
         )
     }

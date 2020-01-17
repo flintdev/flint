@@ -40,9 +40,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@flintdev/model-editor": "0.0.7",
-    "@material-ui/styles": "^4.7.1",
-    "antd": "^3.26.5",
+    "@flintdev/model-editor": "0.0.8",
+    "@material-ui/core": "^4.8.3",
+    "@material-ui/icons": "^4.5.1",
+    "@material-ui/lab": "^4.0.0-alpha.39",
     "css-loader": "^3.4.0",
     "immutability-helper": "^3.0.1",
     "lodash": "^4.17.15",

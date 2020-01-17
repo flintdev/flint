@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
-import {Layout} from 'antd';
 import NavigationSidebar from "./NavigationSidebar";
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
@@ -10,7 +9,6 @@ import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
-const {Header, Footer, Sider, Content} = Layout;
 
 const styles = createStyles({
     root: {
@@ -22,8 +20,21 @@ const styles = createStyles({
         borderRight: '1px solid #ddd'
     },
     contentContainer: {
-        height: '100vh',
+        height: '100%',
         backgroundColor: 'white',
+    },
+    table: {
+        width: '100%',
+        height: '100vh',
+        border: 0,
+        cellSpacing: 0,
+        cellPadding: 0,
+        borderSpacing: 0,
+        borderCollapse: 'collapse',
+    },
+    tdLeft: {
+        width: 60,
+        borderRight: '1px solid #ddd',
     }
 });
 
@@ -42,22 +53,20 @@ class EditorContainer extends React.Component<Props, object> {
         const {classes, currentPageIndex} = this.props;
         return (
             <div className={classes.root}>
-                <Layout>
-                    <Sider
-                        className={classes.sider}
-                        width={60}
-                        theme={"light"}
-                    >
-                        <NavigationSidebar/>
-                    </Sider>
-                    <Layout>
-                        <Content>
+                <table className={classes.table}>
+                    <tbody>
+                    <tr>
+                        <td className={classes.tdLeft} valign={"top"}>
+                            <NavigationSidebar/>
+                        </td>
+                        <td valign={"top"}>
                             <div className={classes.contentContainer}>
                                 {currentPageIndex === Page.Editor && <MVCEditor/>}
                             </div>
-                        </Content>
-                    </Layout>
-                </Layout>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         )
     }
@@ -68,10 +77,7 @@ const mapStateToProps = (state: StoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
-    return {
-
-
-    }
+    return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditorContainer));

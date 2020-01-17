@@ -7,12 +7,16 @@ import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page, NavigationPages} from "../../../constants/editor";
-import {Icon} from 'antd';
 import {themeColor} from "../../../constants";
+import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
+import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
+import ExtensionOutlinedIcon from '@material-ui/icons/ExtensionOutlined';
+import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 
 const styles = createStyles({
     root: {
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: -1,
     },
     tabItem: {
         height: 60,
@@ -21,7 +25,7 @@ const styles = createStyles({
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     tabItemActive: {
         height: 60,
@@ -33,13 +37,15 @@ const styles = createStyles({
         justifyContent: 'center',
         borderLeft: `4px solid ${themeColor.primary}`,
         borderRight: `4px solid white`,
+        marginLeft: -1,
     },
     icon: {
-        fontSize: 22
+        fontSize: 24
     },
     iconActive: {
-        fontSize: 22,
+        fontSize: 24,
         color: themeColor.primary,
+        marginRight: 6,
     }
 });
 
@@ -51,10 +57,10 @@ export interface Props extends WithStyles<typeof styles> {
 const ItemIcon = (props: Props) => {
     const {classes, currentPageIndex} = props;
     return {
-        [Page.Editor]: <Icon type={"home"} className={currentPageIndex === 0 ? classes.iconActive : classes.icon}/>,
-        [Page.Files]: <Icon type={"copy"} className={currentPageIndex === 1 ? classes.iconActive : classes.icon}/>,
-        [Page.Plugins]: <Icon type={"appstore"} className={currentPageIndex === 2 ? classes.iconActive : classes.icon}/>,
-        [Page.Delivery]: <Icon type={"deployment-unit"} className={currentPageIndex === 3 ? classes.iconActive : classes.icon}/>,
+        [Page.Editor]: <DashboardOutlinedIcon className={currentPageIndex === 0 ? classes.iconActive : classes.icon}/>,
+        [Page.Files]: <FileCopyOutlinedIcon className={currentPageIndex === 1 ? classes.iconActive : classes.icon}/>,
+        [Page.Plugins]: <ExtensionOutlinedIcon className={currentPageIndex === 2 ? classes.iconActive : classes.icon}/>,
+        [Page.Delivery]: <CloudUploadOutlinedIcon className={currentPageIndex === 3 ? classes.iconActive : classes.icon}/>,
     }
 };
 

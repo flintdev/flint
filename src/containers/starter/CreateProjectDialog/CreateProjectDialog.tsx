@@ -7,12 +7,14 @@ import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/starter/actions";
 import * as configActions from 'src/redux/modules/config/actions';
-import {Modal, Button} from 'antd';
-import {LOADING_STATUS} from "../../../constants";
-import ParamForm from "./ParamForm";
-import {FormValues} from "./typings";
 import {FSHelper} from "../../../controllers/utils/fsHelper";
 import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
+import Button from "@material-ui/core/Button";
+import ParamForm from "./ParamForm";
 
 const styles = createStyles({
     root: {},
@@ -27,37 +29,39 @@ export interface Props extends WithStyles<typeof styles> {
 class CreateProjectDialog extends React.Component<Props, object> {
     state = {
         submitLoading: false,
+        params: {
+            location: '',
+        },
     };
-
-    formRef: any;
 
     componentDidMount(): void {
 
     }
 
-    handleSubmitButtonClick = () => {
-        const {form} = this.formRef.props;
-        form.validateFields((err: any, values: FormValues) => {
-            if (!!err) return;
-            this.setState({submitLoading: true});
-            const {location} = values;
-            new FSHelper().createDirByPath(location)
-                .then(() => {
-                    this.setState({submitLoading: false});
-                    this.props.createProjectDialogClose();
-                    this.props.setProjectDir(location);
-                    new MainProcessCommunicator().switchFromStarterToEditorWindow()
-                        .then(() => {});
-                })
-                .catch(err => {
-                    console.error('create dir by path', err)
-                });
-        });
+    onEnter = () => {
 
     };
 
-    saveFormRef = (formRef: any) => {
-        this.formRef = formRef;
+    handleFormChange = (params: object) => {
+        this.setState({params});
+    };
+
+    handleSubmitButtonClick = () => {
+        this.setState({submitLoading: true});
+        const {location} = this.state.params;
+        new FSHelper().createDirByPath(location)
+            .then(() => {
+                this.setState({submitLoading: false});
+                this.props.createProjectDialogClose();
+                this.props.setProjectDir(location);
+                new MainProcessCommunicator().switchFromStarterToEditorWindow()
+                    .then(() => {
+
+                    });
+            })
+            .catch(err => {
+                console.error('create dir by path', err)
+            });
     };
 
     render() {
@@ -65,18 +69,28 @@ class CreateProjectDialog extends React.Component<Props, object> {
         const {submitLoading} = this.state;
         return (
             <div className={classes.root}>
-                <Modal
-                    title={"New Project"}
-                    visible={open}
-                    okText={"Create"}
-                    onOk={this.handleSubmitButtonClick}
-                    confirmLoading={submitLoading}
-                    onCancel={this.props.createProjectDialogClose}
+                <Dialog
+                    open={open}
+                    onClose={this.props.createProjectDialogClose}
+                    onEnter={this.onEnter}
+                    fullWidth
                 >
-                    <ParamForm
-                        wrappedComponentRef={this.saveFormRef}
-                    />
-                </Modal>
+                    <DialogTitle>New Project</DialogTitle>
+                    <DialogContent>
+                        <ParamForm onChange={this.handleFormChange}/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={this.props.createProjectDialogClose}>Cancel</Button>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={this.handleSubmitButtonClick}
+                            disabled={submitLoading}
+                        >
+                            {submitLoading ? 'Submitting...' : 'Submit'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
     }

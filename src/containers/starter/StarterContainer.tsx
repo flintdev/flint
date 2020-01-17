@@ -3,8 +3,8 @@
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/styles';
 import ActionView from "./ActionView";
-import { Row, Col } from 'antd';
 import CreateProjectDialog from "./CreateProjectDialog";
+import Grid from '@material-ui/core/Grid';
 
 const styles = createStyles({
     root: {
@@ -12,12 +12,37 @@ const styles = createStyles({
         height: '100%'
     },
     projectsContainer: {
-        borderLeft: '1px solid lightgrey',
-        height: '100vh'
+        width: '100%',
+        height: '100%',
+    },
+    grid: {
+        height: '100%'
+    },
+    table: {
+        width: '100%',
+        height: '100vh',
+        border: 0,
+        cellSpacing: 0,
+        cellPadding: 0,
+        borderSpacing: 0,
+        borderCollapse: 'collapse',
+    },
+    tdLeft: {
+        width: '50%',
+        height: '100%',
+        borderRight: '1px solid lightgrey'
+    },
+    tdRight: {
+        width: '50%',
+        height: '100%',
+    },
+    tr: {
+        border: 0,
+        borderCollapse: 'collapse',
     }
 });
 
-export interface Props extends WithStyles<typeof styles>{
+export interface Props extends WithStyles<typeof styles> {
 
 }
 
@@ -25,17 +50,20 @@ function StarterContainer(props: Props) {
     const {classes} = props;
     return (
         <div className={classes.root}>
-            <Row>
-                <Col span={12}>
-                    <ActionView/>
-                </Col>
-                <Col span={12}>
-                    <div className={classes.projectsContainer}>
+            <table className={classes.table}>
+                <tbody>
+                <tr>
+                    <td valign={"top"} className={classes.tdLeft}>
+                        <ActionView/>
+                    </td>
+                    <td valign={"top"} className={classes.tdRight}>
+                        <div className={classes.projectsContainer}>
 
-                    </div>
-                </Col>
-            </Row>
-
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             <CreateProjectDialog/>
         </div>
     )
