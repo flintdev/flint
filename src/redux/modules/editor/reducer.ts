@@ -14,6 +14,10 @@ export function reducer(state: object, action: EditorAction) {
             return update(state, {
                 currentPageIndex: {$set: action.pageIndex}
             });
+        case types.SET_PROJECT_DIR:
+            return update(state, {
+                projectDir: {$set: action.value}
+            });
         default:
             return state;
     }

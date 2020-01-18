@@ -29,13 +29,14 @@ function createStarterWindow() {
     }
 }
 
-function createEditorWindow() {
+function createEditorWindow(projectDir) {
     editorWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true
         }
     });
     editorWindow.loadFile(path.join(__dirname, 'views/editor.html')).then(r => {
+        editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
         if (!!starterWindow) starterWindow.close();
     });
@@ -54,7 +55,8 @@ function createEditorWindow() {
 app.on('ready', async () => {
     await createStarterWindow();
     ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
-        createEditorWindow();
+        const projectDir = args;
+        createEditorWindow(projectDir);
     });
     ipcMain.on(CHANNEL.SELECT_DIRECTORY, (event, args) => {
         dialog.showOpenDialog(starterWindow, {properties: ['openDirectory']})

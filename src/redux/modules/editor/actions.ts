@@ -19,6 +19,16 @@ export function setCurrentPage(pageIndex: number): SetCurrentPage {
     return { type: types.SET_CURRENT_PAGE, pageIndex }
 }
 
+export interface SetProjectDir {
+    type: typeof types.SET_PROJECT_DIR,
+    value: string
+}
 
+export function setProjectDir(value: string): SetProjectDir {
+    return {
+        type: types.SET_PROJECT_DIR,
+        value
+    }
+}
 
-export type EditorAction = InitializeEditor | SetCurrentPage;
+export type EditorAction = InitializeEditor | SetCurrentPage | SetProjectDir;

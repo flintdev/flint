@@ -10,6 +10,7 @@ import * as actions from "src/redux/modules/editor/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
 import {theme} from "../../constants";
+import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {
@@ -41,6 +42,7 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles> {
     currentPageIndex: number,
+    setProjectDir: (projectDir: string) => void,
 }
 
 class EditorContainer extends React.Component<Props, object> {
@@ -48,6 +50,10 @@ class EditorContainer extends React.Component<Props, object> {
 
     componentDidMount(): void {
         // TODO: sync project info from local storage to state
+        new MainProcessCommunicator().receiveProjectDir()
+            .then((projectDir: string) => {
+                this.props.setProjectDir(projectDir);
+            });
     }
 
     render() {
@@ -80,7 +86,9 @@ const mapStateToProps = (state: StoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
-    return {}
+    return {
+        setProjectDir: (projectDir: string) => dispatch(actions.setProjectDir(projectDir)),
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(EditorContainer));

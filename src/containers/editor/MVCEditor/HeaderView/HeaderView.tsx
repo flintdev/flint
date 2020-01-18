@@ -4,7 +4,7 @@ import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { StoreState } from "src/redux/state";
+import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {ProjectManager} from "../../../../controllers/project/projectManager";
 import Typography from '@material-ui/core/Typography';
@@ -23,7 +23,7 @@ const styles = createStyles({
     }
 });
 
-export interface Props extends WithStyles<typeof styles>, StoreState {
+export interface Props extends WithStyles<typeof styles>, EditorState {
 
 }
 
@@ -37,8 +37,7 @@ class HeaderView extends React.Component<Props, object> {
     }
 
     render() {
-        const {classes, config} = this.props;
-        const {projectDir} = config;
+        const {classes, projectDir} = this.props;
         console.log(projectDir);
         const projectName = new ProjectManager(projectDir).getProjectName();
         return (
@@ -63,7 +62,7 @@ class HeaderView extends React.Component<Props, object> {
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state;
+    return state.editor;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {

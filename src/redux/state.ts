@@ -1,15 +1,15 @@
 // redux/state.ts
 
+export interface EditorState {
+    projectDir: string,
+    currentPageIndex: number
+}
+
 export interface StoreState {
     starter: {
         createProjectDialog: object
     },
-    config: {
-        projectDir: string,
-    },
-    editor: {
-        currentPageIndex: number
-    }
+    editor: EditorState,
 }
 
 export const initState = {
@@ -18,10 +18,8 @@ export const initState = {
             open: false
         }
     },
-    config: {
-        projectDir: '',
-    },
     editor: {
+        projectDir: '',
         currentPageIndex: 0,
     }
 };

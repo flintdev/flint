@@ -5,14 +5,15 @@ import {CHANNEL} from "../constants";
 
 export enum Error {
     CANCELLED,
+    INVALID_PROJECT_DIR
 }
 
 export class MainProcessCommunicator {
 
-    switchFromStarterToEditorWindow = () => {
+    switchFromStarterToEditorWindow = (projectDir: string) => {
         // open editor window and close starter window
         return new Promise((resolve, reject) => {
-            ipcRenderer.send(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER)
+            ipcRenderer.send(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, projectDir)
                 .then(() => {
                     resolve()
                 })
@@ -30,6 +31,16 @@ export class MainProcessCommunicator {
                 else reject(Error.CANCELLED);
             });
             ipcRenderer.send(CHANNEL.SELECT_DIRECTORY);
+        });
+    };
+
+    receiveProjectDir = () => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.SEND_PROJECT_DIR, (event: object, arg: string) => {
+                const projectDir = arg;
+                if (!projectDir) reject(Error.INVALID_PROJECT_DIR);
+                else resolve(projectDir);
+            });
         });
     };
 

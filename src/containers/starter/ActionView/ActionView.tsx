@@ -9,7 +9,6 @@ import {Dispatch} from "redux";
 import {StoreState} from "../../../redux/state";
 import * as actions from "../../../redux/modules/starter/actions";
 import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
-import * as configActions from "../../../redux/modules/config/actions";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
@@ -48,7 +47,6 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>{
     createProjectDialogOpen?: () => void,
-    setProjectDir?: (value: string) => void,
 }
 
 class ActionView extends React.Component<Props, object> {
@@ -69,8 +67,7 @@ class ActionView extends React.Component<Props, object> {
         communicator.selectDirectory()
             .then((filePath: string) => {
                 console.log(filePath);
-                this.props.setProjectDir(filePath);
-                communicator.switchFromStarterToEditorWindow()
+                communicator.switchFromStarterToEditorWindow(filePath)
                     .then(() => {
 
                     });
@@ -124,10 +121,9 @@ const mapStateToProps = (state: StoreState) => {
     return state.starter;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction | configActions.ConfigAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
     return {
         createProjectDialogOpen: () => dispatch(actions.createProjectDialogOpen()),
-        setProjectDir: (value: string) => dispatch(configActions.setProjectDir(value)),
     }
 };
 

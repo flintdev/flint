@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/starter/actions";
-import * as configActions from 'src/redux/modules/config/actions';
 import {FSHelper} from "../../../controllers/utils/fsHelper";
 import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
 import Dialog from "@material-ui/core/Dialog";
@@ -23,7 +22,6 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles> {
     open?: boolean,
     createProjectDialogClose?: () => void,
-    setProjectDir?: (value: string) => void,
 }
 
 class CreateProjectDialog extends React.Component<Props, object> {
@@ -53,8 +51,7 @@ class CreateProjectDialog extends React.Component<Props, object> {
             .then(() => {
                 this.setState({submitLoading: false});
                 this.props.createProjectDialogClose();
-                this.props.setProjectDir(location);
-                new MainProcessCommunicator().switchFromStarterToEditorWindow()
+                new MainProcessCommunicator().switchFromStarterToEditorWindow(location)
                     .then(() => {
 
                     });
@@ -100,10 +97,9 @@ const mapStateToProps = (state: StoreState) => {
     return state.starter.createProjectDialog;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction | configActions.ConfigAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
     return {
         createProjectDialogClose: () => dispatch(actions.createProjectDialogClose()),
-        setProjectDir: (value: string) => dispatch(configActions.setProjectDir(value)),
     }
 };
 
