@@ -1,11 +1,13 @@
 // electron - main.js
 
-const {app, BrowserWindow, Menu, ipcMain, Tray, dialog} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} = require('electron');
 const {CHANNEL} = require('./constants');
 const path = require('path');
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow, editorWindow;
+
+nativeTheme.themeSource = "light";
 
 function createStarterWindow() {
     // const iconPath = path.join(__dirname, 'img/icon.png');
