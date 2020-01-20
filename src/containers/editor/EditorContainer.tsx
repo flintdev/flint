@@ -11,6 +11,7 @@ import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
 import {theme} from "../../constants";
 import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator";
+import {LocalStorageManager} from "../../controllers/localStoreManager";
 
 const styles = createStyles({
     root: {
@@ -49,9 +50,11 @@ class EditorContainer extends React.Component<Props, object> {
     state = {};
 
     componentDidMount(): void {
-        // TODO: sync project info from local storage to state
+        const projectDir = new LocalStorageManager().getProjectDir();
+        if (!!projectDir) this.props.setProjectDir(projectDir);
         new MainProcessCommunicator().receiveProjectDir()
             .then((projectDir: string) => {
+                new LocalStorageManager().setProjectDir(projectDir);
                 this.props.setProjectDir(projectDir);
             });
     }

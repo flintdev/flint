@@ -10,11 +10,9 @@ let starterWindow, editorWindow;
 nativeTheme.themeSource = "light";
 
 function createStarterWindow() {
-    // const iconPath = path.join(__dirname, 'img/icon.png');
     starterWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        // icon: iconPath,
         webPreferences: {
             nodeIntegration: true
         }
