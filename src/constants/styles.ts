@@ -7,3 +7,11 @@ export const NavigationSidebarConfig = {
     },
 };
 
+export const HeaderViewConfig = {
+    Height: 48,
+    ActionIconColorGreen: '#19913a',
+    ActionIconColorGreenDark: '#106827',
+    ActionIconColorBlue: '#0080bd',
+    FabButtonRadius: 36,
+};
+

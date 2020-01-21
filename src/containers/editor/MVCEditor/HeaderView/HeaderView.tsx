@@ -7,12 +7,8 @@ import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {ProjectManager} from "../../../../controllers/project/projectManager";
-import Typography from '@material-ui/core/Typography';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
-import {themeColor} from "../../../../constants";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
+import {theme, themeColor} from "../../../../constants";
 import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import TextField from '@material-ui/core/TextField';
@@ -23,10 +19,22 @@ import {MVC, MVCViews} from "../../../../constants/editor";
 import WebIcon from '@material-ui/icons/Web';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import {HeaderViewConfig} from "../../../../constants/styles";
+import IconButton from '@material-ui/core/IconButton';
+import Fab from '@material-ui/core/Fab';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import BugReportIcon from '@material-ui/icons/BugReport';
+import SearchIcon from '@material-ui/icons/Search';
+import CheckIcon from '@material-ui/icons/Check';
+import HistoryIcon from '@material-ui/icons/History';
+import CallReceivedIcon from '@material-ui/icons/CallReceived';
 
 const styles = createStyles({
     root: {},
     paper: {
+        height: HeaderViewConfig.Height,
         paddingLeft: 20,
         paddingRight: 20,
         borderRadius: 0,
@@ -35,6 +43,7 @@ const styles = createStyles({
     },
     table: {
         width: '100%',
+        height: HeaderViewConfig.Height,
     },
     tdLeft: {},
     tdRight: {
@@ -53,13 +62,38 @@ const styles = createStyles({
     },
     projectSelect: {
         marginRight: 20,
-        marginTop: 4,
+        marginTop: 0,
     },
     viewSelect: {},
     toggleButtonActive: {
         color: themeColor.white,
         backgroundColor: themeColor.primary,
-    }
+    },
+    projectIcon: {
+        marginTop: -3,
+    },
+    actionIconButtonGreen: {
+        color: HeaderViewConfig.ActionIconColorGreen,
+        marginRight: 10,
+    },
+    actionIconButtonBlue: {
+        color: HeaderViewConfig.ActionIconColorBlue,
+        marginRight: 10,
+    },
+    actionIconButtonGrey: {
+        color: themeColor.grey,
+        marginRight: 10,
+    },
+    fabRun: {
+        marginRight: 10,
+        width: HeaderViewConfig.FabButtonRadius,
+        height: HeaderViewConfig.FabButtonRadius,
+        backgroundColor: HeaderViewConfig.ActionIconColorGreen,
+        color: themeColor.white,
+        '&:hover': {
+            backgroundColor: HeaderViewConfig.ActionIconColorGreenDark,
+        }
+    },
 });
 
 const ViewIconMap = {
@@ -79,7 +113,7 @@ class HeaderView extends React.Component<Props, object> {
 
     }
 
-    handleViewChange = (event: React.MouseEvent<HTMLElement>, value: string) => {
+    handleViewButtonClick = (value: string) => (event: React.MouseEvent<HTMLElement>) => {
         if (!!value) this.props.setCurrentView(value);
     };
 
@@ -93,7 +127,7 @@ class HeaderView extends React.Component<Props, object> {
                     <table className={classes.table}>
                         <tbody>
                         <tr>
-                            <td className={classes.tdLeft}>
+                            <td className={classes.tdLeft} valign={"middle"}>
                                 <TextField
                                     className={classes.projectSelect}
                                     select
@@ -102,7 +136,7 @@ class HeaderView extends React.Component<Props, object> {
                                         disableUnderline: true,
                                         startAdornment: (
                                             <InputAdornment position="start">
-                                                <FolderOpenIcon fontSize={"small"}/>
+                                                <FolderOpenIcon fontSize={"small"} className={classes.projectIcon}/>
                                             </InputAdornment>
                                         ),
                                     }}
@@ -110,29 +144,47 @@ class HeaderView extends React.Component<Props, object> {
                                     <MenuItem value={projectName}>{projectName}</MenuItem>
                                 </TextField>
 
-                                <ToggleButtonGroup
+                                <ButtonGroup
                                     className={classes.viewSelect}
-                                    value={currentView}
-                                    exclusive
+                                    variant={"contained"}
                                     size={"small"}
-                                    onChange={this.handleViewChange}
                                 >
                                     {MVCViews.map((view, i) => {
                                         return (
-                                            <ToggleButton
-                                                value={view.key}
+                                            <Button
+                                                color={currentView === view.key ? 'primary' : 'default'}
                                                 key={i}
+                                                onClick={this.handleViewButtonClick(view.key)}
                                             >
                                                 {ViewIconMap[view.key]}&nbsp;
                                                 {view.name}
-                                            </ToggleButton>
+                                            </Button>
                                         )
                                     })}
-                                </ToggleButtonGroup>
+                                </ButtonGroup>
 
                             </td>
                             <td className={classes.tdRight}>
+                                <Fab size={"small"} className={classes.fabRun}>
+                                    <PlayArrowIcon/>
+                                </Fab>
+                                <IconButton size={"small"} className={classes.actionIconButtonGreen}>
+                                    <BugReportIcon/>
+                                </IconButton>
 
+                                <IconButton size={"small"} className={classes.actionIconButtonGreen}>
+                                    <CheckIcon/>
+                                </IconButton>
+                                <IconButton size={"small"} className={classes.actionIconButtonBlue}>
+                                    <CallReceivedIcon/>
+                                </IconButton>
+                                <IconButton size={"small"} className={classes.actionIconButtonGrey}>
+                                    <HistoryIcon/>
+                                </IconButton>
+
+                                <IconButton size={"small"} className={classes.actionIconButtonGrey}>
+                                    <SearchIcon/>
+                                </IconButton>
                             </td>
                         </tr>
                         </tbody>
