@@ -94,6 +94,9 @@ const styles = createStyles({
             backgroundColor: HeaderViewConfig.ActionIconColorGreenDark,
         }
     },
+    viewButtonDefault: {
+        color: themeColor.dimgrey,
+    },
 });
 
 const ViewIconMap = {
@@ -152,6 +155,7 @@ class HeaderView extends React.Component<Props, object> {
                                     {MVCViews.map((view, i) => {
                                         return (
                                             <Button
+                                                className={currentView === view.key ? null : classes.viewButtonDefault}
                                                 color={currentView === view.key ? 'primary' : 'default'}
                                                 key={i}
                                                 onClick={this.handleViewButtonClick(view.key)}
