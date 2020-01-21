@@ -4,7 +4,10 @@ import {createMuiTheme} from "@material-ui/core/styles";
 
 export const themeColor = {
     primary: '#416CED',
-    secondary: '#ff4400'
+    secondary: '#ff4400',
+    grey: 'grey',
+    white: 'white',
+    dimgrey: 'dimgrey',
 };
 
 export const theme = createMuiTheme({
@@ -22,6 +25,11 @@ export const theme = createMuiTheme({
         contrastThreshold: 3,
     }
 });
+
+export const BackgroundColor = {
+    Editor: '#F5F5F5'
+};
+
 export enum LOADING_STATUS {
     NOT_STARTED,
     LOADING,

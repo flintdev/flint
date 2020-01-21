@@ -4,6 +4,7 @@ import {FSHelper} from "../utils/fsHelper";
 
 export class ProjectManager {
     rootDir: string;
+
     constructor(rootDir: string) {
         this.rootDir = rootDir;
     }
@@ -17,8 +18,8 @@ export class ProjectManager {
     };
 
     getProjectName = () => {
-        const projectName: string = this.rootDir.split('/')[-1];
-        return projectName;
+        const tempList = this.rootDir.split('/');
+        return tempList[tempList.length - 1];
     };
 
     private createConfigFile = () => {

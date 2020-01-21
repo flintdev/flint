@@ -9,22 +9,23 @@ import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
-import {theme} from "../../constants";
+import {BackgroundColor, theme, themeColor} from "../../constants";
 import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator";
 import {LocalStorageManager} from "../../controllers/localStoreManager";
 
 const styles = createStyles({
     root: {
         width: '100%',
-        height: '100%'
+        height: '100%',
+        backgroundColor: BackgroundColor.Editor,
     },
     sider: {
         height: '100vh',
-        borderRight: '1px solid #ddd'
+        borderRight: '1px solid #ddd',
+        backgroundColor: themeColor.white
     },
     contentContainer: {
         height: '100%',
-        backgroundColor: 'white',
     },
     table: {
         width: '100%',
@@ -38,6 +39,7 @@ const styles = createStyles({
     tdLeft: {
         width: 60,
         borderRight: '1px solid #ddd',
+        backgroundColor: themeColor.white
     }
 });
 

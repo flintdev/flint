@@ -1,6 +1,5 @@
 // src/constants/starter.ts
 
-import { createMuiTheme } from '@material-ui/core/styles';
 import {version} from "pjson";
 
 export const StarterConfig = {

@@ -17,12 +17,9 @@ import Tab from "@material-ui/core/Tab";
 import HeaderView from "./HeaderView/HeaderView";
 
 const styles = createStyles({
-    root: {
-        paddingTop: 5,
-    },
-    tabContentContainer: {
-        marginLeft: 10,
-        marginRight: 10,
+    root: {},
+    content: {
+       margin: 20,
     },
 });
 
@@ -54,23 +51,14 @@ class MVCEditor extends React.Component<Props, object> {
         const {currentTabIndex} = this.state;
         return (
             <div className={classes.root}>
-                {/*<Tabs*/}
-                {/*    value={currentTabIndex}*/}
-                {/*    onChange={this.handleTabChange}*/}
-                {/*>*/}
-                {/*    {MVCViews.map((view, i) => {*/}
-                {/*        return (*/}
-                {/*            <Tab label={view.name} key={i} />*/}
-                {/*        )*/}
-                {/*    })}*/}
-                {/*</Tabs>*/}
                 <HeaderView/>
-                <div className={classes.tabContentContainer}>
+                <div className={classes.content}>
                     {currentTabIndex === 0 &&
                     <ModelEditor
                         modelName="TestModel"
                         editorData={editorDataSample1}
-                        onSaved={(schemaData: object, editorData: object) => {}}
+                        onSaved={(schemaData: object, editorData: object) => {
+                        }}
                     />
                     }
                 </div>
