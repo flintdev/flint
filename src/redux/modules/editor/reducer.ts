@@ -18,6 +18,12 @@ export function reducer(state: object, action: EditorAction) {
             return update(state, {
                 projectDir: {$set: action.value}
             });
+        case types.SET_CURRENT_VIEW:
+            return update(state, {
+                mvcEditor: {
+                    currentView: {$set: action.value}
+                }
+            });
         default:
             return state;
     }

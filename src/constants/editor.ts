@@ -20,8 +20,13 @@ export enum MVC {
     Controller = 'controller'
 }
 
-export const MVCViews = [
+export const MVCViews: Array<ModelView> = [
     {key: MVC.Model, name: 'Models'},
     {key: MVC.View, name: 'Views'},
     {key: MVC.Controller, name: 'Controllers'},
 ];
+
+export interface ModelView {
+    key: MVC,
+    name: string
+}

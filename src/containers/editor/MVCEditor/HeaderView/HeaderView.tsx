@@ -17,12 +17,18 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import {MVC, MVCViews} from "../../../../constants/editor";
+import WebIcon from '@material-ui/icons/Web';
+import ControlCameraIcon from '@material-ui/icons/ControlCamera';
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 
 const styles = createStyles({
     root: {},
     paper: {
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
         borderRadius: 0,
         marginLeft: -1,
         marginRight: -1
@@ -45,10 +51,25 @@ const styles = createStyles({
         fontSize: 14,
         display: 'inline-block',
     },
+    projectSelect: {
+        marginRight: 20,
+        marginTop: 4,
+    },
+    viewSelect: {},
+    toggleButtonActive: {
+        color: themeColor.white,
+        backgroundColor: themeColor.primary,
+    }
 });
 
-export interface Props extends WithStyles<typeof styles>, EditorState {
+const ViewIconMap = {
+    [MVC.Model]: <AccountTreeOutlinedIcon/>,
+    [MVC.View]: <WebIcon/>,
+    [MVC.Controller]: <ControlCameraIcon/>,
+};
 
+export interface Props extends WithStyles<typeof styles>, EditorState {
+    setCurrentView: (value: string) => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -58,8 +79,13 @@ class HeaderView extends React.Component<Props, object> {
 
     }
 
+    handleViewChange = (event: React.MouseEvent<HTMLElement>, value: string) => {
+        if (!!value) this.props.setCurrentView(value);
+    };
+
     render() {
-        const {classes, projectDir} = this.props;
+        const {classes, projectDir, mvcEditor} = this.props;
+        const {currentView} = mvcEditor;
         const projectName = new ProjectManager(projectDir).getProjectName();
         return (
             <div className={classes.root}>
@@ -69,6 +95,7 @@ class HeaderView extends React.Component<Props, object> {
                         <tr>
                             <td className={classes.tdLeft}>
                                 <TextField
+                                    className={classes.projectSelect}
                                     select
                                     value={projectName}
                                     InputProps={{
@@ -82,6 +109,27 @@ class HeaderView extends React.Component<Props, object> {
                                 >
                                     <MenuItem value={projectName}>{projectName}</MenuItem>
                                 </TextField>
+
+                                <ToggleButtonGroup
+                                    className={classes.viewSelect}
+                                    value={currentView}
+                                    exclusive
+                                    size={"small"}
+                                    onChange={this.handleViewChange}
+                                >
+                                    {MVCViews.map((view, i) => {
+                                        return (
+                                            <ToggleButton
+                                                value={view.key}
+                                                key={i}
+                                            >
+                                                {ViewIconMap[view.key]}&nbsp;
+                                                {view.name}
+                                            </ToggleButton>
+                                        )
+                                    })}
+                                </ToggleButtonGroup>
+
                             </td>
                             <td className={classes.tdRight}>
 
@@ -100,7 +148,9 @@ const mapStateToProps = (state: StoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
-    return {}
+    return {
+        setCurrentView: (value: string) => dispatch(actions.setCurrentView(value)),
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(HeaderView));
