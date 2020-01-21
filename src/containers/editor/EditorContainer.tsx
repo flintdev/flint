@@ -12,6 +12,7 @@ import MVCEditor from "./MVCEditor";
 import {BackgroundColor, theme, themeColor} from "../../constants";
 import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator";
 import {LocalStorageManager} from "../../controllers/localStoreManager";
+import {NavigationSidebarConfig} from "../../constants/styles";
 
 const styles = createStyles({
     root: {
@@ -37,7 +38,7 @@ const styles = createStyles({
         borderCollapse: 'collapse',
     },
     tdLeft: {
-        width: 60,
+        width: NavigationSidebarConfig.Width,
         borderRight: '1px solid #ddd',
         backgroundColor: themeColor.white
     }

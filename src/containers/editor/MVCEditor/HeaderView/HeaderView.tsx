@@ -24,6 +24,8 @@ const styles = createStyles({
         paddingLeft: 10,
         paddingRight: 10,
         borderRadius: 0,
+        marginLeft: -1,
+        marginRight: -1
     },
     table: {
         width: '100%',

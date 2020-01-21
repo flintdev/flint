@@ -12,6 +12,7 @@ import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
+import {NavigationSidebarConfig} from "../../../constants/styles";
 
 const styles = createStyles({
     root: {
@@ -20,7 +21,7 @@ const styles = createStyles({
     },
     tabItem: {
         height: 60,
-        width: '100%',
+        width: NavigationSidebarConfig.Width - 4,
         textAlign: 'center',
         cursor: 'pointer',
         display: 'flex',
@@ -29,23 +30,24 @@ const styles = createStyles({
     },
     tabItemActive: {
         height: 60,
-        width: '100%',
+        width: NavigationSidebarConfig.Width - 4,
         textAlign: 'center',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderLeft: `4px solid ${themeColor.primary}`,
-        borderRight: `4px solid white`,
+        borderLeft: `${4}px solid ${themeColor.primary}`,
+        borderRight: `${4}px solid white`,
         marginLeft: -1,
     },
     icon: {
-        fontSize: 24
+        fontSize: 24,
+        marginRight: -2,
     },
     iconActive: {
         fontSize: 24,
         color: themeColor.primary,
-        marginRight: 6,
+        marginRight: 4,
     }
 });
 
