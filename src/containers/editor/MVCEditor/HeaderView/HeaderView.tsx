@@ -8,18 +8,18 @@ import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {ProjectManager} from "../../../../controllers/project/projectManager";
 import Typography from '@material-ui/core/Typography';
-import FolderIcon from '@material-ui/icons/Folder';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import {themeColor} from "../../../../constants";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Paper} from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 const styles = createStyles({
-    root: {
-
-    },
+    root: {},
     paper: {
         paddingLeft: 10,
         paddingRight: 10,
@@ -68,19 +68,24 @@ class HeaderView extends React.Component<Props, object> {
                         <tbody>
                         <tr>
                             <td className={classes.tdLeft}>
-                                <FormControl>
-                                    <Select
-                                        disableUnderline={true}
-                                        value={projectName}
-                                    >
-                                        <MenuItem value={projectName}>{projectName}</MenuItem>
-                                    </Select>
-                                </FormControl>
+                                <TextField
+                                    select
+                                    value={projectName}
+                                    InputProps={{
+                                        disableUnderline: true,
+                                        startAdornment: (
+                                            <InputAdornment position="start">
+                                                <FolderOpenIcon fontSize={"small"}/>
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                >
+                                    <MenuItem value={projectName}>{projectName}</MenuItem>
+                                </TextField>
                             </td>
                             <td className={classes.tdRight}>
 
                             </td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>
