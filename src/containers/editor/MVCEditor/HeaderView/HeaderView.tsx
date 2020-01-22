@@ -96,6 +96,7 @@ const styles = createStyles({
     },
     viewButtonDefault: {
         color: themeColor.dimgrey,
+        backgroundColor: HeaderViewConfig.ViewButtonBgColor,
     },
 });
 

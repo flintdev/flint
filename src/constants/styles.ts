@@ -13,5 +13,6 @@ export const HeaderViewConfig = {
     ActionIconColorGreenDark: '#106827',
     ActionIconColorBlue: '#0080bd',
     FabButtonRadius: 36,
+    ViewButtonBgColor: '#f0f0f0',
 };
 
