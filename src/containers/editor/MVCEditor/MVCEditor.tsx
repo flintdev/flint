@@ -4,39 +4,32 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
-import {StoreState} from "src/redux/state";
+import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import {MVC, MVCViews} from "../../../constants/editor";
 import ModelEditor from '@flintdev/model-editor';
 import {editorDataSample1} from './exampleData';
-import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import ViewQuiltIcon from '@material-ui/icons/ViewQuilt';
-import ControlCameraIcon from '@material-ui/icons/ControlCamera';
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import HeaderView from "./HeaderView/HeaderView";
+import {EditorData} from "@flintdev/model-editor/dist/interface";
+import {MVC} from "../../../constants/editor";
+import ModelListView from "./ModelListView";
 
 const styles = createStyles({
-    root: {},
+    root: {
+        display: 'flex',
+        flexFlow: "column",
+        height: "100%",
+    },
     content: {
-       margin: 20,
+        flexGrow: 1
     },
 });
 
-export interface Props extends WithStyles<typeof styles> {
+export interface Props extends WithStyles<typeof styles>, EditorState {
 
 }
 
-const TabIcon = {
-    [MVC.Model]: <AccountTreeIcon/>,
-    [MVC.View]: <ViewQuiltIcon/>,
-    [MVC.Controller]: <ControlCameraIcon/>,
-};
-
 class MVCEditor extends React.Component<Props, object> {
-    state = {
-        currentTabIndex: 0
-    };
+    state = {};
 
     componentDidMount(): void {
 
@@ -47,19 +40,14 @@ class MVCEditor extends React.Component<Props, object> {
     };
 
     render() {
-        const {classes} = this.props;
-        const {currentTabIndex} = this.state;
+        const {classes, mvcEditor} = this.props;
+        const {currentView} = mvcEditor;
         return (
             <div className={classes.root}>
                 <HeaderView/>
                 <div className={classes.content}>
-                    {currentTabIndex === 0 &&
-                    <ModelEditor
-                        modelName="TestModel"
-                        editorData={editorDataSample1}
-                        onSaved={(schemaData: object, editorData: object) => {
-                        }}
-                    />
+                    {currentView === MVC.Model &&
+                    <ModelListView/>
                     }
                 </div>
             </div>

@@ -19,6 +19,7 @@ const styles = createStyles({
         width: '100%',
         height: '100%',
         backgroundColor: BackgroundColor.Editor,
+        display: 'flex'
     },
     sider: {
         height: '100vh',
