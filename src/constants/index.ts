@@ -27,7 +27,7 @@ export const theme = createMuiTheme({
 });
 
 export const BackgroundColor = {
-    Editor: '#F5F5F5'
+    Editor: '#FFF'
 };
 
 export enum LOADING_STATUS {

@@ -11,7 +11,7 @@ import {editorDataSample1} from './exampleData';
 import HeaderView from "./HeaderView/HeaderView";
 import {EditorData} from "@flintdev/model-editor/dist/interface";
 import {MVC} from "../../../constants/editor";
-import ModelListView from "./ModelListView";
+import ModelListView from "./ModelEditorView";
 
 const styles = createStyles({
     root: {

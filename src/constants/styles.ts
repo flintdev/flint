@@ -15,4 +15,3 @@ export const HeaderViewConfig = {
     FabButtonRadius: 36,
     ViewButtonBgColor: '#f0f0f0',
 };
-
