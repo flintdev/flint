@@ -7,6 +7,7 @@ import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Paper from "@material-ui/core/Paper";
+import ModelListView from "./ModelListView";
 
 const styles = createStyles({
     root: {
@@ -56,7 +57,7 @@ class ModelEditorView extends React.Component<Props, object> {
                         <tbody>
                         <tr>
                             <td className={classes.tdLeft} valign={"top"}>
-
+                                <ModelListView/>
                             </td>
                             <td valign={"top"}>
 

@@ -5,10 +5,17 @@ export interface EditorState {
     projectDir: string,
     currentPageIndex: number,
     mvcEditor: MVCEditorState,
+    modelEditor: ModelEditorState,
 }
 
 export interface MVCEditorState {
     currentView: string,
+}
+
+export interface ModelEditorState {
+    modelList: Array<string>,
+    modelSelected: string | null,
+    editorData: object | null,
 }
 
 export interface StoreState {
@@ -18,7 +25,7 @@ export interface StoreState {
     editor: EditorState,
 }
 
-export const initState = {
+export const initState: StoreState = {
     starter: {
         createProjectDialog: {
             open: false
@@ -29,6 +36,11 @@ export const initState = {
         currentPageIndex: 0,
         mvcEditor: {
             currentView: MVC.Model,
+        },
+        modelEditor: {
+            modelList: [],
+            modelSelected: null,
+            editorData: null,
         }
     },
 };
