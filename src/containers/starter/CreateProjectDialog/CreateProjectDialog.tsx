@@ -45,23 +45,20 @@ class CreateProjectDialog extends React.Component<Props, object> {
         this.setState({params});
     };
 
-    handleSubmitButtonClick = () => {
+    handleSubmitButtonClick = async () => {
         this.setState({submitLoading: true});
         const {location} = this.state.params;
-        new FSHelper().createDirByPath(location)
-            .then(() => {
-                // init .flint dir
-                new ProjectManager(location).initializeProjectFiles();
-                this.setState({submitLoading: false});
-                this.props.createProjectDialogClose();
-                new MainProcessCommunicator().switchFromStarterToEditorWindow(location)
-                    .then(() => {
-
-                    });
-            })
-            .catch(err => {
-                console.error('create dir by path', err)
-            });
+        const projectManager = new ProjectManager(location);
+        try {
+            const result = await projectManager.createProjectDir();
+        } catch (e) {
+            console.log(e);
+        }
+        // init .flint dir
+        await projectManager.initializeProjectFiles();
+        this.setState({submitLoading: false});
+        this.props.createProjectDialogClose();
+        await new MainProcessCommunicator().switchFromStarterToEditorWindow(location)
     };
 
     render() {

@@ -63,7 +63,6 @@ class ModelListView extends React.Component<Props, object> {
     state = {
         createDialogOpen: false,
     };
-
     modelManager: ModelManager;
     componentDidMount(): void {
         const {projectDir} = this.props;
@@ -75,8 +74,9 @@ class ModelListView extends React.Component<Props, object> {
         this.handleCreateDialogOpen();
     };
 
-    handleCreateModelSubmit = (params: Params, callback: Callback) => {
-        console.log(params);
+    handleCreateModelSubmit = async (params: Params, callback: Callback) => {
+        const name: string = params.name as string;
+        await this.modelManager.createModel(name);
         callback.close();
     };
 

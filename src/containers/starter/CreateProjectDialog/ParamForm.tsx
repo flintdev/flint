@@ -2,10 +2,7 @@
 
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 import {FSHelper} from "../../../controllers/utils/fsHelper";
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';

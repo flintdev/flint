@@ -5,7 +5,7 @@ import {withStyles, WithStyles, createStyles, ThemeProvider} from '@material-ui/
 import NavigationSidebar from "./NavigationSidebar";
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
-import {StoreState} from "src/redux/state";
+import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
@@ -45,8 +45,7 @@ const styles = createStyles({
     }
 });
 
-export interface Props extends WithStyles<typeof styles> {
-    currentPageIndex: number,
+export interface Props extends WithStyles<typeof styles>, EditorState {
     setProjectDir: (projectDir: string) => void,
 }
 
@@ -64,9 +63,10 @@ class EditorContainer extends React.Component<Props, object> {
     }
 
     render() {
-        const {classes, currentPageIndex} = this.props;
+        const {classes, currentPageIndex, projectDir} = this.props;
         return (
             <ThemeProvider theme={theme}>
+                {!!projectDir &&
                 <div className={classes.root}>
                     <table className={classes.table}>
                         <tbody>
@@ -83,6 +83,7 @@ class EditorContainer extends React.Component<Props, object> {
                         </tbody>
                     </table>
                 </div>
+                }
             </ThemeProvider>
         )
     }

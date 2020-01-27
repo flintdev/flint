@@ -10,12 +10,14 @@ export class ProjectManager {
         this.fsHelper = new FSHelper();
     }
 
-    initializeProjectFiles = () => {
-        const configDirPath = `${this.rootDir}/.flint`;
-        this.fsHelper.createDirByPath(configDirPath)
-            .then(() => {
+    createProjectDir = async () => {
+        await this.fsHelper.createDirByPath(this.rootDir);
+    };
 
-            })
+    initializeProjectFiles = async () => {
+        const configDirPath = `${this.rootDir}/.flint`;
+        await this.fsHelper.createDirByPath(configDirPath);
+        return true;
     };
 
     updateRecentProjects = () => {
