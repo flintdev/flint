@@ -13,6 +13,9 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
+import DialogForm from "../../../../../components/DialogForm";
+import {Callback, Params} from "../../../../../components/DialogForm/DialogForm";
+import {CreateModelParamsDef} from "./definition";
 
 const styles = createStyles({
     root: {
@@ -57,7 +60,7 @@ export interface Props extends WithStyles<typeof styles>, ModelEditorState{
 
 class ModelListView extends React.Component<Props, object> {
     state = {
-
+        createDialogOpen: false,
     };
 
     componentDidMount(): void {
@@ -65,11 +68,25 @@ class ModelListView extends React.Component<Props, object> {
     }
 
     handleCreateModelButtonClick = () => {
+        this.handleCreateDialogOpen();
+    };
 
+    handleCreateModelSubmit = (params: Params, callback: Callback) => {
+        console.log(params);
+        callback.close();
+    };
+
+    handleCreateDialogOpen = () => {
+        this.setState({createDialogOpen: true});
+    };
+
+    handleCreateDialogClose = () => {
+        this.setState({createDialogOpen: false});
     };
 
     render() {
         const {classes, modelList, modelSelected} = this.props;
+        const {createDialogOpen} = this.state;
         return (
             <div className={classes.root}>
                 <table className={classes.table}>
@@ -114,6 +131,15 @@ class ModelListView extends React.Component<Props, object> {
                             </Paper>
                         )
                     })}
+
+                    <DialogForm
+                        open={createDialogOpen}
+                        onClose={this.handleCreateDialogClose}
+                        title={"New Model"}
+                        submitButtonTitle={"Create"}
+                        forms={CreateModelParamsDef}
+                        onSubmit={this.handleCreateModelSubmit}
+                    />
                 </div>
             </div>
         )

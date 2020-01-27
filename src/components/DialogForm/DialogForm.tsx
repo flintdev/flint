@@ -19,7 +19,7 @@ const styles = createStyles({
 type FormType = 'input' | 'select';
 type FormValueType = string|number;
 
-interface Form {
+export interface Form {
     type: FormType,
     key: string,
     label: string,
@@ -27,15 +27,16 @@ interface Form {
     helperText?: string,
     required?: boolean,
     dataType?: string,
+    autofocus?: boolean,
     defaultValue?: FormValueType,
-    options: Array<FormValueType>
+    options?: Array<FormValueType>
 }
 
-interface Params {
+export interface Params {
     [key: string]: FormValueType
 }
 
-interface Callback {
+export interface Callback {
     setStatus: (status: LOADING_STATUS) => void,
     close: () => void,
 }
@@ -103,13 +104,14 @@ class DialogForm extends React.Component<Props, object> {
                     open={open}
                     onClose={onClose}
                     onEnter={this.onEnter}
+                    fullWidth={true}
                 >
                     {!!title &&
                     <DialogTitle>{title}</DialogTitle>
                     }
                     <DialogContent>
                         {forms.map((form, i) => {
-                            const {type, key, label, placeholder, helperText, required, defaultValue, dataType, options} = form;
+                            const {type, key, label, placeholder, helperText, required, defaultValue, dataType, autofocus, options} = form;
                             const value = this.getParamValueByKey(key, defaultValue);
                             return (
                                 <div key={i}>
@@ -122,6 +124,7 @@ class DialogForm extends React.Component<Props, object> {
                                         helperText={helperText}
                                         placeholder={placeholder}
                                         type={dataType}
+                                        autoFocus={!!autofocus}
                                         onChange={this.handleFormChange(key)}
                                     />
                                     }
