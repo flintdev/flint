@@ -7,9 +7,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from '@material-ui/core/Button';
-import {Simulate} from "react-dom/test-utils";
-import submit = Simulate.submit;
 import {LOADING_STATUS} from "../../constants";
+import {TextField} from "@material-ui/core";
 
 const styles = createStyles({
     root: {
@@ -18,6 +17,7 @@ const styles = createStyles({
 });
 
 type FormType = 'input' | 'select';
+type FormValueType = string|number;
 
 interface Form {
     type: FormType,
@@ -26,12 +26,13 @@ interface Form {
     placeholder?: string,
     helperText?: string,
     required?: boolean,
-    defaultValue?: string|number,
-    options: Array<string|number>
+    dataType?: string,
+    defaultValue?: FormValueType,
+    options: Array<FormValueType>
 }
 
 interface Params {
-    [key: string]: string|number
+    [key: string]: FormValueType
 }
 
 interface Callback {
@@ -79,6 +80,21 @@ class DialogForm extends React.Component<Props, object> {
         onSubmit(params, callback);
     };
 
+    handleFormChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value;
+        let {params} = this.state;
+        params[key] = value;
+        this.setState({params});
+    };
+    
+    getParamValueByKey = (key: string, defaultValue: FormValueType) => {
+        const {params} = this.state;
+        let value: FormValueType = params[key];
+        if (!!value) return value;
+        if (!!defaultValue) return defaultValue;
+        return '';
+    };
+
     render() {
         const {classes, open, onClose, title, submitButtonTitle, closeButtonTitle, forms} = this.props;
         return (
@@ -92,7 +108,26 @@ class DialogForm extends React.Component<Props, object> {
                     <DialogTitle>{title}</DialogTitle>
                     }
                     <DialogContent>
-
+                        {forms.map((form, i) => {
+                            const {type, key, label, placeholder, helperText, required, defaultValue, dataType, options} = form;
+                            const value = this.getParamValueByKey(key, defaultValue);
+                            return (
+                                <div key={i}>
+                                    {type === "input" && 
+                                    <TextField
+                                        fullWidth
+                                        value={value}
+                                        label={label}
+                                        required={!!required}
+                                        helperText={helperText}
+                                        placeholder={placeholder}
+                                        type={dataType}
+                                        onChange={this.handleFormChange(key)}
+                                    />
+                                    }
+                                </div>
+                            )
+                        })}
                     </DialogContent>
                     <DialogActions>
                         <Button
