@@ -1,16 +1,16 @@
 // src/containers/editor/MVCEditor/ModelEditorView/ModelListView/ModelListView.tsx
 
 import * as React from 'react';
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { Dispatch } from "redux";
-import {EditorState, ModelEditorState, StoreState} from "src/redux/state";
+import {createStyles, WithStyles, withStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {Dispatch} from "redux";
+import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import RadioIcon from '@material-ui/icons/Radio';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import {themeColor} from "../../../../../constants";
+import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import DialogForm from "../../../../../components/DialogForm";
@@ -56,19 +56,26 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, EditorState{
-
+    setModelList: (modelList: string[]) => void,
 }
 
 class ModelListView extends React.Component<Props, object> {
     state = {
         createDialogOpen: false,
+        loadingStatus: LOADING_STATUS.NOT_STARTED,
     };
     modelManager: ModelManager;
+
     componentDidMount(): void {
+        this.initActions().then(r => {});
+    }
+
+    initActions = async () => {
         const {projectDir} = this.props;
         this.modelManager = new ModelManager(projectDir);
-        this.modelManager.checkAndCreateModelDir();
-    }
+        await this.modelManager.checkAndCreateModelDir();
+        await this.reloadModelList();
+    };
 
     handleCreateModelButtonClick = () => {
         this.handleCreateDialogOpen();
@@ -77,7 +84,16 @@ class ModelListView extends React.Component<Props, object> {
     handleCreateModelSubmit = async (params: Params, callback: Callback) => {
         const name: string = params.name as string;
         await this.modelManager.createModel(name);
+        await this.reloadModelList();
         callback.close();
+    };
+
+    reloadModelList = async () => {
+        const {projectDir} = this.props;
+        this.setState({loadingStatus: LOADING_STATUS.LOADING});
+        const modelList = await new ModelManager(projectDir).getModelList();
+        this.props.setModelList(modelList);
+        this.setState({loadingStatus: LOADING_STATUS.COMPLETE});
     };
 
     handleCreateDialogOpen = () => {
@@ -91,7 +107,7 @@ class ModelListView extends React.Component<Props, object> {
     render() {
         const {classes} = this.props;
         const {modelList, modelSelected} = this.props.modelEditor;
-        const {createDialogOpen} = this.state;
+        const {createDialogOpen, loadingStatus} = this.state;
         return (
             <div className={classes.root}>
                 <table className={classes.table}>
@@ -109,7 +125,7 @@ class ModelListView extends React.Component<Props, object> {
                     </tbody>
                 </table>
                 <div className={classes.modelListContainer}>
-                    {modelList.map((modelName, i) => {
+                    {loadingStatus === LOADING_STATUS.COMPLETE && modelList.map((modelName, i) => {
                         return (
                             <Paper className={classes.paper} key={i}>
                                 <table className={classes.table}>
@@ -157,6 +173,7 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
+        setModelList: (modelList: string[]) => dispatch((actions.setModelList(modelList))),
 
     }
 };

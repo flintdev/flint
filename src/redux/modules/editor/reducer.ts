@@ -24,6 +24,13 @@ export function reducer(state: object, action: EditorAction) {
                     currentView: {$set: action.value}
                 }
             });
+        case types.SET_MODEL_LIST:
+            return update(state, {
+                modelEditor: {
+                    modelList: {$set: action.modelList}
+                }
+            });
+
         default:
             return state;
     }

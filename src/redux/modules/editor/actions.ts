@@ -23,6 +23,10 @@ export function setCurrentView(value: string): SetCurrentView {
     return { type: types.SET_CURRENT_VIEW, value }
 }
 
+export function setModelList(modelList: string[]): SetModelList {
+    return { type: types.SET_MODEL_LIST, modelList }
+}
+
 // interfaces
 
 export interface InitializeEditor {
@@ -44,8 +48,14 @@ export interface SetCurrentView {
     value: string
 }
 
+export interface SetModelList {
+    type: typeof types.SET_MODEL_LIST,
+    modelList: string[]
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
     SetCurrentView |
+    SetModelList |
     SetProjectDir;
