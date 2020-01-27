@@ -4,7 +4,7 @@ import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import {ModelEditorState, StoreState} from "src/redux/state";
+import {EditorState, ModelEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -16,6 +16,7 @@ import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import DialogForm from "../../../../../components/DialogForm";
 import {Callback, Params} from "../../../../../components/DialogForm/DialogForm";
 import {CreateModelParamsDef} from "./definition";
+import {ModelManager} from "../../../../../controllers/model/modelManager";
 
 const styles = createStyles({
     root: {
@@ -54,7 +55,7 @@ const styles = createStyles({
     }
 });
 
-export interface Props extends WithStyles<typeof styles>, ModelEditorState{
+export interface Props extends WithStyles<typeof styles>, EditorState{
 
 }
 
@@ -63,8 +64,11 @@ class ModelListView extends React.Component<Props, object> {
         createDialogOpen: false,
     };
 
+    modelManager: ModelManager;
     componentDidMount(): void {
-
+        const {projectDir} = this.props;
+        this.modelManager = new ModelManager(projectDir);
+        this.modelManager.checkAndCreateModelDir();
     }
 
     handleCreateModelButtonClick = () => {
@@ -85,7 +89,8 @@ class ModelListView extends React.Component<Props, object> {
     };
 
     render() {
-        const {classes, modelList, modelSelected} = this.props;
+        const {classes} = this.props;
+        const {modelList, modelSelected} = this.props.modelEditor;
         const {createDialogOpen} = this.state;
         return (
             <div className={classes.root}>
@@ -147,7 +152,7 @@ class ModelListView extends React.Component<Props, object> {
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state.editor.modelEditor;
+    return state.editor;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {

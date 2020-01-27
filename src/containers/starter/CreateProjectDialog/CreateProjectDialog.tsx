@@ -14,6 +14,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import ParamForm from "./ParamForm";
+import {ProjectManager} from "../../../controllers/project/projectManager";
 
 const styles = createStyles({
     root: {},
@@ -49,6 +50,8 @@ class CreateProjectDialog extends React.Component<Props, object> {
         const {location} = this.state.params;
         new FSHelper().createDirByPath(location)
             .then(() => {
+                // init .flint dir
+                new ProjectManager(location).initializeProjectFiles();
                 this.setState({submitLoading: false});
                 this.props.createProjectDialogClose();
                 new MainProcessCommunicator().switchFromStarterToEditorWindow(location)
