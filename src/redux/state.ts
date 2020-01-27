@@ -16,9 +16,6 @@ export interface ModelEditorState {
     modelList: Array<string>,
     modelSelected: string | null,
     editorData: object | null,
-    createModelDialog: {
-        open: boolean,
-    }
 }
 
 export interface StoreState {
@@ -44,9 +41,6 @@ export const initState: StoreState = {
             modelList: [],
             modelSelected: null,
             editorData: null,
-            createModelDialog: {
-                open: false
-            }
         }
     },
 };
