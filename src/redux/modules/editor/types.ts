@@ -6,3 +6,4 @@ export const SET_CURRENT_PAGE = 'editor/SET_CURRENT_PAGE';
 // mvc editor
 export const SET_CURRENT_VIEW = 'editor/mvcEditor/SET_CURRENT_VIEW';
 export const SET_MODEL_LIST = 'editor/mvcEditor/SET_MODEL_LIST';
+export const SELECT_MODEL = 'editor/mvcEditor/SELECT_MODEL';

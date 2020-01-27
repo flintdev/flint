@@ -30,6 +30,12 @@ export function reducer(state: object, action: EditorAction) {
                     modelList: {$set: action.modelList}
                 }
             });
+        case types.SELECT_MODEL:
+            return update(state, {
+                modelEditor: {
+                    modelSelected: {$set: action.value}
+                }
+            });
 
         default:
             return state;

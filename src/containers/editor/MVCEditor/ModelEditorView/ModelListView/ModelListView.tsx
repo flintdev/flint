@@ -8,7 +8,7 @@ import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import RadioIcon from '@material-ui/icons/Radio';
+import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
@@ -33,9 +33,10 @@ const styles = createStyles({
     paper: {
         marginLeft: 0,
         marginRight: 0,
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: 15,
+        marginBottom: 15,
         padding: 10,
+        cursor: 'pointer',
     },
     table: {
         width: '100%',
@@ -43,6 +44,7 @@ const styles = createStyles({
     tdIcon: {
         textAlign: 'center',
         width: 30,
+        paddingTop: 5,
     },
     iconActive: {
         color: themeColor.primary,
@@ -55,8 +57,9 @@ const styles = createStyles({
     }
 });
 
-export interface Props extends WithStyles<typeof styles>, EditorState{
+export interface Props extends WithStyles<typeof styles>, EditorState {
     setModelList: (modelList: string[]) => void,
+    selectModel: (value: string) => void,
 }
 
 class ModelListView extends React.Component<Props, object> {
@@ -104,6 +107,10 @@ class ModelListView extends React.Component<Props, object> {
         this.setState({createDialogOpen: false});
     };
 
+    handleModelBoxClick = (modelName: string) => () => {
+        this.props.selectModel(modelName);
+    };
+
     render() {
         const {classes} = this.props;
         const {modelList, modelSelected} = this.props.modelEditor;
@@ -127,13 +134,18 @@ class ModelListView extends React.Component<Props, object> {
                 <div className={classes.modelListContainer}>
                     {loadingStatus === LOADING_STATUS.COMPLETE && modelList.map((modelName, i) => {
                         return (
-                            <Paper className={classes.paper} key={i}>
+                            <Paper
+                                className={classes.paper}
+                                key={i}
+                                onClick={this.handleModelBoxClick(modelName)}
+                            >
                                 <table className={classes.table}>
                                     <tbody>
                                     <tr>
                                         <td>
                                             <Typography
                                                 variant={"subtitle1"}
+                                                color={modelName === modelSelected ? "primary": "initial"}
                                             >
                                                 {modelName}
                                             </Typography>
@@ -142,7 +154,7 @@ class ModelListView extends React.Component<Props, object> {
                                             {modelSelected === modelName ?
                                                 <CheckCircleIcon className={classes.iconActive}/>
                                                 :
-                                                <RadioIcon className={classes.icon}/>
+                                                <RadioButtonUncheckedIcon className={classes.icon}/>
                                             }
                                         </td>
                                     </tr>
@@ -174,7 +186,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         setModelList: (modelList: string[]) => dispatch((actions.setModelList(modelList))),
-
+        selectModel: (value: string) => dispatch((actions.selectModel(value))),
     }
 };
 

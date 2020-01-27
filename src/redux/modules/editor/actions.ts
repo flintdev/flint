@@ -27,6 +27,12 @@ export function setModelList(modelList: string[]): SetModelList {
     return { type: types.SET_MODEL_LIST, modelList }
 }
 
+export function selectModel(value: string): SelectModel {
+    return { type: types.SELECT_MODEL, value }
+}
+
+
+
 // interfaces
 
 export interface InitializeEditor {
@@ -53,9 +59,15 @@ export interface SetModelList {
     modelList: string[]
 }
 
+export interface SelectModel {
+    type: typeof types.SELECT_MODEL,
+    value: string,
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
     SetCurrentView |
     SetModelList |
+    SelectModel |
     SetProjectDir;
