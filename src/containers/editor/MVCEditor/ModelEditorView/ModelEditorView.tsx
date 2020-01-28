@@ -4,10 +4,17 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
-import {StoreState} from "src/redux/state";
+import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import Paper from "@material-ui/core/Paper";
 import ModelListView from "./ModelListView";
+import {ProjectManager} from "../../../../controllers/project/projectManager";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import SaveIcon from '@material-ui/icons/Save';
+import Chip from "@material-ui/core/Chip";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 const styles = createStyles({
     root: {
@@ -34,10 +41,42 @@ const styles = createStyles({
         width: 240,
         borderRight: '1px solid #ddd',
         backgroundColor: '#f5f5f5'
-    }
+    },
+    headerViewContainer: {
+        borderBottom: '1px solid #ddd',
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    headerTable: {
+    },
+
+    textRight: {
+        textAlign: 'right',
+    },
+    headerTitle: {
+        flex: 1,
+    },
+    chip: {
+        borderRadius: 8,
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    chipUnselected: {
+        borderRadius: 8,
+        fontSize: 16,
+        color: 'grey'
+    },
+    actionButton: {
+        marginLeft: 20,
+    },
+    bodyViewContainer: {
+
+    },
 });
 
-export interface Props extends WithStyles<typeof styles> {
+export interface Props extends WithStyles<typeof styles>, EditorState {
 
 }
 
@@ -48,8 +87,18 @@ class ModelEditorView extends React.Component<Props, object> {
 
     }
 
+    handleSaveButtonClick = () => {
+
+    };
+
+    handleDeleteButtonClick = () => {
+
+    };
+
     render() {
-        const {classes} = this.props;
+        const {classes, projectDir, modelEditor} = this.props;
+        const projectName = new ProjectManager(projectDir).getProjectName();
+        const {modelSelected} = modelEditor;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -60,12 +109,49 @@ class ModelEditorView extends React.Component<Props, object> {
                                 <ModelListView/>
                             </td>
                             <td valign={"top"}>
+                                {/* Header View */}
+                                <div className={classes.headerViewContainer}>
+                                    <table className={classes.table}>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <div className={classes.headerTitle}>
+                                                    {!modelSelected && <Chip variant={"outlined"} label={"model unselected"} className={classes.chipUnselected}/>}
+                                                    {!!modelSelected && <Chip variant={"outlined"} label={modelSelected} color={"primary"} className={classes.chip}/>}
+                                                </div>
+                                            </td>
+                                            <td className={classes.textRight}>
+                                                <Button
+                                                    variant={"outlined"}
+                                                    color={"secondary"}
+                                                    className={classes.actionButton}
+                                                    onClick={this.handleDeleteButtonClick}
+                                                >
+                                                    <DeleteOutlineIcon/>&nbsp;Delete
+                                                </Button>
+                                                <Button
+                                                    variant={"contained"}
+                                                    color={"primary"}
+                                                    className={classes.actionButton}
+                                                    onClick={this.handleSaveButtonClick}
+                                                >
+                                                    <SaveIcon/>&nbsp;Save
+                                                </Button>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {/* Body view */}
+                                <div className={classes.bodyViewContainer}>
 
+                                </div>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+
             </div>
         )
     }

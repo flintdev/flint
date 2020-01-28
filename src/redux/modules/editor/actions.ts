@@ -32,7 +32,6 @@ export function selectModel(value: string): SelectModel {
 }
 
 
-
 // interfaces
 
 export interface InitializeEditor {
