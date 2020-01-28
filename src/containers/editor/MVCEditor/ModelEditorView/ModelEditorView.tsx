@@ -15,6 +15,8 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save';
 import Chip from "@material-ui/core/Chip";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import Grid from '@material-ui/core/Grid';
+import TreeEditor from "./TreeEditor";
 
 const styles = createStyles({
     root: {
@@ -41,6 +43,11 @@ const styles = createStyles({
         width: 240,
         borderRight: '1px solid #ddd',
         backgroundColor: '#f5f5f5'
+    },
+    tdRight: {
+        height: '100%',
+        display: 'flex',
+        flexFlow: "column",
     },
     headerViewContainer: {
         borderBottom: '1px solid #ddd',
@@ -72,8 +79,18 @@ const styles = createStyles({
         marginLeft: 20,
     },
     bodyViewContainer: {
-
+        flexGrow: 1,
+        display: 'flex',
+        flexFlow: "column",
     },
+    grid: {
+        flexGrow: 1
+    },
+    gridItem: {
+        flexGrow: 1,
+        display: 'flex',
+        flexFlow: "column",
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, EditorState {
@@ -108,7 +125,7 @@ class ModelEditorView extends React.Component<Props, object> {
                             <td className={classes.tdLeft} valign={"top"}>
                                 <ModelListView/>
                             </td>
-                            <td valign={"top"}>
+                            <td className={classes.tdRight} valign={"top"}>
                                 {/* Header View */}
                                 <div className={classes.headerViewContainer}>
                                     <table className={classes.table}>
@@ -144,7 +161,14 @@ class ModelEditorView extends React.Component<Props, object> {
                                 </div>
                                 {/* Body view */}
                                 <div className={classes.bodyViewContainer}>
+                                    <Grid container spacing={0} className={classes.grid}>
+                                        <Grid item xs={6} className={classes.gridItem}>
+                                            <TreeEditor/>
+                                        </Grid>
+                                        <Grid item xs={6} className={classes.gridItem}>
 
+                                        </Grid>
+                                    </Grid>
                                 </div>
                             </td>
                         </tr>

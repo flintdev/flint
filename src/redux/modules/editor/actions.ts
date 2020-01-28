@@ -1,6 +1,7 @@
 // src/redux/modules/editor/actions.ts
 
 import * as types from './types';
+import {EditorData} from "@flintdev/model-editor/dist/interface";
 
 // functions
 
@@ -29,6 +30,10 @@ export function setModelList(modelList: string[]): SetModelList {
 
 export function selectModel(value: string): SelectModel {
     return { type: types.SELECT_MODEL, value }
+}
+
+export function setEditorData (editorData: EditorData): SetEditorData {
+    return { type: types.SET_EDITOR_DATA, editorData }
 }
 
 
@@ -63,10 +68,16 @@ export interface SelectModel {
     value: string,
 }
 
+export interface SetEditorData {
+    type: typeof types.SET_EDITOR_DATA,
+    editorData: EditorData,
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
     SetCurrentView |
     SetModelList |
     SelectModel |
+    SetEditorData |
     SetProjectDir;

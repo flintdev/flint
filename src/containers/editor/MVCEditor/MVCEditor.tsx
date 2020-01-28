@@ -6,10 +6,7 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import ModelEditor from '@flintdev/model-editor';
-import {editorDataSample1} from './exampleData';
 import HeaderView from "./HeaderView/HeaderView";
-import {EditorData} from "@flintdev/model-editor/dist/interface";
 import {MVC} from "../../../constants/editor";
 import ModelListView from "./ModelEditorView";
 
