@@ -8,9 +8,6 @@ import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import ModelListView from "./ModelListView";
 import {ProjectManager} from "../../../../controllers/project/projectManager";
-import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save';
 import Chip from "@material-ui/core/Chip";
@@ -19,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import TreeEditor from "./TreeEditor";
 import SchemaView from "./SchemaView";
 import {ModelManager} from "../../../../controllers/model/modelManager";
+import Toast from "../../../../components/Toast";
+import {ToastType} from "../../../../components/Toast/Toast";
 
 const styles = createStyles({
     root: {
@@ -99,19 +98,44 @@ export interface Props extends WithStyles<typeof styles>, EditorState {
 
 }
 
+interface State {
+    toastOpen: boolean,
+    toastType: ToastType,
+    toastMessage: string,
+}
+
 class ModelEditorView extends React.Component<Props, object> {
-    state = {};
+    state: State = {
+        toastOpen: false,
+        toastType: 'success',
+        toastMessage: '',
+    };
 
     componentDidMount(): void {
 
     }
+
+    handleToastOpen = () => {
+        const {modelSelected} = this.props.modelEditor;
+        this.setState({
+            toastOpen: true,
+            toastType: 'success',
+            toastMessage: `${modelSelected} is saved successfully`,
+        });
+    };
+
+    handleToastClose = () => {
+        this.setState({
+            toastOpen: false,
+        });
+    };
 
     handleSaveButtonClick = async () => {
         const {projectDir, modelEditor} = this.props;
         const {modelSelected, editorData, schemaData} = modelEditor;
         if (!modelSelected) return;
         await new ModelManager(projectDir).saveEditorData(modelSelected, editorData);
-        // TODO: send notification
+        this.handleToastOpen();
     };
 
     handleDeleteButtonClick = () => {
@@ -120,7 +144,7 @@ class ModelEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes, projectDir, modelEditor} = this.props;
-        const projectName = new ProjectManager(projectDir).getProjectName();
+        const {toastOpen, toastType, toastMessage} = this.state;
         const {modelSelected} = modelEditor;
         return (
             <div className={classes.root}>
@@ -182,6 +206,12 @@ class ModelEditorView extends React.Component<Props, object> {
                     </table>
                 </div>
 
+                <Toast
+                    open={toastOpen}
+                    onClose={this.handleToastClose}
+                    type={toastType}
+                    message={toastMessage}
+                />
             </div>
         )
     }

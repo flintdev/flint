@@ -11,10 +11,12 @@ const styles = createStyles({
     },
 });
 
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
+
 export interface Props extends WithStyles<typeof styles>{
     open: boolean,
     onClose: () => void,
-    type: 'success' | 'error' | 'warning' | 'info',
+    type: ToastType,
     message: string
 }
 
@@ -40,8 +42,13 @@ class Toast extends React.Component<Props, object> {
             <div className={classes.root}>
                 <Snackbar
                     open={open}
+                    anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
                     autoHideDuration={3000}
-                    onClose={onClose}>
+                    onClose={onClose}
+                >
                     <Alert onClose={this.handleClose} severity={type}>
                         {message}
                     </Alert>

@@ -60,8 +60,9 @@ export class ModelManager {
     };
 
     saveEditorData = async (modelName: string, editorData: EditorData) => {
-        const configJson = await this.fetchConfigData();
+        let configJson = await this.fetchConfigData();
         _.set(configJson, ['editorDataMap', modelName], editorData);
+        await this.saveConfigData(configJson);
     };
 
     private checkAndCreateModelConfigFile = async () => {
