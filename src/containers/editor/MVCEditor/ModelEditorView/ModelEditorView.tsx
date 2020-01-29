@@ -17,6 +17,7 @@ import Chip from "@material-ui/core/Chip";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Grid from '@material-ui/core/Grid';
 import TreeEditor from "./TreeEditor";
+import SchemaView from "./SchemaView";
 
 const styles = createStyles({
     root: {
@@ -166,7 +167,7 @@ class ModelEditorView extends React.Component<Props, object> {
                                             <TreeEditor/>
                                         </Grid>
                                         <Grid item xs={6} className={classes.gridItem}>
-
+                                            <SchemaView/>
                                         </Grid>
                                     </Grid>
                                 </div>

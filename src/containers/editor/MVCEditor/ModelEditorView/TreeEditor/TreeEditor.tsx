@@ -22,10 +22,13 @@ const styles = createStyles({
         flexGrow: 1
     },
     card: {
-        height: '100%'
+        height: '100%',
+        display: 'flex',
+        flexFlow: 'column'
     },
     cardContent: {
-        overflow: 'scroll'
+        overflow: 'scroll',
+        flexGrow: 1
     },
 });
 
@@ -67,6 +70,7 @@ class TreeEditor extends React.Component<Props, object> {
                     <CardHeader
                         avatar={<Avatar><AccountTreeIcon/></Avatar>}
                         title={`Tree Editor`}
+                        subheader={'Define the schema structure of data model'}
                     />
                     <CardContent className={classes.cardContent}>
                         {!!modelSelected && loadingStatus === LOADING_STATUS.COMPLETE &&
