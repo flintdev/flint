@@ -11,6 +11,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CodeIcon from '@material-ui/icons/Code';
 import Avatar from "@material-ui/core/Avatar";
+import MonacoEditor, {EditorDidMount} from 'react-monaco-editor';
 
 const styles = createStyles({
     root: {
@@ -18,8 +19,15 @@ const styles = createStyles({
         flexGrow: 1
     },
     card: {
-        height: '100%'
+        height: '100%',
+        display: 'flex',
+        flexFlow: 'column'
     },
+    cardContent: {
+        // paddingLeft: 20,
+        // paddingRight: 20,
+        flexGrow: 1
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>{
@@ -35,6 +43,14 @@ class SchemaView extends React.Component<Props, object> {
 
     }
 
+    editorDidMount: EditorDidMount = (editor, monaco) => {
+        editor.focus();
+    };
+
+    getCode = () => {
+
+    };
+
     render() {
         const {classes} = this.props;
         return (
@@ -45,8 +61,16 @@ class SchemaView extends React.Component<Props, object> {
                         title={`Schema Viewer`}
                         subheader={`OpenAPI schema of data model`}
                     />
-                    <CardContent>
-
+                    <CardContent className={classes.cardContent}>
+                        <MonacoEditor
+                            language="yaml"
+                            theme="vs-dark"
+                            value={""}
+                            options={{
+                                readOnly: true,
+                            }}
+                            editorDidMount={this.editorDidMount}
+                        />
                     </CardContent>
                 </Card>
             </div>

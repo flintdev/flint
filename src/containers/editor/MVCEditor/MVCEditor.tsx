@@ -32,10 +32,6 @@ class MVCEditor extends React.Component<Props, object> {
 
     }
 
-    handleTabChange = (event: React.ChangeEvent, index: number) => {
-        this.setState({currentTabIndex: index});
-    };
-
     render() {
         const {classes, mvcEditor} = this.props;
         const {currentView} = mvcEditor;

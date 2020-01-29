@@ -1,6 +1,6 @@
 // redux/state.ts
 import {MVC} from "../constants/editor";
-import {EditorData} from "@flintdev/model-editor/dist/interface";
+import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 
 export interface EditorState {
     projectDir: string,
@@ -17,6 +17,7 @@ export interface ModelEditorState {
     modelList: Array<string>,
     modelSelected: string | undefined,
     editorData: EditorData | undefined,
+    schemaData: SchemaData | undefined,
 }
 
 export interface StoreState {
@@ -42,6 +43,7 @@ export const initState: StoreState = {
             modelList: [],
             modelSelected: undefined,
             editorData: undefined,
+            schemaData: undefined,
         }
     },
 };
