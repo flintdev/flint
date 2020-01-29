@@ -18,6 +18,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Grid from '@material-ui/core/Grid';
 import TreeEditor from "./TreeEditor";
 import SchemaView from "./SchemaView";
+import {ModelManager} from "../../../../controllers/model/modelManager";
 
 const styles = createStyles({
     root: {
@@ -105,8 +106,12 @@ class ModelEditorView extends React.Component<Props, object> {
 
     }
 
-    handleSaveButtonClick = () => {
-
+    handleSaveButtonClick = async () => {
+        const {projectDir, modelEditor} = this.props;
+        const {modelSelected, editorData, schemaData} = modelEditor;
+        if (!modelSelected) return;
+        await new ModelManager(projectDir).saveEditorData(modelSelected, editorData);
+        // TODO: send notification
     };
 
     handleDeleteButtonClick = () => {
