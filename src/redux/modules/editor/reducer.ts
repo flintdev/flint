@@ -7,9 +7,7 @@ import {EditorAction} from "./actions";
 export function reducer(state: object, action: EditorAction) {
     switch (action.type) {
         case types.INITIALIZE_EDITOR:
-            return update(state, {
-
-            });
+            return update(state, {});
         case types.SET_CURRENT_PAGE:
             return update(state, {
                 currentPageIndex: {$set: action.pageIndex}
@@ -34,6 +32,18 @@ export function reducer(state: object, action: EditorAction) {
             return update(state, {
                 modelEditor: {
                     modelSelected: {$set: action.value}
+                }
+            });
+        case types.SET_EDITOR_DATA:
+            return update(state, {
+                modelEditor: {
+                    editorData: {$set: action.editorData}
+                }
+            });
+        case types.SET_SCHEMA_DATA:
+            return update(state, {
+                modelEditor: {
+                    schemaData: {$set: action.schemaData}
                 }
             });
 

@@ -2,6 +2,7 @@
 
 import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
+import {EditorData} from "@flintdev/model-editor/dist/interface";
 
 interface Config {
     models: Array<object>
@@ -56,6 +57,11 @@ export class ModelManager {
     getEditorData = async (modelName: string) => {
         const configJson = await this.fetchConfigData();
         return _.get(configJson, ['editorDataMap', modelName]);
+    };
+
+    saveEditorData = async (modelName: string, editorData: EditorData) => {
+        const configJson = await this.fetchConfigData();
+        _.set(configJson, ['editorDataMap', modelName], editorData);
     };
 
     private checkAndCreateModelConfigFile = async () => {

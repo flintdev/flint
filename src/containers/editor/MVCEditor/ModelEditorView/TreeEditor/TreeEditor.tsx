@@ -33,7 +33,8 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, EditorState {
-    setEditorData: (editorData: EditorData) => void
+    setEditorData: (editorData: EditorData) => void,
+    setSchemaData: (schemaData: SchemaData) => void,
 }
 
 class TreeEditor extends React.Component<Props, object> {
@@ -58,6 +59,7 @@ class TreeEditor extends React.Component<Props, object> {
 
     handleModelEditorUpdated = (schemaData: SchemaData, editorData: EditorData) => {
         this.props.setEditorData(editorData);
+        this.props.setSchemaData(schemaData);
     };
 
     render() {
@@ -95,6 +97,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
+        setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
     }
 };
 

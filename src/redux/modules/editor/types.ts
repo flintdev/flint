@@ -9,3 +9,4 @@ export const SET_CURRENT_VIEW = 'editor/mvcEditor/SET_CURRENT_VIEW';
 export const SET_MODEL_LIST = 'editor/modelEditor/SET_MODEL_LIST';
 export const SELECT_MODEL = 'editor/modelEditor/SELECT_MODEL';
 export const SET_EDITOR_DATA = 'editor/modelEditor/SET_EDITOR_DATA';
+export const SET_SCHEMA_DATA = 'editor/modelEditor/SET_SCHEMA_DATA';
