@@ -17,7 +17,7 @@ import DialogForm from "../../../../../components/DialogForm";
 import {Callback, Params} from "../../../../../components/DialogForm/DialogForm";
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
-import {EditorData} from "@flintdev/model-editor/dist/interface";
+import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 
 const styles = createStyles({
     root: {
@@ -62,6 +62,8 @@ export interface Props extends WithStyles<typeof styles>, EditorState {
     setModelList: (modelList: string[]) => void,
     selectModel: (value: string) => void,
     setEditorData: (editorData: EditorData) => void,
+    setDefaultEditorData: (editorData: EditorData) => void,
+    setSchemaData: (schemaData: SchemaData) => void,
 }
 
 class ModelListView extends React.Component<Props, object> {
@@ -110,10 +112,12 @@ class ModelListView extends React.Component<Props, object> {
     };
 
     handleModelBoxClick = (modelName: string) => async () => {
+        this.props.setEditorData(undefined);
+        this.props.setSchemaData(undefined);
         const editorData = await this.modelManager.getEditorData(modelName);
-        console.log(editorData);
         // order of the 2 actions is important.
         this.props.setEditorData(editorData);
+        this.props.setDefaultEditorData(editorData);
         this.props.selectModel(modelName);
     };
 
@@ -194,6 +198,8 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
         setModelList: (modelList: string[]) => dispatch((actions.setModelList(modelList))),
         selectModel: (value: string) => dispatch((actions.selectModel(value))),
         setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
+        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.setDefaultEditorData(editorData)),
+        setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
     }
 };
 

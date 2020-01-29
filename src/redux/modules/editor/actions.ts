@@ -40,6 +40,9 @@ export function setSchemaData(schemaData: SchemaData): SetSchemaData {
     return { type: types.SET_SCHEMA_DATA, schemaData }
 }
 
+export function setDefaultEditorData(editorData: EditorData): SetDefaultEditorData {
+    return { type: types.SET_DEFAULT_EDITOR_DATA, editorData}
+}
 
 
 // interfaces
@@ -83,6 +86,11 @@ export interface SetSchemaData {
     schemaData: SchemaData,
 }
 
+export interface SetDefaultEditorData {
+    type: typeof types.SET_DEFAULT_EDITOR_DATA,
+    editorData: EditorData,
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
@@ -91,4 +99,5 @@ export type EditorAction =
     SelectModel |
     SetEditorData |
     SetSchemaData |
+    SetDefaultEditorData |
     SetProjectDir;

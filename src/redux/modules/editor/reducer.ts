@@ -40,6 +40,12 @@ export function reducer(state: object, action: EditorAction) {
                     editorData: {$set: action.editorData}
                 }
             });
+        case types.SET_DEFAULT_EDITOR_DATA:
+            return update(state, {
+                modelEditor: {
+                    defaultEditorData: {$set: action.editorData}
+                }
+            });
         case types.SET_SCHEMA_DATA:
             return update(state, {
                 modelEditor: {

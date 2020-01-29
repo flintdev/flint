@@ -17,6 +17,7 @@ export interface ModelEditorState {
     modelList: Array<string>,
     modelSelected: string | undefined,
     editorData: EditorData | undefined,
+    defaultEditorData: EditorData | undefined,
     schemaData: SchemaData | undefined,
 }
 
@@ -43,6 +44,7 @@ export const initState: StoreState = {
             modelList: [],
             modelSelected: undefined,
             editorData: undefined,
+            defaultEditorData: undefined,
             schemaData: undefined,
         }
     },

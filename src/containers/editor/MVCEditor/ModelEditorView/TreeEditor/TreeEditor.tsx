@@ -35,11 +35,16 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, EditorState {
     setEditorData: (editorData: EditorData) => void,
     setSchemaData: (schemaData: SchemaData) => void,
+    setDefaultEditorData: (editorData: EditorData) => void,
+}
+
+interface State {
+    loadingStatus: LOADING_STATUS,
 }
 
 class TreeEditor extends React.Component<Props, object> {
-    state = {
-        loadingStatus: LOADING_STATUS.NOT_STARTED
+    state: State = {
+        loadingStatus: LOADING_STATUS.NOT_STARTED,
     };
     modelManager: ModelManager;
 
@@ -54,6 +59,7 @@ class TreeEditor extends React.Component<Props, object> {
         this.setState({loadingStatus: LOADING_STATUS.LOADING});
         const editorData = await this.modelManager.getEditorData(modelSelected);
         this.props.setEditorData(editorData);
+        this.props.setDefaultEditorData(editorData);
         this.setState({loadingStatus: LOADING_STATUS.COMPLETE});
     };
 
@@ -64,7 +70,7 @@ class TreeEditor extends React.Component<Props, object> {
 
     render() {
         const {classes, modelEditor} = this.props;
-        const {modelSelected, editorData} = modelEditor;
+        const {modelSelected, editorData, defaultEditorData} = modelEditor;
         const {loadingStatus} = this.state;
         return (
             <div className={classes.root}>
@@ -78,7 +84,7 @@ class TreeEditor extends React.Component<Props, object> {
                         {!!modelSelected && loadingStatus === LOADING_STATUS.COMPLETE &&
                         <ModelEditor
                             modelName={modelSelected}
-                            editorData={editorData}
+                            editorData={defaultEditorData}
                             onUpdated={this.handleModelEditorUpdated}
                         />
                         }
@@ -97,6 +103,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
+        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.setDefaultEditorData(editorData)),
         setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
     }
 };
