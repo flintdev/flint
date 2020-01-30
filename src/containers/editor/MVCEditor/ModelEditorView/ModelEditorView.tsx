@@ -7,7 +7,6 @@ import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import ModelListView from "./ModelListView";
-import {ProjectManager} from "../../../../controllers/project/projectManager";
 import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save';
 import Chip from "@material-ui/core/Chip";
@@ -18,6 +17,7 @@ import SchemaView from "./SchemaView";
 import {ModelManager} from "../../../../controllers/model/modelManager";
 import Toast from "../../../../components/Toast";
 import {ToastType} from "../../../../components/Toast/Toast";
+import ConfirmPopover from "../../../../components/ConfirmPopover";
 
 const styles = createStyles({
     root: {
@@ -57,8 +57,7 @@ const styles = createStyles({
         paddingLeft: 20,
         paddingRight: 20,
     },
-    headerTable: {
-    },
+    headerTable: {},
 
     textRight: {
         textAlign: 'right',
@@ -102,6 +101,7 @@ interface State {
     toastOpen: boolean,
     toastType: ToastType,
     toastMessage: string,
+    anchorEl: undefined | HTMLButtonElement
 }
 
 class ModelEditorView extends React.Component<Props, object> {
@@ -109,11 +109,20 @@ class ModelEditorView extends React.Component<Props, object> {
         toastOpen: false,
         toastType: 'success',
         toastMessage: '',
+        anchorEl: undefined
     };
 
     componentDidMount(): void {
 
     }
+
+    handleConfirmDeletePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+        this.setState({anchorEl: event.currentTarget});
+    };
+
+    handleConfirmDeletePopoverClose = () => {
+        this.setState({anchorEl: undefined});
+    };
 
     handleToastOpen = () => {
         const {modelSelected} = this.props.modelEditor;
@@ -146,6 +155,7 @@ class ModelEditorView extends React.Component<Props, object> {
         const {classes, projectDir, modelEditor} = this.props;
         const {toastOpen, toastType, toastMessage} = this.state;
         const {modelSelected} = modelEditor;
+        const {anchorEl} = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -163,8 +173,12 @@ class ModelEditorView extends React.Component<Props, object> {
                                         <tr>
                                             <td>
                                                 <div className={classes.headerTitle}>
-                                                    {!modelSelected && <Chip variant={"outlined"} label={"model unselected"} className={classes.chipUnselected}/>}
-                                                    {!!modelSelected && <Chip variant={"outlined"} label={modelSelected} color={"primary"} className={classes.chip}/>}
+                                                    {!modelSelected &&
+                                                    <Chip variant={"outlined"} label={"model unselected"}
+                                                          className={classes.chipUnselected}/>}
+                                                    {!!modelSelected &&
+                                                    <Chip variant={"outlined"} label={modelSelected} color={"primary"}
+                                                          className={classes.chip}/>}
                                                 </div>
                                             </td>
                                             <td className={classes.textRight}>
@@ -172,7 +186,7 @@ class ModelEditorView extends React.Component<Props, object> {
                                                     variant={"outlined"}
                                                     color={"secondary"}
                                                     className={classes.actionButton}
-                                                    onClick={this.handleDeleteButtonClick}
+                                                    onClick={this.handleConfirmDeletePopoverOpen}
                                                 >
                                                     <DeleteOutlineIcon/>&nbsp;Delete
                                                 </Button>
@@ -212,6 +226,16 @@ class ModelEditorView extends React.Component<Props, object> {
                     type={toastType}
                     message={toastMessage}
                 />
+
+                <ConfirmPopover
+                    anchorEl={anchorEl}
+                    onClose={this.handleConfirmDeletePopoverClose}
+                    confirmButtonTitle={"Delete"}
+                    color={"secondary"}
+                    message={`Are you sure to delete ${modelSelected}?`}
+                    onConfirm={this.handleDeleteButtonClick}
+                />
+
             </div>
         )
     }

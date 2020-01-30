@@ -3,7 +3,7 @@
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
-import Alert  from '@material-ui/lab/Alert';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 const styles = createStyles({
     root: {
@@ -18,6 +18,10 @@ export interface Props extends WithStyles<typeof styles>{
     onClose: () => void,
     type: ToastType,
     message: string
+}
+
+function Alert(props: AlertProps) {
+    return <MuiAlert elevation={3} {...props} />;
 }
 
 class Toast extends React.Component<Props, object> {
