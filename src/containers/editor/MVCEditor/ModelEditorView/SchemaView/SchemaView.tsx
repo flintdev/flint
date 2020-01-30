@@ -11,6 +11,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CodeIcon from '@material-ui/icons/Code';
 import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
 import * as yaml from 'js-yaml';
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-yaml";
@@ -69,7 +70,7 @@ class SchemaView extends React.Component<Props, object> {
                 <Card className={classes.card}>
                     <CardHeader
                         avatar={<Avatar><CodeIcon/></Avatar>}
-                        title={`Schema Viewer`}
+                        title={<Typography variant={"subtitle1"}>Schema Viewer</Typography>}
                         subheader={`OpenAPI schema of data model`}
                     />
                     <CardContent className={classes.cardContent}>

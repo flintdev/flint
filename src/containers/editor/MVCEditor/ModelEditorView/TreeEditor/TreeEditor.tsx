@@ -15,6 +15,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import Avatar from "@material-ui/core/Avatar";
+import Typography from "@material-ui/core/Typography";
 
 const styles = createStyles({
     root: {
@@ -77,7 +78,7 @@ class TreeEditor extends React.Component<Props, object> {
                 <Card className={classes.card}>
                     <CardHeader
                         avatar={<Avatar><AccountTreeIcon/></Avatar>}
-                        title={`Tree Editor`}
+                        title={<Typography variant={"subtitle1"}>Tree Editor</Typography> }
                         subheader={'Define the schema structure of data model'}
                     />
                     <CardContent className={classes.cardContent}>
