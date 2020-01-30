@@ -7,7 +7,7 @@ import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import {Page, NavigationPages} from "../../../constants/editor";
-import {themeColor} from "../../../constants";
+import {theme, themeColor} from "../../../constants";
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
@@ -43,6 +43,7 @@ const styles = createStyles({
     icon: {
         fontSize: 24,
         marginRight: -2,
+        color: themeColor.dimgrey,
     },
     iconActive: {
         fontSize: 24,
