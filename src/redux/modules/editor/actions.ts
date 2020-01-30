@@ -44,6 +44,10 @@ export function setDefaultEditorData(editorData: EditorData): SetDefaultEditorDa
     return { type: types.SET_DEFAULT_EDITOR_DATA, editorData}
 }
 
+export function deleteModel (modelName: string): DeleteModel {
+    return { type: types.DELETE_MODEL, modelName }
+}
+
 
 // interfaces
 
@@ -91,6 +95,11 @@ export interface SetDefaultEditorData {
     editorData: EditorData,
 }
 
+export interface DeleteModel {
+    type: typeof types.DELETE_MODEL,
+    modelName: string
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
@@ -100,4 +109,5 @@ export type EditorAction =
     SetEditorData |
     SetSchemaData |
     SetDefaultEditorData |
+    DeleteModel |
     SetProjectDir;

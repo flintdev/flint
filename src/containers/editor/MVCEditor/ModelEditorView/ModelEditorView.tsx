@@ -94,7 +94,7 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, EditorState {
-
+    deleteModel: (modelName: string) => void,
 }
 
 interface State {
@@ -111,9 +111,11 @@ class ModelEditorView extends React.Component<Props, object> {
         toastMessage: '',
         anchorEl: undefined
     };
+    modelManager: ModelManager;
 
     componentDidMount(): void {
-
+        const {projectDir} = this.props;
+        this.modelManager = new ModelManager(projectDir);
     }
 
     handleConfirmDeletePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -147,8 +149,11 @@ class ModelEditorView extends React.Component<Props, object> {
         this.handleToastOpen();
     };
 
-    handleDeleteButtonClick = () => {
-
+    handleDeleteButtonClick = async () => {
+        const {modelSelected} = this.props.modelEditor;
+        await this.modelManager.deleteModel(modelSelected);
+        this.handleConfirmDeletePopoverClose();
+        this.props.deleteModel(modelSelected);
     };
 
     render() {
@@ -182,22 +187,27 @@ class ModelEditorView extends React.Component<Props, object> {
                                                 </div>
                                             </td>
                                             <td className={classes.textRight}>
-                                                <Button
-                                                    variant={"outlined"}
-                                                    color={"secondary"}
-                                                    className={classes.actionButton}
-                                                    onClick={this.handleConfirmDeletePopoverOpen}
-                                                >
-                                                    <DeleteOutlineIcon/>&nbsp;Delete
-                                                </Button>
-                                                <Button
-                                                    variant={"contained"}
-                                                    color={"primary"}
-                                                    className={classes.actionButton}
-                                                    onClick={this.handleSaveButtonClick}
-                                                >
-                                                    <SaveIcon/>&nbsp;Save
-                                                </Button>
+                                                {!!modelSelected &&
+                                                <React.Fragment>
+                                                    <Button
+                                                        variant={"outlined"}
+                                                        color={"secondary"}
+                                                        className={classes.actionButton}
+                                                        onClick={this.handleConfirmDeletePopoverOpen}
+                                                    >
+                                                        <DeleteOutlineIcon/>&nbsp;Delete
+                                                    </Button>
+                                                    <Button
+                                                        variant={"contained"}
+                                                        color={"primary"}
+                                                        className={classes.actionButton}
+                                                        onClick={this.handleSaveButtonClick}
+                                                    >
+                                                        <SaveIcon/>&nbsp;Save
+                                                    </Button>
+                                                </React.Fragment>
+                                                }
+
                                             </td>
                                         </tr>
                                         </tbody>
@@ -246,7 +256,9 @@ const mapStateToProps = (state: StoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
-    return {}
+    return {
+        deleteModel: (modelName: string) => dispatch(actions.deleteModel(modelName)),
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ModelEditorView));

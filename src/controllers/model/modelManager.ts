@@ -39,11 +39,22 @@ export class ModelManager {
     };
 
     createModel = async (modelName: string) => {
-
         const result = await this.checkAndCreateModelConfigFile();
         if (!result) return false;
         let configJson = await this.fetchConfigData();
         configJson.models.push(modelName);
+        await this.saveConfigData(configJson);
+    };
+
+    deleteModel = async (modelName: string) => {
+        let configJson = await this.fetchConfigData();
+        let {models, editorDataMap} = configJson;
+        // remove from models
+        _.remove(models, (model: string) => model === modelName);
+        // remove from editorDataMap
+        _.omit(editorDataMap, [modelName]);
+        _.set(configJson, ['editorDataNao'], editorDataMap);
+        _.set(configJson, ['models'], models);
         await this.saveConfigData(configJson);
     };
 

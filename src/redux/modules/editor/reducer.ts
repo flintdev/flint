@@ -3,8 +3,9 @@
 import * as types from "./types";
 import update from 'immutability-helper';
 import {EditorAction} from "./actions";
+import {EditorState} from "../../state";
 
-export function reducer(state: object, action: EditorAction) {
+export function reducer(state: EditorState, action: EditorAction) {
     switch (action.type) {
         case types.INITIALIZE_EDITOR:
             return update(state, {});
@@ -50,6 +51,16 @@ export function reducer(state: object, action: EditorAction) {
             return update(state, {
                 modelEditor: {
                     schemaData: {$set: action.schemaData}
+                }
+            });
+        case types.DELETE_MODEL:
+            return update(state, {
+                modelEditor: {
+                    editorData: {$set: undefined},
+                    schemaData: {$set: undefined},
+                    defaultEditorData: {$set: undefined},
+                    modelSelected: {$set: undefined},
+                    modelList: {$splice: [[state.modelEditor.modelList.indexOf(action.modelName), 1]]},
                 }
             });
 
