@@ -18,6 +18,9 @@ import {ModelManager} from "../../../../controllers/model/modelManager";
 import Toast from "../../../../components/Toast";
 import {ToastType} from "../../../../components/Toast/Toast";
 import ConfirmPopover from "../../../../components/ConfirmPopover";
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
+import {themeColor} from "../../../../constants";
+import Typography from '@material-ui/core/Typography';
 
 const styles = createStyles({
     root: {
@@ -90,6 +93,23 @@ const styles = createStyles({
         flexGrow: 1,
         display: 'flex',
         flexFlow: "column",
+    },
+    emptyViewContainer: {
+        height: '100%',
+        textAlign: 'center',
+    },
+    emptyViewIcon: {
+        color: themeColor.lightgrey,
+        fontSize: 100,
+    },
+    innerContainer: {
+        position: "relative",
+        top: "50%",
+        left: "50%",
+        transform: 'translate(-50%, -50%)',
+    },
+    emptyViewText: {
+        color: themeColor.lightgrey,
     }
 });
 
@@ -171,65 +191,79 @@ class ModelEditorView extends React.Component<Props, object> {
                                 <ModelListView/>
                             </td>
                             <td className={classes.tdRight} valign={"top"}>
-                                {/* Header View */}
-                                <div className={classes.headerViewContainer}>
-                                    <table className={classes.table}>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <div className={classes.headerTitle}>
-                                                    {!modelSelected &&
-                                                    <Chip variant={"outlined"} label={"model unselected"}
-                                                          className={classes.chipUnselected}/>}
-                                                    {!!modelSelected &&
-                                                    <Chip variant={"outlined"} label={modelSelected} color={"primary"}
-                                                          className={classes.chip}/>}
-                                                </div>
-                                            </td>
-                                            <td className={classes.textRight}>
-                                                {!!modelSelected &&
-                                                <React.Fragment>
-                                                    <Button
-                                                        variant={"outlined"}
-                                                        color={"secondary"}
-                                                        className={classes.actionButton}
-                                                        onClick={this.handleConfirmDeletePopoverOpen}
-                                                    >
-                                                        <DeleteOutlineIcon/>&nbsp;Delete
-                                                    </Button>
-                                                    <Button
-                                                        variant={"contained"}
-                                                        color={"primary"}
-                                                        className={classes.actionButton}
-                                                        onClick={this.handleSaveButtonClick}
-                                                    >
-                                                        <SaveIcon/>&nbsp;Save
-                                                    </Button>
-                                                </React.Fragment>
-                                                }
-
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                {!modelSelected &&
+                                <div className={classes.emptyViewContainer}>
+                                    <div className={classes.innerContainer}>
+                                        <AccountTreeOutlinedIcon className={classes.emptyViewIcon}/>
+                                        <br/>
+                                        <Typography
+                                            variant={"h6"}
+                                            className={classes.emptyViewText}
+                                        >
+                                            No Data Model Selected
+                                        </Typography>
+                                    </div>
                                 </div>
-                                {/* Body view */}
-                                <div className={classes.bodyViewContainer}>
-                                    <Grid container spacing={0} className={classes.grid}>
-                                        <Grid item xs={6} className={classes.gridItem}>
-                                            <TreeEditor/>
+                                }
+                                {!!modelSelected &&
+                                <React.Fragment>
+                                    {/* Header View */}
+                                    <div className={classes.headerViewContainer}>
+                                        <table className={classes.table}>
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div className={classes.headerTitle}>
+                                                        <Chip
+                                                            variant={"outlined"}
+                                                            label={modelSelected}
+                                                            color={"primary"}
+                                                            className={classes.chip}
+                                                        />
+                                                    </div>
+                                                </td>
+                                                <td className={classes.textRight}>
+                                                    <React.Fragment>
+                                                        <Button
+                                                            variant={"outlined"}
+                                                            color={"secondary"}
+                                                            className={classes.actionButton}
+                                                            onClick={this.handleConfirmDeletePopoverOpen}
+                                                        >
+                                                            <DeleteOutlineIcon/>&nbsp;Delete
+                                                        </Button>
+                                                        <Button
+                                                            variant={"contained"}
+                                                            color={"primary"}
+                                                            className={classes.actionButton}
+                                                            onClick={this.handleSaveButtonClick}
+                                                        >
+                                                            <SaveIcon/>&nbsp;Save
+                                                        </Button>
+                                                    </React.Fragment>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {/* Body view */}
+                                    <div className={classes.bodyViewContainer}>
+                                        <Grid container spacing={0} className={classes.grid}>
+                                            <Grid item xs={6} className={classes.gridItem}>
+                                                <TreeEditor/>
+                                            </Grid>
+                                            <Grid item xs={6} className={classes.gridItem}>
+                                                <SchemaView/>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={6} className={classes.gridItem}>
-                                            <SchemaView/>
-                                        </Grid>
-                                    </Grid>
-                                </div>
+                                    </div>
+                                </React.Fragment>
+                                }
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-
                 <Toast
                     open={toastOpen}
                     onClose={this.handleToastClose}

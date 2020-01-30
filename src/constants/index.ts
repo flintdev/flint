@@ -8,6 +8,7 @@ export const themeColor = {
     grey: 'grey',
     white: 'white',
     dimgrey: 'dimgrey',
+    lightgrey: 'lightgrey',
 };
 
 export const theme = createMuiTheme({
