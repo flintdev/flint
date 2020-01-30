@@ -75,7 +75,7 @@ class TreeEditor extends React.Component<Props, object> {
         const {loadingStatus} = this.state;
         return (
             <div className={classes.root}>
-                <Card className={classes.card}>
+                <Card className={classes.card} elevation={5}>
                     <CardHeader
                         avatar={<Avatar><AccountTreeIcon/></Avatar>}
                         title={<Typography variant={"subtitle1"}>Tree Editor</Typography> }

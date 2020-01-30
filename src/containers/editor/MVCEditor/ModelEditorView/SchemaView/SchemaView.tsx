@@ -15,7 +15,7 @@ import Typography from "@material-ui/core/Typography";
 import * as yaml from 'js-yaml';
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-yaml";
-import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-tomorrow_night";
 
 const styles = createStyles({
     root: {
@@ -67,7 +67,7 @@ class SchemaView extends React.Component<Props, object> {
         const code = this.getCode();
         return (
             <div className={classes.root}>
-                <Card className={classes.card}>
+                <Card className={classes.card} elevation={5}>
                     <CardHeader
                         avatar={<Avatar><CodeIcon/></Avatar>}
                         title={<Typography variant={"subtitle1"}>Schema Viewer</Typography>}
@@ -76,7 +76,7 @@ class SchemaView extends React.Component<Props, object> {
                     <CardContent className={classes.cardContent}>
                         <AceEditor
                             mode="yaml"
-                            theme="monokai"
+                            theme="tomorrow_night"
                             onLoad={this.codeEditorOnLoad}
                             fontSize={14}
                             value={code}
