@@ -4,14 +4,10 @@ import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 import {SpecGenerator} from "./specGenerator";
+import {edit} from "ace-builds";
 
 interface Config {
     models: Array<object>
-}
-
-interface ModelData {
-    name: string,
-    editorData: object | undefined
 }
 
 const INITIAL_CONFIG: Config = {
@@ -59,13 +55,15 @@ export class ModelManager {
 
     deleteModel = async (modelName: string) => {
         let configJson = await this.fetchConfigData();
-        let {models, editorDataMap} = configJson;
+        let {models, editorDataMap, revision} = configJson;
         // remove from models
         _.remove(models, (model: string) => model === modelName);
         // remove from editorDataMap
-        _.omit(editorDataMap, [modelName]);
-        _.set(configJson, ['editorDataNao'], editorDataMap);
+        editorDataMap = _.omit(editorDataMap, [modelName]);
+        revision = _.omit(revision, [modelName]);
+        _.set(configJson, ['editorDataMap'], editorDataMap);
         _.set(configJson, ['models'], models);
+        _.set(configJson, ['revision'], revision);
         await this.saveConfigData(configJson);
     };
 

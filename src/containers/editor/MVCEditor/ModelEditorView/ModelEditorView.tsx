@@ -177,7 +177,7 @@ class ModelEditorView extends React.Component<Props, object> {
 
     handleSaveButtonClick = async () => {
         const {projectDir, modelEditor} = this.props;
-        const {modelSelected, editorData, schemaData} = modelEditor;
+        const {modelSelected, editorData} = modelEditor;
         if (!modelSelected) return;
         await new ModelManager(projectDir).saveEditorData(modelSelected, editorData);
         const revision = await this.modelManager.getRevision(modelSelected);
