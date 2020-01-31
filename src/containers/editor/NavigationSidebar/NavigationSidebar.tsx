@@ -13,6 +13,7 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import {NavigationSidebarConfig} from "../../../constants/styles";
+import Tooltip from '@material-ui/core/Tooltip';
 
 const styles = createStyles({
     root: {
@@ -20,7 +21,7 @@ const styles = createStyles({
         marginTop: -1,
     },
     tabItem: {
-        height: 60,
+        height: 70,
         width: NavigationSidebarConfig.Width - 4,
         textAlign: 'center',
         cursor: 'pointer',
@@ -29,7 +30,7 @@ const styles = createStyles({
         justifyContent: 'center',
     },
     tabItemActive: {
-        height: 60,
+        height: 70,
         width: NavigationSidebarConfig.Width - 4,
         textAlign: 'center',
         cursor: 'pointer',
@@ -41,14 +42,17 @@ const styles = createStyles({
         marginLeft: -1,
     },
     icon: {
-        fontSize: 24,
+        fontSize: 28,
         marginRight: -2,
         color: themeColor.dimgrey,
     },
     iconActive: {
-        fontSize: 24,
+        fontSize: 28,
         color: themeColor.primary,
         marginRight: 4,
+    },
+    tooltip: {
+        fontSize: 14
     }
 });
 
@@ -63,7 +67,8 @@ const ItemIcon = (props: Props) => {
         [Page.Editor]: <DashboardOutlinedIcon className={currentPageIndex === 0 ? classes.iconActive : classes.icon}/>,
         [Page.Files]: <FileCopyOutlinedIcon className={currentPageIndex === 1 ? classes.iconActive : classes.icon}/>,
         [Page.Plugins]: <AppsIcon className={currentPageIndex === 2 ? classes.iconActive : classes.icon}/>,
-        [Page.Delivery]: <CloudUploadOutlinedIcon className={currentPageIndex === 3 ? classes.iconActive : classes.icon}/>,
+        [Page.Delivery]: <CloudUploadOutlinedIcon
+            className={currentPageIndex === 3 ? classes.iconActive : classes.icon}/>,
     }
 };
 
@@ -86,14 +91,15 @@ class NavigationSidebar extends React.Component<Props, object> {
                     return (
                         <div
                             className={currentPageIndex === i ? classes.tabItemActive : classes.tabItem}
-                            key={i}
                             onClick={this.handleTabItemClick(i)}
+                            key={i}
                         >
-                            {ItemIcon(this.props)[page.key]}
+                            <Tooltip title={page.name} placement={"right"} classes={{tooltip: classes.tooltip}}>
+                                {ItemIcon(this.props)[page.key]}
+                            </Tooltip>
                         </div>
                     )
                 })}
-
             </div>
         )
     }
