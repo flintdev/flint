@@ -21,6 +21,9 @@ import ConfirmPopover from "../../../../components/ConfirmPopover";
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import {themeColor} from "../../../../constants";
 import Typography from '@material-ui/core/Typography';
+import Fab from '@material-ui/core/Fab';
+import orange from "@material-ui/core/colors/orange";
+import SyncIcon from '@material-ui/icons/Sync';
 
 const styles = createStyles({
     root: {
@@ -113,11 +116,19 @@ const styles = createStyles({
     },
     syncButton: {
         marginRight: 50,
+        backgroundColor: orange[700],
+        color: themeColor.white,
+        height: 40,
+        '&:hover': {
+            backgroundColor: orange[900],
+
+        }
     }
 });
 
 export interface Props extends WithStyles<typeof styles>, EditorState {
     deleteModel: (modelName: string) => void,
+    setCurrentRevision: (editor: number, source: number) => void,
 }
 
 interface State {
@@ -169,6 +180,8 @@ class ModelEditorView extends React.Component<Props, object> {
         const {modelSelected, editorData, schemaData} = modelEditor;
         if (!modelSelected) return;
         await new ModelManager(projectDir).saveEditorData(modelSelected, editorData);
+        const revision = await this.modelManager.getRevision(modelSelected);
+        this.props.setCurrentRevision(revision.editor, revision.source);
         this.handleToastOpen();
     };
 
@@ -182,12 +195,14 @@ class ModelEditorView extends React.Component<Props, object> {
     handleSyncSourceButtonClick = async () => {
         const {modelSelected, schemaData} = this.props.modelEditor;
         await this.modelManager.generateSourceFiles(modelSelected, schemaData);
+        const revision = await this.modelManager.getRevision(modelSelected);
+        this.props.setCurrentRevision(revision.editor, revision.source);
     };
 
     render() {
         const {classes, projectDir, modelEditor} = this.props;
         const {toastOpen, toastType, toastMessage} = this.state;
-        const {modelSelected} = modelEditor;
+        const {modelSelected, currentRevision} = modelEditor;
         const {anchorEl} = this.state;
         return (
             <div className={classes.root}>
@@ -232,13 +247,16 @@ class ModelEditorView extends React.Component<Props, object> {
                                                 </td>
                                                 <td className={classes.textRight}>
                                                     <React.Fragment>
-                                                        <Button
-                                                            variant={"outlined"}
+                                                        {currentRevision.editor !== currentRevision.source &&
+                                                        <Fab
+                                                            variant={"extended"}
                                                             className={classes.syncButton}
                                                             onClick={this.handleSyncSourceButtonClick}
                                                         >
+                                                            <SyncIcon/>&nbsp;
                                                             Sync Source Files
-                                                        </Button>
+                                                        </Fab>
+                                                        }
                                                         <Button
                                                             variant={"outlined"}
                                                             color={"secondary"}
@@ -307,6 +325,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         deleteModel: (modelName: string) => dispatch(actions.deleteModel(modelName)),
+        setCurrentRevision: (editor: number, source: number) => dispatch(actions.setCurrentRevision(editor, source)),
     }
 };
 

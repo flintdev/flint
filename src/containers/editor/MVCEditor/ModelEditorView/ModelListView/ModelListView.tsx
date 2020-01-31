@@ -64,6 +64,7 @@ export interface Props extends WithStyles<typeof styles>, EditorState {
     setEditorData: (editorData: EditorData) => void,
     setDefaultEditorData: (editorData: EditorData) => void,
     setSchemaData: (schemaData: SchemaData) => void,
+    setCurrentRevision: (editor: number, source: number) => void,
 }
 
 class ModelListView extends React.Component<Props, object> {
@@ -119,6 +120,8 @@ class ModelListView extends React.Component<Props, object> {
         this.props.setEditorData(editorData);
         this.props.setDefaultEditorData(editorData);
         this.props.selectModel(modelName);
+        const revision = await this.modelManager.getRevision(modelName);
+        this.props.setCurrentRevision(revision.editor, revision.source);
     };
 
     render() {
@@ -200,6 +203,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
         setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
         setDefaultEditorData: (editorData: EditorData) => dispatch(actions.setDefaultEditorData(editorData)),
         setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
+        setCurrentRevision: (editor: number, source: number) => dispatch(actions.setCurrentRevision(editor, source)),
     }
 };
 

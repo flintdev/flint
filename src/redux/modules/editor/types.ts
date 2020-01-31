@@ -12,3 +12,4 @@ export const SET_EDITOR_DATA = 'editor/modelEditor/SET_EDITOR_DATA';
 export const SET_DEFAULT_EDITOR_DATA = 'editor/modelEditor/SET_DEFAULT_EDITOR_DATA';
 export const SET_SCHEMA_DATA = 'editor/modelEditor/SET_SCHEMA_DATA';
 export const DELETE_MODEL = 'editor/modelEditor/DELETE_MODEL';
+export const SET_CURRENT_REVISION = 'editor/modelEditor/SET_CURRENT_REVISION';

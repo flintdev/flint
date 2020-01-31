@@ -48,6 +48,11 @@ export function deleteModel (modelName: string): DeleteModel {
     return { type: types.DELETE_MODEL, modelName }
 }
 
+export function setCurrentRevision(editor: number, source: number): SetCurrentRevision {
+    return { type: types.SET_CURRENT_REVISION, editor, source }
+}
+
+
 
 // interfaces
 
@@ -100,6 +105,12 @@ export interface DeleteModel {
     modelName: string
 }
 
+export interface SetCurrentRevision {
+    type: typeof types.SET_CURRENT_REVISION,
+    editor: number,
+    source: number
+}
+
 export type EditorAction =
     InitializeEditor |
     SetCurrentPage |
@@ -110,4 +121,5 @@ export type EditorAction =
     SetSchemaData |
     SetDefaultEditorData |
     DeleteModel |
+    SetCurrentRevision |
     SetProjectDir;

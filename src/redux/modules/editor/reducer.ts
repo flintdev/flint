@@ -63,6 +63,15 @@ export function reducer(state: EditorState, action: EditorAction) {
                     modelList: {$splice: [[state.modelEditor.modelList.indexOf(action.modelName), 1]]},
                 }
             });
+        case types.SET_CURRENT_REVISION:
+            return update(state, {
+                modelEditor: {
+                    currentRevision: {
+                        editor: {$set: action.editor},
+                        source: {$set: action.source},
+                    }
+                }
+            });
 
         default:
             return state;

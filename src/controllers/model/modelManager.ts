@@ -99,9 +99,7 @@ export class ModelManager {
     };
 
     generateSourceFiles = async (modelName: string, schemaData: SchemaData) => {
-        // const configJson = await this.fetchConfigData();
         const crdSpecYaml = new SpecGenerator().renderCRDSpecYaml(modelName, schemaData);
-        console.log(crdSpecYaml);
         await this.checkAndCreateSourceDir();
         const filePath = `${this.sourceDirPath}/${modelName}.yaml`;
         await this.fsHelper.createFile(filePath, crdSpecYaml);

@@ -19,6 +19,10 @@ export interface ModelEditorState {
     editorData: EditorData | undefined,
     defaultEditorData: EditorData | undefined,
     schemaData: SchemaData | undefined,
+    currentRevision: {
+        editor: number | undefined,
+        source: number | undefined,
+    }
 }
 
 export interface StoreState {
@@ -46,6 +50,10 @@ export const initState: StoreState = {
             editorData: undefined,
             defaultEditorData: undefined,
             schemaData: undefined,
+            currentRevision: {
+                editor: undefined,
+                source: undefined
+            }
         }
     },
 };
