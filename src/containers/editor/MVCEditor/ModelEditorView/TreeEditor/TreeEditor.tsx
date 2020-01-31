@@ -71,7 +71,7 @@ class TreeEditor extends React.Component<Props, object> {
 
     render() {
         const {classes, modelEditor} = this.props;
-        const {modelSelected, editorData, defaultEditorData} = modelEditor;
+        const {modelSelected, defaultEditorData} = modelEditor;
         const {loadingStatus} = this.state;
         return (
             <div className={classes.root}>

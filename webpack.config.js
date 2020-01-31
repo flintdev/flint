@@ -66,7 +66,7 @@ module.exports = env => {
                     loader: "source-map-loader"
                 },
                 {
-                    test: /\.txt$/,
+                    test: /\.(txt|yaml)$/,
                     use: 'raw-loader'
                 },
                 {

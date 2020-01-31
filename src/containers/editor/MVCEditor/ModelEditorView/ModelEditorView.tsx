@@ -110,6 +110,9 @@ const styles = createStyles({
     },
     emptyViewText: {
         color: themeColor.lightgrey,
+    },
+    syncButton: {
+        marginRight: 50,
     }
 });
 
@@ -176,6 +179,11 @@ class ModelEditorView extends React.Component<Props, object> {
         this.props.deleteModel(modelSelected);
     };
 
+    handleSyncSourceButtonClick = async () => {
+        const {modelSelected, schemaData} = this.props.modelEditor;
+        await this.modelManager.generateSourceFiles(modelSelected, schemaData);
+    };
+
     render() {
         const {classes, projectDir, modelEditor} = this.props;
         const {toastOpen, toastType, toastMessage} = this.state;
@@ -224,6 +232,13 @@ class ModelEditorView extends React.Component<Props, object> {
                                                 </td>
                                                 <td className={classes.textRight}>
                                                     <React.Fragment>
+                                                        <Button
+                                                            variant={"outlined"}
+                                                            className={classes.syncButton}
+                                                            onClick={this.handleSyncSourceButtonClick}
+                                                        >
+                                                            Sync Source Files
+                                                        </Button>
                                                         <Button
                                                             variant={"outlined"}
                                                             color={"secondary"}

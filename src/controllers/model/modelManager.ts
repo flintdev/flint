@@ -2,7 +2,8 @@
 
 import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
-import {EditorData} from "@flintdev/model-editor/dist/interface";
+import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
+import {SpecGenerator} from "./specGenerator";
 
 interface Config {
     models: Array<object>
@@ -22,11 +23,13 @@ export class ModelManager {
     fsHelper: FSHelper;
     dirPath: string;
     configPath: string;
+    sourceDirPath: string;
     constructor(rootDir: string) {
         this.rootDir = rootDir;
         this.fsHelper = new FSHelper();
         this.dirPath = `${this.rootDir}/.flint/models`;
         this.configPath = `${this.rootDir}/.flint/models/config.json`;
+        this.sourceDirPath = `${this.rootDir}/src/models`;
     }
 
     checkAndCreateModelDir = async () => {
@@ -35,6 +38,14 @@ export class ModelManager {
             await this.fsHelper.checkPathExists(this.dirPath);
         } catch (e) {
             await this.fsHelper.createDirByPath(this.dirPath);
+        }
+    };
+
+    checkAndCreateSourceDir = async () => {
+        try {
+            await this.fsHelper.checkPathExists(this.sourceDirPath);
+        } catch (e) {
+            await this.fsHelper.createDirByPath(this.sourceDirPath);
         }
     };
 
@@ -70,16 +81,45 @@ export class ModelManager {
         return _.get(configJson, ['editorDataMap', modelName]);
     };
 
+    getRevision = async (modelName: string) => {
+        const configJson = await this.fetchConfigData();
+        const revision =  _.get(configJson, ['revision', modelName]);
+        const editor = !!revision?.editor ? revision.editor : 1;
+        const source = !!revision?.source ? revision.source : 0;
+        return {editor, source};
+    };
+
     saveEditorData = async (modelName: string, editorData: EditorData) => {
         let configJson = await this.fetchConfigData();
         _.set(configJson, ['editorDataMap', modelName], editorData);
+        let editorRevision = _.get(configJson, ['revision', modelName, 'editor']);
+        editorRevision = !!editorRevision ? editorRevision + 1 : 1;
+        _.set(configJson, ['revision', modelName, 'editor'], editorRevision);
+        await this.saveConfigData(configJson);
+    };
+
+    generateSourceFiles = async (modelName: string, schemaData: SchemaData) => {
+        // const configJson = await this.fetchConfigData();
+        const crdSpecYaml = new SpecGenerator().renderCRDSpecYaml(modelName, schemaData);
+        console.log(crdSpecYaml);
+        await this.checkAndCreateSourceDir();
+        const filePath = `${this.sourceDirPath}/${modelName}.yaml`;
+        await this.fsHelper.createFile(filePath, crdSpecYaml);
+        await this.syncSourceRevision(modelName);
+    };
+
+    private syncSourceRevision = async (modelName: string) => {
+        const configJson = await this.fetchConfigData();
+        const {editor} = await this.getRevision(modelName);
+        _.set(configJson, ['revision', modelName, 'editor'], editor);
+        _.set(configJson, ['revision', modelName, 'source'], editor);
         await this.saveConfigData(configJson);
     };
 
     private checkAndCreateModelConfigFile = async () => {
         try {
             await this.fsHelper.checkPathExists(this.configPath);
-            return true
+            return true;
         } catch (err) {
             await this.fsHelper.createFile(this.configPath, JSON.stringify(INITIAL_CONFIG));
             return true;
