@@ -118,7 +118,7 @@ const styles = createStyles({
         marginRight: 50,
         backgroundColor: orange[700],
         color: themeColor.white,
-        height: 40,
+        height: 36,
         '&:hover': {
             backgroundColor: orange[900],
 
