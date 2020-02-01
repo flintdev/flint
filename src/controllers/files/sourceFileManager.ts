@@ -3,6 +3,7 @@
 import {FSHelper} from "../utils/fsHelper";
 
 export interface TreeNode {
+    path: string,
     name: string,
     type: 'file' | 'dir',
     children?: TreeNode[]
@@ -26,12 +27,13 @@ export class SourceFileManager {
         let nodes: TreeNode[] = [];
         for (let file of files) {
             const {name, type} = file;
+            const path = `${parentPath}/${name}`;
             if (type === 'dir') {
-                const children: TreeNode[] = await this.recurToChildren(`${parentPath}/${name}`);
-                const node = {name, type, children};
+                const children: TreeNode[] = await this.recurToChildren(path);
+                const node = {name, type, path, children};
                 nodes.push(node);
             } else {
-                const node = {name, type};
+                const node = {name, type, path};
                 nodes.push(node);
             }
         }
