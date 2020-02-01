@@ -6,10 +6,22 @@ import {Dirent} from "fs";
 const fs = window.require('fs');
 const homedir = window.require('os').homedir();
 
+const FILES_IGNORE = [
+    '.DS_Store'
+];
+
 export enum ErrorType {
     DirExists,
     DirNotExists,
 }
+
+export interface FileInfo {
+    name: string,
+    type: 'file' | 'dir',
+}
+
+export type ReadDirResolve = (files: FileInfo[]) => void;
+
 
 export class FSHelper {
     createDirByPath = (path: string) => {
@@ -33,10 +45,16 @@ export class FSHelper {
     };
 
     readDir = (path: string) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: ReadDirResolve, reject) => {
             fs.readdir(path, {withFileTypes: true}, (err:ErrnoException, files:Dirent[]) => {
-                if (err) return reject(err);
-                resolve(files);
+                if (!!err) return reject(err);
+                const fileInfoList: FileInfo[] = files.filter(file => !FILES_IGNORE.includes(file.name)).map(file => {
+                    return {
+                        name: file.name,
+                        type: file.isDirectory() ? 'dir' : 'file'
+                    }
+                });
+                resolve(fileInfoList);
             })
         });
     };

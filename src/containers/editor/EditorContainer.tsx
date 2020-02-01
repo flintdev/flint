@@ -13,6 +13,7 @@ import {BackgroundColor, theme, themeColor} from "../../constants";
 import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator";
 import {LocalStorageManager} from "../../controllers/localStoreManager";
 import {NavigationSidebarConfig} from "../../constants/styles";
+import FileBrowser from "./FileBrowser";
 
 const styles = createStyles({
     root: {
@@ -77,6 +78,7 @@ class EditorContainer extends React.Component<Props, object> {
                             <td valign={"top"}>
                                 <div className={classes.contentContainer}>
                                     {currentPageIndex === Page.Editor && <MVCEditor/>}
+                                    {currentPageIndex === Page.Files && <FileBrowser/>}
                                 </div>
                             </td>
                         </tr>
