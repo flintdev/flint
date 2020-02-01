@@ -1,6 +1,7 @@
 // controllers/utils/fsHelper.ts
 
 import ErrnoException = NodeJS.ErrnoException;
+import {Dirent} from "fs";
 
 const fs = window.require('fs');
 const homedir = window.require('os').homedir();
@@ -28,6 +29,15 @@ export class FSHelper {
                 if (err) return reject(err);
                 resolve();
             });
+        });
+    };
+
+    readDir = (path: string) => {
+        return new Promise((resolve, reject) => {
+            fs.readdir(path, {withFileTypes: true}, (err:ErrnoException, files:Dirent[]) => {
+                if (err) return reject(err);
+                resolve(files);
+            })
         });
     };
 

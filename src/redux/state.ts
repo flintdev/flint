@@ -25,11 +25,19 @@ export interface ModelEditorState {
     }
 }
 
+export interface FilesState {
+    projectDir: string,
+    treeData: object,
+    nodeSelected: object,
+    fileContent: string,
+}
+
 export interface StoreState {
     starter: {
         createProjectDialog: object
     },
     editor: EditorState,
+    files: FilesState,
 }
 
 export const initState: StoreState = {
@@ -56,4 +64,10 @@ export const initState: StoreState = {
             }
         }
     },
+    files: {
+        projectDir: '',
+        treeData: undefined,
+        nodeSelected: undefined,
+        fileContent: '',
+    }
 };
