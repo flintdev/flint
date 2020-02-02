@@ -11,6 +11,10 @@ export function reducer(state: FilesState, action: FilesAction) {
             return update(state, {
                 projectDir: {$set: action.projectDir}
             });
+        case types.SET_TREE_DATA:
+            return update(state, {
+                treeData: {$set: action.treeData}
+            });
 
         default:
             return state;

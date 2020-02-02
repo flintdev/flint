@@ -13,7 +13,7 @@ export class SourceFileManager {
 
     getTreeData = async () => {
         const treeData = await this.recurToChildren(this.rootDir);
-        console.log(treeData);
+        return treeData;
     };
 
     private recurToChildren = async (parentPath: string) => {

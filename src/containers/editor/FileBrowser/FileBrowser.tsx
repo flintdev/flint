@@ -12,6 +12,7 @@ import 'm-react-splitters/lib/splitters.css';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FileTreeView from "./FileTreeView/FileTreeView";
+import {FileTreeNode} from "../../../interface";
 
 const styles = createStyles({
     root: {
@@ -20,7 +21,9 @@ const styles = createStyles({
         height: "100%",
     },
     fileTreeContainer: {
-        backgroundColor: '#f5f5f5'
+        height: '100%',
+        backgroundColor: '#f5f5f5',
+        overflow: 'scroll'
     },
     headerPaper: {
         borderRadius: 0,
@@ -30,11 +33,16 @@ const styles = createStyles({
         paddingRight: 10,
         marginBottom: 2,
     },
+    splitView: {
+        flexGrow: 1,
+        display: 'flex',
+        flexFlow: "column",
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, FilesState {
     setProjectDir: (projectDir: string) => void,
-
+    setTreeData: (treeData: FileTreeNode[]) => void,
 }
 
 class FileBrowser extends React.Component<Props, object> {
@@ -50,7 +58,7 @@ class FileBrowser extends React.Component<Props, object> {
 
     initActions = async (projectDir: string) => {
         const treeData = await new SourceFileManager(projectDir).getTreeData();
-        console.log(treeData);
+        this.props.setTreeData(treeData);
     };
 
     render() {
@@ -61,20 +69,23 @@ class FileBrowser extends React.Component<Props, object> {
                 <Paper className={classes.headerPaper}>
                     <Typography variant={"subtitle1"}>{projectDir}</Typography>
                 </Paper>
-                <Splitter
-                    position="vertical"
-                    primaryPaneMaxWidth="50%"
-                    primaryPaneMinWidth="10%"
-                    primaryPaneWidth="300px"
-                    postPoned={false}
-                >
-                    <div className={classes.fileTreeContainer}>
-                        <FileTreeView/>
-                    </div>
-                    <div>
+                <div className={classes.splitView}>
+                    <Splitter
+                        position="vertical"
+                        primaryPaneMaxWidth="50%"
+                        primaryPaneMinWidth="10%"
+                        primaryPaneWidth="300px"
+                        postPoned={false}
+                    >
+                        <div className={classes.fileTreeContainer}>
+                            <FileTreeView/>
+                        </div>
+                        <div>
 
-                    </div>
-                </Splitter>
+                        </div>
+                    </Splitter>
+                </div>
+
             </div>
         )
     }
@@ -86,7 +97,8 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.FilesAction>) => {
     return {
-        setProjectDir: (projectDir: string) => dispatch(actions.setProjectDir(projectDir))
+        setProjectDir: (projectDir: string) => dispatch(actions.setProjectDir(projectDir)),
+        setTreeData: (treeData: FileTreeNode[]) => dispatch(actions.setTreeData(treeData)),
     }
 };
 
