@@ -7,10 +7,27 @@ import { Dispatch } from "redux";
 import {FilesState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/files/actions";
 import {SourceFileManager} from "../../../controllers/files/sourceFileManager";
+import Splitter from 'm-react-splitters';
+import 'm-react-splitters/lib/splitters.css';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const styles = createStyles({
     root: {
-
+        display: 'flex',
+        flexFlow: "column",
+        height: "100%",
+    },
+    fileTreeContainer: {
+        backgroundColor: '#f5f5f5'
+    },
+    headerPaper: {
+        borderRadius: 0,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10,
+        marginBottom: 2,
     },
 });
 
@@ -39,7 +56,23 @@ class FileBrowser extends React.Component<Props, object> {
         const {classes, projectDir} = this.props;
         return (
             <div className={classes.root}>
+                <Paper className={classes.headerPaper}>
+                    <Typography variant={"subtitle1"}>{projectDir}</Typography>
+                </Paper>
+                <Splitter
+                    position="vertical"
+                    primaryPaneMaxWidth="50%"
+                    primaryPaneMinWidth="10%"
+                    primaryPaneWidth="300px"
+                    postPoned={false}
+                >
+                    <div className={classes.fileTreeContainer}>
 
+                    </div>
+                    <div>
+
+                    </div>
+                </Splitter>
             </div>
         )
     }
