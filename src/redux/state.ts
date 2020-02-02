@@ -1,7 +1,7 @@
 // redux/state.ts
 import {MVC} from "../constants/editor";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
-import {TreeNode} from "../controllers/files/sourceFileManager";
+import {FileTreeNode} from "../interface";
 
 export interface EditorState {
     projectDir: string,
@@ -28,8 +28,8 @@ export interface ModelEditorState {
 
 export interface FilesState {
     projectDir: string,
-    treeData: TreeNode,
-    nodeSelected: TreeNode,
+    treeData: FileTreeNode[],
+    nodeSelected: FileTreeNode,
     fileContent: string,
 }
 

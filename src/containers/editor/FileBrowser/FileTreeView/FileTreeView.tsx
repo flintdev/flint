@@ -26,6 +26,10 @@ class FileTreeView extends React.Component<Props, object> {
 
     }
 
+    recurToRenderTreeNode = () => {
+
+    };
+
     render() {
         const {classes} = this.props;
         return (

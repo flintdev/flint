@@ -11,6 +11,7 @@ import Splitter from 'm-react-splitters';
 import 'm-react-splitters/lib/splitters.css';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import FileTreeView from "./FileTreeView/FileTreeView";
 
 const styles = createStyles({
     root: {
@@ -54,6 +55,7 @@ class FileBrowser extends React.Component<Props, object> {
 
     render() {
         const {classes, projectDir} = this.props;
+        if (!projectDir) return (<div/>);
         return (
             <div className={classes.root}>
                 <Paper className={classes.headerPaper}>
@@ -67,7 +69,7 @@ class FileBrowser extends React.Component<Props, object> {
                     postPoned={false}
                 >
                     <div className={classes.fileTreeContainer}>
-
+                        <FileTreeView/>
                     </div>
                     <div>
 
