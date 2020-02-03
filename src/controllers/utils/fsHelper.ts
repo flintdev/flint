@@ -21,7 +21,7 @@ export interface FileInfo {
 }
 
 export type ReadDirResolve = (files: FileInfo[]) => void;
-
+export type ReadFileResolve = (value: string) => void;
 
 export class FSHelper {
     createDirByPath = (path: string) => {
@@ -60,7 +60,7 @@ export class FSHelper {
     };
 
     readFile = (path: string) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve: ReadFileResolve, reject) => {
             fs.readFile(path, 'utf8', (err: ErrnoException, data: Buffer) => {
                 if (err) return reject(err);
                 resolve(data.toString());

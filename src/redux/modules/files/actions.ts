@@ -17,7 +17,9 @@ export function selectNode(node: FileTreeNode): SelectNode {
     return { type: types.SELECT_NODE, node }
 }
 
-
+export function setFileContent(value: string|null): SetFileContent {
+    return { type: types.SET_FILE_CONTENT, value }
+}
 
 // interfaces
 
@@ -36,7 +38,13 @@ export interface SelectNode {
     node: FileTreeNode,
 }
 
+export interface SetFileContent {
+    type: typeof types.SET_FILE_CONTENT,
+    value: string|null,
+}
+
 export type FilesAction =
     SetTreeData |
     SelectNode |
+    SetFileContent |
     SetProjectDir;

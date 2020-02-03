@@ -17,6 +17,7 @@ import {themeColor} from "../../../../constants";
 import {SvgIconProps} from '@material-ui/core/SvgIcon';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import Typography from '@material-ui/core/Typography';
+import {SourceFileManager} from "../../../../controllers/files/sourceFileManager";
 
 const styles = createStyles({
     root: {},
@@ -44,6 +45,8 @@ const useTreeItemStyles = makeStyles(createStyles({
 
 export interface Props extends WithStyles<typeof styles>, FilesState {
     selectNode: (node: FileTreeNode) => void,
+    setFileContent: (value: string|null) => void,
+
 }
 
 interface NodeLabelProps {
@@ -73,14 +76,19 @@ function NodeLabel(props: NodeLabelProps) {
 
 class FileTreeView extends React.Component<Props, object> {
     state = {};
-
+    sourceFileManager: SourceFileManager;
     componentDidMount(): void {
-
+        const {projectDir} = this.props;
+        this.sourceFileManager = new SourceFileManager(projectDir);
     }
 
-    handleNodeSelect = (node: FileTreeNode) => (event: React.MouseEvent) => {
+    handleNodeSelect = (node: FileTreeNode) => async (event: React.MouseEvent) => {
         event.stopPropagation();
         this.props.selectNode(node);
+        if (node.type === "file") {
+            const fileContent = await this.sourceFileManager.getFileContent(node.path);
+            this.props.setFileContent(fileContent);
+        }
     };
 
     recurToRenderTreeNode = (node: FileTreeNode) => {
@@ -161,6 +169,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.FilesAction>) => {
     return {
         selectNode: (node: FileTreeNode) => dispatch(actions.selectNode(node)),
+        setFileContent: (value: string|null) => dispatch(actions.setFileContent(value)),
 
     }
 };

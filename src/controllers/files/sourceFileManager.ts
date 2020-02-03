@@ -6,6 +6,7 @@ import {FileTreeNode} from "../../interface";
 export class SourceFileManager {
     rootDir: string;
     fsHelper: FSHelper;
+
     constructor(rootDir: string) {
         this.rootDir = rootDir;
         this.fsHelper = new FSHelper();
@@ -14,6 +15,14 @@ export class SourceFileManager {
     getTreeData = async () => {
         const treeData = await this.recurToChildren(this.rootDir);
         return treeData;
+    };
+
+    getFileContent = async (path: string) => {
+        try {
+            return await this.fsHelper.readFile(path);
+        } catch (e) {
+            return null;
+        }
     };
 
     private recurToChildren = async (parentPath: string) => {

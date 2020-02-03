@@ -30,7 +30,7 @@ export interface FilesState {
     projectDir: string,
     treeData: FileTreeNode[],
     nodeSelected: FileTreeNode,
-    fileContent: string,
+    fileContent: string|null,
 }
 
 export interface StoreState {

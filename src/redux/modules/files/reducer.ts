@@ -19,6 +19,10 @@ export function reducer(state: FilesState, action: FilesAction) {
             return update(state, {
                 nodeSelected: {$set: action.node}
             });
+        case types.SET_FILE_CONTENT:
+            return update(state, {
+                fileContent: {$set: action.value}
+            });
 
         default:
             return state;
