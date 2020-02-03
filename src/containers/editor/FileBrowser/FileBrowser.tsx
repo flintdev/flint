@@ -34,10 +34,10 @@ const styles = createStyles({
     },
     headerPaper: {
         borderRadius: 0,
-        paddingTop: 5,
-        paddingBottom: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 15,
+        paddingRight: 15,
         marginBottom: 2,
     },
     splitView: {

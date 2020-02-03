@@ -62,6 +62,8 @@ function NodeLabel(props: NodeLabelProps) {
             <Typography
                 variant={"body1"}
                 className={classes.labelText}
+                display={"inline"}
+                noWrap={true}
             >
                 {labelText}
             </Typography>
