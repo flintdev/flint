@@ -43,7 +43,7 @@ const useTreeItemStyles = makeStyles(createStyles({
 }));
 
 export interface Props extends WithStyles<typeof styles>, FilesState {
-
+    selectNode: (node: FileTreeNode) => void,
 }
 
 interface NodeLabelProps {
@@ -76,6 +76,11 @@ class FileTreeView extends React.Component<Props, object> {
 
     }
 
+    handleNodeSelect = (node: FileTreeNode) => (event: React.MouseEvent) => {
+        event.stopPropagation();
+        this.props.selectNode(node);
+    };
+
     recurToRenderTreeNode = (node: FileTreeNode) => {
         return (
             <React.Fragment key={node.path}>
@@ -89,6 +94,7 @@ class FileTreeView extends React.Component<Props, object> {
                             type={"file"}
                         />
                     }
+                    onClick={this.handleNodeSelect(node)}
                 />
                 }
                 {!!node.children && node.children.length > 0 &&
@@ -151,7 +157,10 @@ const mapStateToProps = (state: StoreState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.FilesAction>) => {
-    return {}
+    return {
+        selectNode: (node: FileTreeNode) => dispatch(actions.selectNode(node)),
+
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(FileTreeView));

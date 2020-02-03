@@ -13,6 +13,12 @@ export function setTreeData(treeData: FileTreeNode[]): SetTreeData {
     return { type: types.SET_TREE_DATA, treeData }
 }
 
+export function selectNode(node: FileTreeNode): SelectNode {
+    return { type: types.SELECT_NODE, node }
+}
+
+
+
 // interfaces
 
 export interface SetProjectDir {
@@ -25,6 +31,12 @@ export interface SetTreeData {
     treeData: FileTreeNode[],
 }
 
+export interface SelectNode {
+    type: typeof types.SELECT_NODE,
+    node: FileTreeNode,
+}
+
 export type FilesAction =
     SetTreeData |
+    SelectNode |
     SetProjectDir;

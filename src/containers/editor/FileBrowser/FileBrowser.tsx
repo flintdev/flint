@@ -13,6 +13,13 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import FileTreeView from "./FileTreeView/FileTreeView";
 import {FileTreeNode} from "../../../interface";
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import {ProjectManager} from "../../../controllers/project/projectManager";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Chip from '@material-ui/core/Chip';
+import FolderIcon from '@material-ui/icons/Folder';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import {themeColor} from "../../../constants";
 
 const styles = createStyles({
     root: {
@@ -37,7 +44,10 @@ const styles = createStyles({
         flexGrow: 1,
         display: 'flex',
         flexFlow: "column",
-    }
+    },
+    icon: {
+        color: themeColor.grey,
+    },
 });
 
 export interface Props extends WithStyles<typeof styles>, FilesState {
@@ -61,13 +71,40 @@ class FileBrowser extends React.Component<Props, object> {
         this.props.setTreeData(treeData);
     };
 
+    splitFilePath = (path: string) => {
+        const {projectDir} = this.props;
+        const projectName = new ProjectManager(projectDir).getProjectName();
+        const tempList = path.replace(projectDir, projectName).split('/');
+        return tempList;
+    };
+
+    getFileIcon = (files: string[], nodeSelected: FileTreeNode, index: number) => {
+        const {classes} = this.props;
+        if (!nodeSelected) return <FolderIcon className={classes.icon}/>;
+        else if (nodeSelected.type === 'dir') return <FolderIcon className={classes.icon}/>;
+        else if (files.length === index + 1) return <DescriptionOutlinedIcon className={classes.icon}/>;
+        else return <FolderIcon className={classes.icon}/>;
+    };
+
     render() {
-        const {classes, projectDir} = this.props;
+        const {classes, projectDir, nodeSelected} = this.props;
         if (!projectDir) return (<div/>);
+        const files = !!nodeSelected ? this.splitFilePath(nodeSelected.path): this.splitFilePath(projectDir);
         return (
             <div className={classes.root}>
                 <Paper className={classes.headerPaper}>
-                    <Typography variant={"subtitle1"}>{projectDir}</Typography>
+                    <Breadcrumbs separator={<NavigateNextIcon fontSize={"small"}/>}>
+                        {files.map((file, i) => {
+                            return (
+                                <Chip
+                                    key={i}
+                                    size={"small"}
+                                    label={file}
+                                    icon={this.getFileIcon(files, nodeSelected, i)}
+                                />
+                            )
+                        })}
+                    </Breadcrumbs>
                 </Paper>
                 <div className={classes.splitView}>
                     <Splitter
