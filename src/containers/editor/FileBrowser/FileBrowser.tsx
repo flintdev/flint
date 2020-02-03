@@ -20,6 +20,7 @@ import Chip from '@material-ui/core/Chip';
 import FolderIcon from '@material-ui/icons/Folder';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import {themeColor} from "../../../constants";
+import CodeEditor from "./CodeEditor/CodeEditor";
 
 const styles = createStyles({
     root: {
@@ -31,6 +32,9 @@ const styles = createStyles({
         height: '100%',
         backgroundColor: '#f5f5f5',
         overflow: 'scroll'
+    },
+    codeEditorContainer: {
+        height: '100%',
     },
     headerPaper: {
         borderRadius: 0,
@@ -117,8 +121,8 @@ class FileBrowser extends React.Component<Props, object> {
                         <div className={classes.fileTreeContainer}>
                             <FileTreeView/>
                         </div>
-                        <div>
-
+                        <div className={classes.codeEditorContainer}>
+                            <CodeEditor/>
                         </div>
                     </Splitter>
                 </div>
