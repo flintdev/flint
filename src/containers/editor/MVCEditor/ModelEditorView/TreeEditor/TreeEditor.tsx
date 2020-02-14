@@ -5,7 +5,7 @@ import {createStyles, WithStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import {LOADING_STATUS} from "../../../../../constants";
 import ModelEditor from "@flintdev/model-editor";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
@@ -91,7 +91,6 @@ class TreeEditor extends React.Component<Props, object> {
                         }
                     </CardContent>
                 </Card>
-
             </div>
         )
     }
@@ -103,9 +102,9 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-        setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
-        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.setDefaultEditorData(editorData)),
-        setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
+        setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
+        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setDefaultEditorData(editorData)),
+        setSchemaData: (schemaData: SchemaData) => dispatch(actions.modelEditor.setSchemaData(schemaData)),
     }
 };
 

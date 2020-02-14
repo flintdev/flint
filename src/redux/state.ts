@@ -8,6 +8,7 @@ export interface EditorState {
     currentPageIndex: number,
     mvcEditor: MVCEditorState,
     modelEditor: ModelEditorState,
+    processEditor: ProcessEditorState,
 }
 
 export interface MVCEditorState {
@@ -23,6 +24,15 @@ export interface ModelEditorState {
     currentRevision: {
         editor: number | undefined,
         source: number | undefined,
+    }
+}
+
+export interface ProcessEditorState {
+    processList: string[],
+    processSelected: string | undefined,
+    processEditorDialog: {
+        open: boolean,
+        editorData: object | undefined,
     }
 }
 
@@ -62,6 +72,14 @@ export const initState: StoreState = {
             currentRevision: {
                 editor: undefined,
                 source: undefined
+            }
+        },
+        processEditor: {
+            processList: [],
+            processSelected: undefined,
+            processEditorDialog: {
+                open: false,
+                editorData: undefined
             }
         }
     },

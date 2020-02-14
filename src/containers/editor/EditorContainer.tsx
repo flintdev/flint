@@ -6,7 +6,7 @@ import NavigationSidebar from "./NavigationSidebar";
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import {Page} from "../../constants/editor";
 import MVCEditor from "./MVCEditor";
 import {BackgroundColor, theme, themeColor} from "../../constants";

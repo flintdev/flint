@@ -2,7 +2,7 @@
 
 import * as types from "./types";
 import update from 'immutability-helper';
-import {EditorAction} from "./actions";
+import {EditorAction} from "./actions/actions";
 import {EditorState} from "../../state";
 
 export function reducer(state: EditorState, action: EditorAction) {

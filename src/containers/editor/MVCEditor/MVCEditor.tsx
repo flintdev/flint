@@ -5,7 +5,7 @@ import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import HeaderView from "./HeaderView/HeaderView";
 import {MVC} from "../../../constants/editor";
 import ModelListView from "./ModelEditorView";

@@ -13,3 +13,8 @@ export const SET_DEFAULT_EDITOR_DATA = 'editor/modelEditor/SET_DEFAULT_EDITOR_DA
 export const SET_SCHEMA_DATA = 'editor/modelEditor/SET_SCHEMA_DATA';
 export const DELETE_MODEL = 'editor/modelEditor/DELETE_MODEL';
 export const SET_CURRENT_REVISION = 'editor/modelEditor/SET_CURRENT_REVISION';
+// process editor
+export const SET_PROCESS_LIST = 'editor/processEditor/SET_PROCESS_LIST';
+export const SELECT_PROCESS = 'editor/processEditor/SELECT_PROCESS';
+export const PROCESS_EDITOR_DIALOG_OPEN = 'editor/processEditor/PROCESS_EDITOR_DIALOG_OPEN';
+export const PROCESS_EDITOR_DIALOG_CLOSE = 'editor/processEditor/PROCESS_EDITOR_DIALOG_CLOSE';

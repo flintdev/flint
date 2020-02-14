@@ -5,7 +5,7 @@ import {createStyles, WithStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
@@ -198,12 +198,12 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-        setModelList: (modelList: string[]) => dispatch((actions.setModelList(modelList))),
-        selectModel: (value: string) => dispatch((actions.selectModel(value))),
-        setEditorData: (editorData: EditorData) => dispatch(actions.setEditorData(editorData)),
-        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.setDefaultEditorData(editorData)),
-        setSchemaData: (schemaData: SchemaData) => dispatch(actions.setSchemaData(schemaData)),
-        setCurrentRevision: (editor: number, source: number) => dispatch(actions.setCurrentRevision(editor, source)),
+        setModelList: (modelList: string[]) => dispatch((actions.modelEditor.setModelList(modelList))),
+        selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
+        setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
+        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setDefaultEditorData(editorData)),
+        setSchemaData: (schemaData: SchemaData) => dispatch(actions.modelEditor.setSchemaData(schemaData)),
+        setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
     }
 };
 

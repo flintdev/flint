@@ -5,7 +5,7 @@ import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import {Page, NavigationPages} from "../../../constants/editor";
 import {theme, themeColor} from "../../../constants";
 import DashboardOutlinedIcon from '@material-ui/icons/DashboardOutlined';

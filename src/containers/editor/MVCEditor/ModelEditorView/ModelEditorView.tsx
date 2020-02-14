@@ -5,7 +5,7 @@ import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {EditorState, StoreState} from "src/redux/state";
-import * as actions from "src/redux/modules/editor/actions";
+import * as actions from "src/redux/modules/editor/actions/actions";
 import ModelListView from "./ModelListView";
 import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save';
@@ -324,8 +324,8 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-        deleteModel: (modelName: string) => dispatch(actions.deleteModel(modelName)),
-        setCurrentRevision: (editor: number, source: number) => dispatch(actions.setCurrentRevision(editor, source)),
+        deleteModel: (modelName: string) => dispatch(actions.modelEditor.deleteModel(modelName)),
+        setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
     }
 };
 
