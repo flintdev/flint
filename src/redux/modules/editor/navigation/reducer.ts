@@ -1,4 +1,4 @@
-//
+// src/redux/modules/editor/navigation/reducer.ts
 
 import * as types from './types';
 import update from 'immutability-helper';
