@@ -11,7 +11,7 @@ export enum Error {
 export class MainProcessCommunicator {
 
     switchFromStarterToEditorWindow = (projectDir: string) => {
-        // open editor window and close starter window
+        // open editorWindow window and close starterWindow window
         return new Promise((resolve, reject) => {
             ipcRenderer.send(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, projectDir)
                 .then(() => {

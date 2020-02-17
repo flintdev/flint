@@ -4,14 +4,17 @@ import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 import {FileTreeNode} from "../interface";
 
 export interface EditorState {
-    projectDir: string,
-    currentPageIndex: number,
-    mvcEditor: MVCEditorState,
+    navigation: NavigationState,
     modelEditor: ModelEditorState,
     processEditor: ProcessEditorState,
 }
 
-export interface MVCEditorState {
+export interface ConfigState {
+    projectDir: string,
+    currentPageIndex: number,
+}
+
+export interface NavigationState {
     currentView: string,
 }
 
@@ -47,6 +50,7 @@ export interface StoreState {
     starter: {
         createProjectDialog: object
     },
+    config: ConfigState,
     editor: EditorState,
     files: FilesState,
 }
@@ -57,10 +61,12 @@ export const initState: StoreState = {
             open: false
         }
     },
-    editor: {
+    config: {
         projectDir: '',
         currentPageIndex: 0,
-        mvcEditor: {
+    },
+    editor: {
+        navigation: {
             currentView: MVC.Model,
         },
         modelEditor: {

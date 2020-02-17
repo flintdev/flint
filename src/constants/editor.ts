@@ -1,4 +1,4 @@
-// src/constants/editor.ts
+// src/constants/editorWindow.ts
 
 export enum Page {
     Editor,

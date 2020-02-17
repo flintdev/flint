@@ -1,4 +1,4 @@
-// src/redux/modules/starter/types.ts
+// src/redux/modules/starterWindow/types.ts
 
-export const CREATE_PROJECT_DIALOG_OPEN = 'starter/createProjectDialog/CREATE_PROJECT_DIALOG_OPEN';
-export const CREATE_PROJECT_DIALOG_CLOSE = 'starter/createProjectDialog/CREATE_PROJECT_DIALOG_CLOSE';
+export const CREATE_PROJECT_DIALOG_OPEN = 'starterWindow/createProjectDialog/CREATE_PROJECT_DIALOG_OPEN';
+export const CREATE_PROJECT_DIALOG_CLOSE = 'starterWindow/createProjectDialog/CREATE_PROJECT_DIALOG_CLOSE';

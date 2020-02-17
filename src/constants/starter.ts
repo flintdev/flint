@@ -1,4 +1,4 @@
-// src/constants/starter.ts
+// src/constants/starterWindow.ts
 
 import {version} from "pjson";
 
