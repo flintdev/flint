@@ -14,7 +14,7 @@ import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import DialogForm from "../../../../../components/DialogForm";
-import {Callback, Params} from "../../../../../components/DialogForm/DialogForm";
+import {Callback, Params} from "../../../../../components/DialogForm";
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
@@ -182,7 +182,7 @@ class ModelListView extends React.Component<Props, object> {
                         open={createDialogOpen}
                         onClose={this.handleCreateDialogClose}
                         title={"New Model"}
-                        submitButtonTitle={"Create"}
+                        submitButtonTitle={"Create Model"}
                         forms={CreateModelParamsDef}
                         onSubmit={this.handleCreateModelSubmit}
                     />

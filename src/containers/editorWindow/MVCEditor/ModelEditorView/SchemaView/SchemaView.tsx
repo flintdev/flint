@@ -66,7 +66,7 @@ class SchemaView extends React.Component<Props, object> {
         const code = this.getCode();
         return (
             <div className={classes.root}>
-                <Card className={classes.card} elevation={5}>
+                <Card className={classes.card} elevation={4}>
                     <CardHeader
                         avatar={<Avatar><CodeIcon/></Avatar>}
                         title={<Typography variant={"subtitle1"}>Schema Viewer</Typography>}

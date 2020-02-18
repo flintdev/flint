@@ -34,7 +34,6 @@ const styles = createStyles({
     },
     content: {
         marginTop: 2,
-        // marginLeft: 1,
         flexGrow: 1,
     },
     table: {

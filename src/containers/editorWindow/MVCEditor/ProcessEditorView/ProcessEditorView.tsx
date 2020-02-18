@@ -6,8 +6,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { StoreState } from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import ProcessEditor from '@flintdev/process-editor';
-import {stepOptions} from "./stepOptions";
+import ProcessListView from "./ProcessListView";
 
 const styles = createStyles({
     root: {
@@ -16,6 +15,12 @@ const styles = createStyles({
         height: '100%',
         flexDirection: 'column',
     },
+    content: {
+        marginTop: 2,
+        flexGrow: 1,
+        backgroundColor: '#f5f5f5'
+    },
+
 });
 
 export interface Props extends WithStyles<typeof styles>{
@@ -26,32 +31,18 @@ class ProcessEditorView extends React.Component<Props, object> {
     state = {
 
     };
-    operations: object = {};
 
     componentDidMount(): void {
 
     }
 
-    editorOnSaved = (processData: any, editorData: any) => {
-        console.log(processData);
-        console.log(editorData);
-    };
-
-    editorStepDbClick = (stepData: any) => {
-        console.log(stepData);
-    };
-
     render() {
         const {classes} = this.props;
         return (
             <div className={classes.root}>
-                <ProcessEditor
-                    operations={this.operations}
-                    stepOptions={stepOptions}
-                    editorData={undefined}
-                    onSaved={this.editorOnSaved}
-                    stepDbClick={this.editorStepDbClick}
-                />
+                <div className={classes.content}>
+                    <ProcessListView/>
+                </div>
             </div>
         )
     }

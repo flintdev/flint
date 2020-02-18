@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { StoreState } from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
+import ProcessEditor from '@flintdev/process-editor';
+import {stepOptions} from "./stepOptions";
 
 const styles = createStyles({
     root: {
@@ -21,16 +23,32 @@ class ProcessEditorDialog extends React.Component<Props, object> {
     state = {
 
     };
+    operations: object = {};
 
     componentDidMount(): void {
 
     }
 
+    editorOnSaved = (processData: any, editorData: any) => {
+        console.log(processData);
+        console.log(editorData);
+    };
+
+    editorStepDbClick = (stepData: any) => {
+        console.log(stepData);
+    };
+
     render() {
         const {classes} = this.props;
         return (
             <div className={classes.root}>
-
+                <ProcessEditor
+                    operations={this.operations}
+                    stepOptions={stepOptions}
+                    editorData={undefined}
+                    onSaved={this.editorOnSaved}
+                    stepDbClick={this.editorStepDbClick}
+                />
             </div>
         )
     }
