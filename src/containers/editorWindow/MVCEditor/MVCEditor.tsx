@@ -4,7 +4,7 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
-import {EditorState, NavigationState, StoreState} from "src/redux/state";
+import {NavigationState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import HeaderView from "./HeaderView/HeaderView";
 import {MVC} from "../../../constants/editor";
@@ -39,12 +39,8 @@ class MVCEditor extends React.Component<Props, object> {
             <div className={classes.root}>
                 <HeaderView/>
                 <div className={classes.content}>
-                    {currentView === MVC.Model &&
-                    <ModelListView/>
-                    }
-                    {currentView === MVC.Controller &&
-                    <ProcessEditorView/>
-                    }
+                    {currentView === MVC.Model && <ModelListView/>}
+                    {currentView === MVC.Controller && <ProcessEditorView/>}
                 </div>
             </div>
         )

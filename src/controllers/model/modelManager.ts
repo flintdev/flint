@@ -4,7 +4,6 @@ import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 import {SpecGenerator} from "./specGenerator";
-import {edit} from "ace-builds";
 
 interface Config {
     models: Array<object>

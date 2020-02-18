@@ -12,13 +12,14 @@ import IconButton from "@material-ui/core/IconButton";
 import AddIcon from '@material-ui/icons/Add';
 import DialogForm, {Params, Callback} from "src/components/DialogForm";
 import {CreateProcessParamsDef} from "./definition";
+import Fab from '@material-ui/core/Fab';
 
 const styles = createStyles({
     root: {
 
     },
     paperContainer: {
-        margin: 10,
+        margin: 20,
         padding: 20,
     },
     headerTable: {
@@ -52,6 +53,8 @@ class ProcessListView extends React.Component<Props, object> {
     };
 
     handleCreateProcessSubmit = async (params: Params, callback: Callback) => {
+        const name = params.name as string;
+
         callback.close();
     };
 
@@ -68,9 +71,13 @@ class ProcessListView extends React.Component<Props, object> {
                                 <Typography variant={"h6"}>Process List</Typography>
                             </td>
                             <td className={classes.textRight}>
-                                <IconButton onClick={this.handleCreateDialogOpen}>
+                                <Fab
+                                    onClick={this.handleCreateDialogOpen}
+                                    color={"primary"}
+                                    size={"small"}
+                                >
                                     <AddIcon/>
-                                </IconButton>
+                                </Fab>
                             </td>
                         </tr>
                         </tbody>
