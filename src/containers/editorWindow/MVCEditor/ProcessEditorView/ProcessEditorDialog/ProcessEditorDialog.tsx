@@ -4,19 +4,26 @@ import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { StoreState } from "src/redux/state";
+import {ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import ProcessEditor from '@flintdev/process-editor';
 import {stepOptions} from "./stepOptions";
+import Dialog from "@material-ui/core/Dialog";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 
 const styles = createStyles({
     root: {
 
     },
+    dialogContent: {
+        margin: -24
+    }
 });
 
-export interface Props extends WithStyles<typeof styles>{
-
+export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
+    processEditorDialogClose: () => void,
 }
 
 class ProcessEditorDialog extends React.Component<Props, object> {
@@ -39,28 +46,37 @@ class ProcessEditorDialog extends React.Component<Props, object> {
     };
 
     render() {
-        const {classes} = this.props;
+        const {classes, processSelected, processEditorDialog} = this.props;
         return (
             <div className={classes.root}>
-                <ProcessEditor
-                    operations={this.operations}
-                    stepOptions={stepOptions}
-                    editorData={undefined}
-                    onSaved={this.editorOnSaved}
-                    stepDbClick={this.editorStepDbClick}
-                />
+                <Dialog
+                    open={processEditorDialog.open}
+                    onClose={this.props.processEditorDialogClose}
+                    fullScreen={true}
+                >
+                    <DialogContent className={classes.dialogContent}>
+                        <ProcessEditor
+                            operations={this.operations}
+                            stepOptions={stepOptions}
+                            editorData={undefined}
+                            onSaved={this.editorOnSaved}
+                            stepDbClick={this.editorStepDbClick}
+                        />
+                    </DialogContent>
+                </Dialog>
+
             </div>
         )
     }
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state.editor;
+    return state.editor.processEditor;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-
+        processEditorDialogClose: () => dispatch(actions.processEditor.processEditorDialogClose()),
     }
 };
 

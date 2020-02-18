@@ -7,6 +7,8 @@ import { Dispatch } from "redux";
 import { StoreState } from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import ProcessListView from "./ProcessListView";
+import ProcessInfoView from "./ProcessInfoView";
+import ProcessEditorDialog from "./ProcessEditorDialog";
 
 const styles = createStyles({
     root: {
@@ -64,12 +66,13 @@ class ProcessEditorView extends React.Component<Props, object> {
                                 <ProcessListView/>
                             </td>
                             <td className={classes.tdRight} valign={"top"}>
-
+                                <ProcessInfoView/>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+                <ProcessEditorDialog/>
             </div>
         )
     }
