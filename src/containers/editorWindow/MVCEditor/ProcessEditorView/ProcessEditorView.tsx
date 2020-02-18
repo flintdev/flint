@@ -18,9 +18,25 @@ const styles = createStyles({
     content: {
         marginTop: 2,
         flexGrow: 1,
-        backgroundColor: '#f5f5f5'
     },
-
+    table: {
+        width: '100%',
+        height: '100%',
+        border: 0,
+        cellSpacing: 0,
+        cellPadding: 0,
+        borderSpacing: 0,
+        borderCollapse: 'collapse',
+    },
+    tdLeft: {
+        width: 240,
+        borderRight: '1px solid #ddd',
+    },
+    tdRight: {
+        height: '100%',
+        display: 'flex',
+        flexFlow: "column",
+    },
 });
 
 export interface Props extends WithStyles<typeof styles>{
@@ -41,7 +57,18 @@ class ProcessEditorView extends React.Component<Props, object> {
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
-                    <ProcessListView/>
+                    <table className={classes.table}>
+                        <tbody>
+                        <tr>
+                            <td className={classes.tdLeft} valign={"top"}>
+                                <ProcessListView/>
+                            </td>
+                            <td className={classes.tdRight} valign={"top"}>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         )

@@ -4,7 +4,7 @@ import * as React from 'react';
 import {createStyles, WithStyles, withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
 import {Dispatch} from "redux";
-import {ConfigState, EditorState, ModelEditorState, StoreState} from "src/redux/state";
+import {ConfigState, ModelEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -198,7 +198,7 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-        setModelList: (modelList: string[]) => dispatch((actions.modelEditor.setModelList(modelList))),
+        setModelList: (modelList: string[]) => dispatch(actions.modelEditor.setModelList(modelList)),
         selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
         setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
         setDefaultEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setDefaultEditorData(editorData)),
