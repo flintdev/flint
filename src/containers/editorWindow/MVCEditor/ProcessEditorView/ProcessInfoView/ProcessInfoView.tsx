@@ -12,6 +12,9 @@ const styles = createStyles({
     root: {
 
     },
+    actionButton: {
+        margin: 10,
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
@@ -33,9 +36,22 @@ class ProcessInfoView extends React.Component<Props, object> {
 
     render() {
         const {classes, processSelected} = this.props;
+        if (!processSelected) return <div/>
         return (
             <div className={classes.root}>
-                <Button onClick={this.handleOpenEditorClick}>Open Editor</Button>
+                <Button
+                    onClick={this.handleOpenEditorClick}
+                    variant={"contained"}
+                    className={classes.actionButton}
+                >
+                    Open Editor
+                </Button>
+                <Button
+                    variant={"outlined"}
+                    className={classes.actionButton}
+                >
+                    Sync Source Files
+                </Button>
             </div>
         )
     }

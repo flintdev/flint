@@ -6,12 +6,14 @@ import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import {ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
-import ProcessEditor from '@flintdev/process-editor';
 import {stepOptions} from "./stepOptions";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import {ProcessEditor} from "@flintdev/process-editor";
+import Slide from '@material-ui/core/Slide';
+import { TransitionProps } from '@material-ui/core/transitions';
 
 const styles = createStyles({
     root: {
@@ -25,6 +27,11 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
     processEditorDialogClose: () => void,
 }
+
+const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 
 class ProcessEditorDialog extends React.Component<Props, object> {
     state = {
@@ -53,6 +60,7 @@ class ProcessEditorDialog extends React.Component<Props, object> {
                     open={processEditorDialog.open}
                     onClose={this.props.processEditorDialogClose}
                     fullScreen={true}
+                    TransitionComponent={Transition}
                 >
                     <DialogContent className={classes.dialogContent}>
                         <ProcessEditor
@@ -61,6 +69,7 @@ class ProcessEditorDialog extends React.Component<Props, object> {
                             editorData={undefined}
                             onSaved={this.editorOnSaved}
                             stepDbClick={this.editorStepDbClick}
+                            onClose={this.props.processEditorDialogClose}
                         />
                     </DialogContent>
                 </Dialog>
