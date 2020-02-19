@@ -30,9 +30,13 @@ interface Operations {
     updateStepData?: (stepData: any) => void
 }
 
-class StepEditDialog extends React.Component<Props, object> {
-    state = {
+interface State {
+    attributes: StepAttributes
+}
 
+class StepEditDialog extends React.Component<Props, object> {
+    state: State = {
+        attributes: null
     };
     operations: Operations = {};
     componentDidMount(): void {
@@ -56,7 +60,7 @@ class StepEditDialog extends React.Component<Props, object> {
     };
 
     handleAttributesUpdated = (attributes: StepAttributes) => {
-
+        this.setState({attributes})
     };
 
     render() {

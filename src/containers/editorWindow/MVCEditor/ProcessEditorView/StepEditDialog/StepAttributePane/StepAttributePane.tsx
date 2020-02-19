@@ -11,6 +11,8 @@ import Paper from "@material-ui/core/Paper";
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {themeColor} from "../../../../../../constants";
+import Grid from '@material-ui/core/Grid';
+import {TextField} from "@material-ui/core";
 
 const styles = createStyles({
     root: {},
@@ -19,6 +21,7 @@ const styles = createStyles({
         paddingBottom: 10,
         paddingLeft: 20,
         paddingRight: 20,
+        marginBottom: 10,
     },
     table: {
         width: '100%',
@@ -26,7 +29,11 @@ const styles = createStyles({
     title: {},
     subtitle: {
         color: themeColor.grey
-    }
+    },
+    buttonContainer: {
+        textAlign: 'right',
+    },
+
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
@@ -43,6 +50,8 @@ class StepAttributePane extends React.Component<Props, object> {
 
     componentDidMount(): void {
         this.setState({editing: false});
+        const {attributes} = this.state;
+        this.props.onUpdated(attributes);
     }
 
     handleEditButtonClick = () => {
@@ -50,6 +59,27 @@ class StepAttributePane extends React.Component<Props, object> {
             editing: true,
             editingAttributes: this.state.attributes,
         });
+    };
+
+    handleCancelButtonClick = () => {
+        this.setState({
+            editing: false
+        });
+    };
+
+    handleUpdateButtonClick = () => {
+        const {editingAttributes} = this.state;
+        this.setState({
+            editing: false,
+            attributes: editingAttributes,
+        });
+        this.props.onUpdated(editingAttributes);
+    };
+
+    handleStepNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let {editingAttributes} = this.state;
+        editingAttributes.name = event.target.value;
+        this.setState({editingAttributes});
     };
 
     render() {
@@ -78,6 +108,27 @@ class StepAttributePane extends React.Component<Props, object> {
                         </tr>
                         </tbody>
                     </table>
+                    }
+                    {editing &&
+                    <div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <TextField
+                                    value={editingAttributes.name}
+                                    label={"Step Name"}
+                                    onChange={this.handleStepNameChange}
+                                    fullWidth={true}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+
+                            </Grid>
+                        </Grid>
+                        <div className={classes.buttonContainer}>
+                            <Button variant={"contained"} onClick={this.handleUpdateButtonClick}>Update</Button>
+                            <Button onClick={this.handleCancelButtonClick}>Cancel</Button>
+                        </div>
+                    </div>
                     }
                 </Paper>
             </div>
