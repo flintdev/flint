@@ -7,13 +7,20 @@ import HighlightOffTwoToneIcon from '@material-ui/icons/HighlightOffTwoTone';
 import AssignmentTurnedInTwoToneIcon from '@material-ui/icons/AssignmentTurnedInTwoTone';
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import NewReleasesTwoToneIcon from '@material-ui/icons/NewReleasesTwoTone';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 export const stepOptions = [
     {
-        "type": "Script",
+        "type": "Code Block",
         "group": "Standard",
         "category": "Automation",
         "icon": <CodeIcon/>
+    },
+    {
+        "type": "End",
+        "group": "Standard",
+        "category": "Automation",
+        "icon": <RadioButtonCheckedIcon/>
     },
     {
         "type": "Approve/Reject",

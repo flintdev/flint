@@ -20,6 +20,13 @@ export function processEditorDialogClose(): ProcessEditorDialogClose {
     return { type: types.PROCESS_EDITOR_DIALOG_CLOSE }
 }
 
+export function stepEditDialogOpen(stepData: any): StepEditDialogOpen {
+    return { type: types.STEP_EDIT_DIALOG_OPEN, stepData }
+}
+
+export function stepEditDialogClose(): StepEditDialogClose {
+    return { type: types.STEP_EDIT_DIALOG_CLOSE }
+}
 
 // interfaces
 
@@ -41,10 +48,22 @@ export interface ProcessEditorDialogClose {
     type: typeof types.PROCESS_EDITOR_DIALOG_CLOSE,
 }
 
+
+export interface StepEditDialogOpen {
+    type: typeof types.STEP_EDIT_DIALOG_OPEN,
+    stepData: any
+}
+
+export interface StepEditDialogClose {
+    type: typeof types.STEP_EDIT_DIALOG_CLOSE,
+}
+
 export type ProcessEditorAction =
     SelectProcess |
     ProcessEditorDialogOpen |
     ProcessEditorDialogClose |
+    StepEditDialogOpen |
+    StepEditDialogClose |
     SetProcessList;
 
 

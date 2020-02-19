@@ -36,7 +36,7 @@ class ProcessInfoView extends React.Component<Props, object> {
 
     render() {
         const {classes, processSelected} = this.props;
-        if (!processSelected) return <div/>
+        if (!processSelected) return <div/>;
         return (
             <div className={classes.root}>
                 <Button

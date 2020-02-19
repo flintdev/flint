@@ -14,6 +14,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import {ProcessEditor} from "@flintdev/process-editor";
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
+import StepEditDialog from "../StepEditDialog";
 
 const styles = createStyles({
     root: {
@@ -43,13 +44,12 @@ class ProcessEditorDialog extends React.Component<Props, object> {
 
     }
 
-    editorOnSaved = (processData: any, editorData: any) => {
-        console.log(processData);
-        console.log(editorData);
+    editorOnSaved = (editorData: any) => {
+        console.log('on saved - editor data', editorData);
     };
 
     editorStepDbClick = (stepData: any) => {
-        console.log(stepData);
+        console.log('step double clicked', stepData);
     };
 
     render() {
@@ -61,6 +61,7 @@ class ProcessEditorDialog extends React.Component<Props, object> {
                     onClose={this.props.processEditorDialogClose}
                     fullScreen={true}
                     TransitionComponent={Transition}
+                    disableEnforceFocus={true}
                 >
                     <DialogContent className={classes.dialogContent}>
                         <ProcessEditor
@@ -73,6 +74,10 @@ class ProcessEditorDialog extends React.Component<Props, object> {
                         />
                     </DialogContent>
                 </Dialog>
+
+                <StepEditDialog
+                    operations={this.operations}
+                />
 
             </div>
         )

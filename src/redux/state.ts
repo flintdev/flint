@@ -36,6 +36,10 @@ export interface ProcessEditorState {
     processEditorDialog: {
         open: boolean,
         editorData: object | undefined,
+    },
+    stepEditDialog: {
+        open: boolean,
+        stepData: any | undefined
     }
 }
 
@@ -86,6 +90,10 @@ export const initState: StoreState = {
             processEditorDialog: {
                 open: false,
                 editorData: undefined
+            },
+            stepEditDialog: {
+                open: false,
+                stepData: undefined
             }
         }
     },

@@ -3,8 +3,9 @@
 import * as types from './types';
 import update from 'immutability-helper';
 import {ProcessEditorAction} from "./actions";
+import {ProcessEditorState} from "../../../state";
 
-export function reducer(state: object, action: ProcessEditorAction) {
+export function reducer(state: ProcessEditorState, action: ProcessEditorAction) {
     switch (action.type) {
         case types.SET_PROCESS_LIST:
             return update(state, {
@@ -23,6 +24,19 @@ export function reducer(state: object, action: ProcessEditorAction) {
         case types.PROCESS_EDITOR_DIALOG_CLOSE:
             return update(state, {
                 processEditorDialog: {
+                    open: {$set: false}
+                }
+            });
+        case types.STEP_EDIT_DIALOG_OPEN:
+            return update(state, {
+                stepEditDialog: {
+                    open: {$set: true},
+                    stepData: {$set: action.stepData}
+                }
+            });
+        case types.STEP_EDIT_DIALOG_CLOSE:
+            return update(state, {
+                stepEditDialog: {
                     open: {$set: false}
                 }
             });
