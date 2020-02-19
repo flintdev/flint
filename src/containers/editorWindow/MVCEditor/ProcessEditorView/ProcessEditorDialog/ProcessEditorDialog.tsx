@@ -27,6 +27,7 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
     processEditorDialogClose: () => void,
+    stepEditDialogOpen: (stepData: any) => void,
 }
 
 const Transition = React.forwardRef<unknown, TransitionProps>(function Transition(props, ref) {
@@ -50,6 +51,7 @@ class ProcessEditorDialog extends React.Component<Props, object> {
 
     editorStepDbClick = (stepData: any) => {
         console.log('step double clicked', stepData);
+        this.props.stepEditDialogOpen(stepData);
     };
 
     render() {
@@ -90,6 +92,7 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
+        stepEditDialogOpen: (stepData: any) => dispatch(actions.processEditor.stepEditDialogOpen(stepData)),
         processEditorDialogClose: () => dispatch(actions.processEditor.processEditorDialogClose()),
     }
 };

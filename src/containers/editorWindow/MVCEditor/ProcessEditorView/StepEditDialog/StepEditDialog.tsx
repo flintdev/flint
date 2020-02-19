@@ -11,6 +11,9 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from '@material-ui/core/Button';
+import {ProcessDataHandler} from "../../../../../controllers/process/processDataHandler";
+import StepAttributePane from "./StepAttributePane/StepAttributePane";
+import {StepAttributes} from "./interface";
 
 const styles = createStyles({
     root: {
@@ -20,7 +23,6 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
     operations: Operations,
-    stepEditDialogOpen: (stepData: any) => void,
     stepEditDialogClose: () => void,
 }
 
@@ -47,9 +49,20 @@ class StepEditDialog extends React.Component<Props, object> {
         this.props.stepEditDialogClose();
     };
 
+    parseStepData = () => {
+        const {stepData} = this.props.stepEditDialog;
+        if (!stepData) return {attributes: null, code: '', outputs: null};
+        return new ProcessDataHandler().parseStepData(stepData);
+    };
+
+    handleAttributesUpdated = (attributes: StepAttributes) => {
+
+    };
+
     render() {
         const {classes, stepEditDialog} = this.props;
-        const {open, stepData} = stepEditDialog;
+        const {open} = stepEditDialog;
+        const {attributes, code, outputs} = this.parseStepData();
         return (
             <div className={classes.root}>
                 <Dialog
@@ -61,11 +74,14 @@ class StepEditDialog extends React.Component<Props, object> {
                     fullWidth={true}
                 >
                     <DialogContent>
-
+                        <StepAttributePane
+                            attributes={attributes}
+                            onUpdated={this.handleAttributesUpdated}
+                        />
                     </DialogContent>
                     <DialogActions>
                         <Button>Close</Button>
-                        <Button variant={"contained"}>Update</Button>
+                        <Button variant={"contained"} color={"primary"}>Update</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -79,7 +95,6 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-        stepEditDialogOpen: (stepData: any) => dispatch(actions.processEditor.stepEditDialogOpen(stepData)),
         stepEditDialogClose: () => dispatch(actions.processEditor.stepEditDialogClose()),
 
     }
