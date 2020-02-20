@@ -35,7 +35,7 @@ export interface ProcessEditorState {
     processSelected: string | undefined,
     processEditorDialog: {
         open: boolean,
-        editorData: object | undefined,
+        editorData: any | undefined,
     },
     stepEditDialog: {
         open: boolean,

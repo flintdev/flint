@@ -28,6 +28,16 @@ export function stepEditDialogClose(): StepEditDialogClose {
     return { type: types.STEP_EDIT_DIALOG_CLOSE }
 }
 
+export interface UpdateEditorData {
+    type: typeof types.UPDATE_EDITOR_DATA,
+    editorData: any
+}
+
+export function updateEditorData(editorData: any): UpdateEditorData {
+    return { type: types.UPDATE_EDITOR_DATA, editorData }
+}
+
+
 // interfaces
 
 export interface SetProcessList {
@@ -59,6 +69,7 @@ export interface StepEditDialogClose {
 }
 
 export type ProcessEditorAction =
+    UpdateEditorData |
     SelectProcess |
     ProcessEditorDialogOpen |
     ProcessEditorDialogClose |

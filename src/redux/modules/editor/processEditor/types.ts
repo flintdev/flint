@@ -6,3 +6,4 @@ export const PROCESS_EDITOR_DIALOG_OPEN = 'editorWindow/processEditor/PROCESS_ED
 export const PROCESS_EDITOR_DIALOG_CLOSE = 'editorWindow/processEditor/PROCESS_EDITOR_DIALOG_CLOSE';
 export const STEP_EDIT_DIALOG_OPEN = 'editorWindow/processEditor/STEP_EDIT_DIALOG_OPEN';
 export const STEP_EDIT_DIALOG_CLOSE = 'editorWindow/processEditor/STEP_EDIT_DIALOG_CLOSE';
+export const UPDATE_EDITOR_DATA = 'editorWindow/processEditor/UPDATE_EDITOR_DATA';

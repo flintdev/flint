@@ -40,6 +40,12 @@ export function reducer(state: ProcessEditorState, action: ProcessEditorAction) 
                     open: {$set: false}
                 }
             });
+        case types.UPDATE_EDITOR_DATA:
+            return update(state, {
+                processEditorDialog: {
+                    editorData: {$set: action.editorData}
+                }
+            });
 
         default:
             return state;
