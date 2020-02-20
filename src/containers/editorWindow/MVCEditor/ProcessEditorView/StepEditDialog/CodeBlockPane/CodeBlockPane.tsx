@@ -10,6 +10,8 @@ import Paper from '@material-ui/core/Paper';
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-golang";
 import "ace-builds/src-noconflict/theme-tomorrow";
+import {TemplateMap} from "./templates/templateMap";
+import {StepAttributes, StepType} from "../interface";
 
 const styles = createStyles({
     root: {
@@ -23,6 +25,7 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
+    attributes: StepAttributes,
     code: string,
     onUpdated: (code: string) => void,
 }
@@ -33,11 +36,36 @@ class CodeBlockPane extends React.Component<Props, object> {
     };
 
     componentDidMount(): void {
-
     }
 
     handleCodeChange = (value: string) => {
         this.props.onUpdated(value);
+    };
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<object>, snapshot?: any): void {
+        if (prevProps.attributes !== this.props.attributes) {
+            this.setDefaultCode();
+        }
+    }
+
+    setDefaultCode = () => {
+        const {code, attributes, processSelected} = this.props;
+        const {type, name} = attributes;
+        if (!code || code === "") {
+            let defaultCode;
+            switch (type) {
+                case StepType.CODE_BLOCK:
+                    defaultCode = TemplateMap[type](name);
+                    break;
+                case StepType.TRIGGER:
+                    defaultCode = TemplateMap[type](processSelected);
+                    break;
+                default:
+                    defaultCode = "";
+                    break;
+            }
+            this.handleCodeChange(defaultCode);
+        }
     };
 
     render() {

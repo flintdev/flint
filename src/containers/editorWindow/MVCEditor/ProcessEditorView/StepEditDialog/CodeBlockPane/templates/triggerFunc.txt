@@ -1,0 +1,9 @@
+package {{package}}
+
+import (
+	workflowFramework "workflow-engine/engine"
+)
+func TriggerCondition(event workflowFramework.Event) bool {
+	// example:
+	// return event.Model == "expense" && event.Type == "ADD"
+}

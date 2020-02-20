@@ -1,0 +1,15 @@
+package {{package}}
+
+import (
+    types '...'
+)
+
+func execute(handler Types.Handler) {
+    // example to manage flow data:
+    // var value = "test1";
+    // var path = "$.field1.field2";
+    // var operator = "$set";
+    // handler.flowData.set(path, value, operator?);
+    // handler.flowData.get(path);
+
+}

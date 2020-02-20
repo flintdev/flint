@@ -25,26 +25,14 @@ export const stepOptions = [
     {
         "type": "Approve/Reject",
         "group": "Standard",
-        "category": "Automation",
+        "category": "Manual",
         "icon": <AssignmentTurnedInTwoToneIcon />
     },
     {
-        "type": "Object Add",
+        "type": "Trigger",
         "group": "Standard",
-        "category": "Trigger",
+        "category": "Automation",
         "icon": <AddCircleTwoToneIcon />
-    },
-    {
-        "type": "Object Update",
-        "group": "Standard",
-        "category": "Trigger",
-        "icon": <NewReleasesTwoToneIcon />
-    },
-    {
-        "type": "Object Delete",
-        "group": "Standard",
-        "category": "Trigger",
-        "icon": <HighlightOffTwoToneIcon />
     },
     {
         "type": "Gmail",

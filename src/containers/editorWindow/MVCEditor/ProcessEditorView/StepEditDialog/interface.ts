@@ -6,3 +6,8 @@ export interface StepAttributes {
     category: string,
     type: string,
 }
+
+export enum StepType {
+    CODE_BLOCK = 'Code Block',
+    TRIGGER = 'Trigger',
+}

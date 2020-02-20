@@ -48,7 +48,16 @@ class StepEditDialog extends React.Component<Props, object> {
 
     }
 
+    reset = () => {
+        this.setState({
+            attributes: null,
+            code: '',
+            outputs: []
+        });
+    };
+
     onEnter = () => {
+        this.reset();
         this.operations = this.props.operations;
         const {attributes, code, outputs} = this.parseStepData();
         this.setState({attributes, code, outputs});
@@ -97,6 +106,7 @@ class StepEditDialog extends React.Component<Props, object> {
                     disableEnforceFocus={true}
                     maxWidth={"lg"}
                     fullWidth={true}
+
                 >
                     <DialogContent>
                         <StepAttributePane
@@ -104,6 +114,7 @@ class StepEditDialog extends React.Component<Props, object> {
                             onUpdated={this.handleAttributesUpdated}
                         />
                         <CodeBlockPane
+                            attributes={attributes}
                             code={code}
                             onUpdated={this.handleCodeUpdated}
                         />
