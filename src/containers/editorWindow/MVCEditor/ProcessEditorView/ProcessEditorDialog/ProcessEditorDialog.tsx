@@ -99,7 +99,6 @@ class ProcessEditorDialog extends React.Component<Props, object> {
     render() {
         const {classes, processEditorDialog} = this.props;
         const {editorDataLoadingStatus} = this.state;
-        console.log('editorData', processEditorDialog.editorData);
         return (
             <div className={classes.root}>
                 <Dialog

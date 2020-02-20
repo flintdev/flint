@@ -132,7 +132,7 @@ class ProcessListView extends React.Component<Props, object> {
                                 selected={process===processSelected}
                                 onClick={this.handleListItemClick(process)}
                             >
-                                <ListItemText primary={<Typography variant={"subtitle2"}>{process}</Typography>}/>
+                                <ListItemText primary={process}/>
                                 <IconButton
                                     size={"small"}
                                     onClick={this.handleDeleteProcessClick(process)}
