@@ -34,12 +34,14 @@ interface Operations {
 interface State {
     attributes: StepAttributes,
     code: string,
+    outputs: object[]
 }
 
 class StepEditDialog extends React.Component<Props, object> {
     state: State = {
         attributes: null,
         code: '',
+        outputs: []
     };
     operations: Operations = {};
     componentDidMount(): void {
@@ -47,7 +49,9 @@ class StepEditDialog extends React.Component<Props, object> {
     }
 
     onEnter = () => {
-        this.operations = this.props.operations
+        this.operations = this.props.operations;
+        const {attributes, code, outputs} = this.parseStepData();
+        this.setState({attributes, code, outputs});
     };
 
     handleDialogClose = () => {
@@ -73,7 +77,7 @@ class StepEditDialog extends React.Component<Props, object> {
     render() {
         const {classes, stepEditDialog} = this.props;
         const {open} = stepEditDialog;
-        const {attributes, code, outputs} = this.parseStepData();
+        const {attributes, code, outputs} = this.state;
         return (
             <div className={classes.root}>
                 <Dialog

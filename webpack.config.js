@@ -70,7 +70,7 @@ module.exports = env => {
                     use: 'raw-loader'
                 },
                 {
-                    test: /\.(png|jpg)$/,
+                    test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
                     use: 'url-loader?limit=30720'
                 },
                 {
