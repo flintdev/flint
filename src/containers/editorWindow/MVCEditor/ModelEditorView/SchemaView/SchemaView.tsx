@@ -28,8 +28,6 @@ const styles = createStyles({
         flexFlow: 'column'
     },
     cardContent: {
-        // paddingLeft: 20,
-        // paddingRight: 20,
         flexGrow: 1
     }
 });

@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import {ProcessDataHandler} from "../../../../../controllers/process/processDataHandler";
 import StepAttributePane from "./StepAttributePane/StepAttributePane";
 import {StepAttributes} from "./interface";
+import CodeBlockPane from "./CodeBlockPane";
 
 const styles = createStyles({
     root: {
@@ -31,12 +32,14 @@ interface Operations {
 }
 
 interface State {
-    attributes: StepAttributes
+    attributes: StepAttributes,
+    code: string,
 }
 
 class StepEditDialog extends React.Component<Props, object> {
     state: State = {
-        attributes: null
+        attributes: null,
+        code: '',
     };
     operations: Operations = {};
     componentDidMount(): void {
@@ -60,7 +63,11 @@ class StepEditDialog extends React.Component<Props, object> {
     };
 
     handleAttributesUpdated = (attributes: StepAttributes) => {
-        this.setState({attributes})
+        this.setState({attributes});
+    };
+
+    handleCodeUpdated = (code: string) => {
+        this.setState({code});
     };
 
     render() {
@@ -81,6 +88,10 @@ class StepEditDialog extends React.Component<Props, object> {
                         <StepAttributePane
                             attributes={attributes}
                             onUpdated={this.handleAttributesUpdated}
+                        />
+                        <CodeBlockPane
+                            code={code}
+                            onUpdated={this.handleCodeUpdated}
                         />
                     </DialogContent>
                     <DialogActions>

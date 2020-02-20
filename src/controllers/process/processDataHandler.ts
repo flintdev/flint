@@ -18,7 +18,7 @@ interface StepData {
 
 interface Output {
     name: string,
-    condition: {
+    condition?: {
         key: string,
         value: string,
         operator: '==',
