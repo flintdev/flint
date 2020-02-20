@@ -1,6 +1,8 @@
 // src/controllers/process/processDataHandler.ts
 
-interface StepData {
+import {StepAttributes} from "../../containers/editorWindow/MVCEditor/ProcessEditorView/StepEditDialog/interface";
+
+export interface StepData {
     name: string,
     inputs: any,
     outputs: any,
@@ -16,7 +18,7 @@ interface StepData {
     }
 }
 
-interface Output {
+export interface Output {
     name: string,
     condition?: {
         key: string,
@@ -38,5 +40,15 @@ export class ProcessDataHandler {
             category, type, group, name: label,
         };
         return {attributes, code, outputs};
-    }
+    };
+
+    updateStepData = (stepData: StepData, attributes: StepAttributes, code: string, outputs: Output[]) => {
+        stepData.data = {
+            label: attributes.name,
+            ...attributes,
+            code,
+            outputs
+        };
+        return stepData;
+    };
 }

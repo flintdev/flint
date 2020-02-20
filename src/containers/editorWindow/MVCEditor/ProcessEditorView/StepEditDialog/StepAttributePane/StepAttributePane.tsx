@@ -43,20 +43,17 @@ export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
 class StepAttributePane extends React.Component<Props, object> {
     state = {
         editing: false,
-        attributes: this.props.attributes,
         editingAttributes: this.props.attributes,
     };
 
     componentDidMount(): void {
         this.setState({editing: false});
-        const {attributes} = this.state;
-        this.props.onUpdated(attributes);
     }
 
     handleEditButtonClick = () => {
         this.setState({
             editing: true,
-            editingAttributes: this.state.attributes,
+            editingAttributes: this.props.attributes,
         });
     };
 
@@ -82,8 +79,9 @@ class StepAttributePane extends React.Component<Props, object> {
     };
 
     render() {
-        const {classes} = this.props;
-        const {editing, attributes, editingAttributes} = this.state;
+        const {classes, attributes} = this.props;
+        const {editing, editingAttributes} = this.state;
+        if (!attributes) return <div/>;
         return (
             <div className={classes.root}>
                 <Paper className={classes.paper}>

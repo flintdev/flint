@@ -11,7 +11,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from '@material-ui/core/Button';
-import {ProcessDataHandler} from "../../../../../controllers/process/processDataHandler";
+import {Output, ProcessDataHandler} from "../../../../../controllers/process/processDataHandler";
 import StepAttributePane from "./StepAttributePane/StepAttributePane";
 import {StepAttributes} from "./interface";
 import CodeBlockPane from "./CodeBlockPane";
@@ -34,7 +34,7 @@ interface Operations {
 interface State {
     attributes: StepAttributes,
     code: string,
-    outputs: object[]
+    outputs: Output[]
 }
 
 class StepEditDialog extends React.Component<Props, object> {
@@ -55,8 +55,6 @@ class StepEditDialog extends React.Component<Props, object> {
     };
 
     handleDialogClose = () => {
-        const newStepData = {};
-        this.operations.updateStepData(newStepData);
         this.props.stepEditDialogClose();
     };
 
@@ -72,6 +70,18 @@ class StepEditDialog extends React.Component<Props, object> {
 
     handleCodeUpdated = (code: string) => {
         this.setState({code});
+    };
+
+    handleOutputsUpdated = (outputs: Output) => {
+
+    };
+
+    handleUpdateButtonClick = () => {
+        const {attributes, code, outputs} = this.state;
+        const {stepData} = this.props.stepEditDialog;
+        const newStepData = new ProcessDataHandler().updateStepData(stepData, attributes, code, outputs);
+        this.operations.updateStepData(newStepData);
+        this.handleDialogClose();
     };
 
     render() {
@@ -99,8 +109,14 @@ class StepEditDialog extends React.Component<Props, object> {
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button>Close</Button>
-                        <Button variant={"contained"} color={"primary"}>Update</Button>
+                        <Button onClick={this.handleDialogClose}>Close</Button>
+                        <Button
+                            variant={"contained"}
+                            color={"primary"}
+                            onClick={this.handleUpdateButtonClick}
+                        >
+                            Update
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
