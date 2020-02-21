@@ -24,7 +24,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import CancelIcon from '@material-ui/icons/Cancel';
+import AddIcon from '@material-ui/icons/Add';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { themeColor } from 'src/constants';
 
@@ -216,7 +216,7 @@ class StepConditionPane extends React.Component<Props, object> {
                                 <Typography variant={"subtitle1"}>Conditions</Typography>
                             </td>
                             <td align={"right"}>
-                                <Button variant={"outlined"}>Add</Button>
+                                <Button variant={"outlined"}><AddIcon/>&nbsp;Add</Button>
                             </td>
                         </tr>
                         </tbody>
