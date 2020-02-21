@@ -23,7 +23,7 @@ export interface Output {
     condition?: {
         key: string,
         value: string,
-        operator: '==',
+        operator: string,
     }
 }
 

@@ -15,6 +15,7 @@ import {Output, ProcessDataHandler} from "../../../../../controllers/process/pro
 import StepAttributePane from "./StepAttributePane/StepAttributePane";
 import {StepAttributes} from "./interface";
 import CodeBlockPane from "./CodeBlockPane";
+import StepConditionPane from "./StepConditionPane";
 
 const styles = createStyles({
     root: {
@@ -81,8 +82,8 @@ class StepEditDialog extends React.Component<Props, object> {
         this.setState({code});
     };
 
-    handleOutputsUpdated = (outputs: Output) => {
-
+    handleOutputsUpdated = (outputs: Output[]) => {
+        this.setState({outputs});
     };
 
     handleUpdateButtonClick = () => {
@@ -117,6 +118,10 @@ class StepEditDialog extends React.Component<Props, object> {
                             attributes={attributes}
                             code={code}
                             onUpdated={this.handleCodeUpdated}
+                        />
+                        <StepConditionPane
+                            outputs={outputs}
+                            onUpdated={this.handleOutputsUpdated}
                         />
                     </DialogContent>
                     <DialogActions>
