@@ -23,7 +23,7 @@ export class ProcessManager {
         this.fsHelper = new FSHelper();
         this.dirPath = `${this.rootDir}/.flint/processes`;
         this.configPath = `${this.rootDir}/.flint/processes/config.json`;
-        this.sourceDirPath = `${this.rootDir}/src/processes`;
+        this.sourceDirPath = `${this.rootDir}/src/controllers`;
     }
 
     checkAndCreateProcessDir = async () => {

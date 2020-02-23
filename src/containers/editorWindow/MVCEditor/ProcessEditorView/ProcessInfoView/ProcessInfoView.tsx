@@ -4,9 +4,10 @@ import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import {ProcessEditorState, StoreState} from "src/redux/state";
+import {ConfigState, ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Button from "@material-ui/core/Button";
+import {ProcessManager} from "../../../../../controllers/process/processManager";
 
 const styles = createStyles({
     root: {
@@ -17,7 +18,7 @@ const styles = createStyles({
     }
 });
 
-export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
+export interface Props extends WithStyles<typeof styles>, ProcessEditorState, ConfigState {
     processEditorDialogOpen: () => void,
 }
 
@@ -25,13 +26,20 @@ class ProcessInfoView extends React.Component<Props, object> {
     state = {
 
     };
-
+    processManager: ProcessManager;
     componentDidMount(): void {
-
+        const {projectDir} = this.props;
+        this.processManager = new ProcessManager(projectDir);
     }
 
     handleOpenEditorClick = () => {
         this.props.processEditorDialogOpen();
+    };
+
+    handleSyncSourceButtonClick = async () => {
+        const {processSelected} = this.props;
+        const editorData = await this.processManager.getEditorData(processSelected);
+        console.log('editor data - ', editorData);
     };
 
     render() {
@@ -49,6 +57,7 @@ class ProcessInfoView extends React.Component<Props, object> {
                 <Button
                     variant={"outlined"}
                     className={classes.actionButton}
+                    onClick={this.handleSyncSourceButtonClick}
                 >
                     Sync Source Files
                 </Button>
@@ -58,7 +67,7 @@ class ProcessInfoView extends React.Component<Props, object> {
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state.editor.processEditor;
+    return {...state.editor.processEditor, ...state.config};
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {

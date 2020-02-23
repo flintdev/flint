@@ -1,0 +1,17 @@
+package main
+
+import (
+	workflowFramework "github.com/flintdev/workflow-engine/engine"
+	{{#workflows}}
+	{{name}} "./workflows/{{name}}"
+	{{/workflows}}
+)
+
+func main() {
+	app := workflowFramework.CreateApp()
+	{{#workflows}}
+	app.RegisterWorkflow({{name}}.Definition, {{name}}.Steps, {{name}}.Trigger)
+	{{/workflows}}
+	app.LoadConfig()
+	app.start()
+}
