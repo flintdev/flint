@@ -34,14 +34,6 @@ export class ProcessManager {
         }
     };
 
-    checkAndCreateSourceDir = async () => {
-        try {
-            await this.fsHelper.checkPathExists(this.sourceDirPath);
-        } catch (e) {
-            await this.fsHelper.createDirByPath(this.sourceDirPath);
-        }
-    };
-
     createProcess = async (processName: string) => {
         if (!await this.checkAndCreateProcessConfigFile()) return false;
         let configJson = await this.fetchConfigData();

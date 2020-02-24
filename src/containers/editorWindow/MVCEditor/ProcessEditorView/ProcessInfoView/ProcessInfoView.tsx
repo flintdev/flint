@@ -8,6 +8,7 @@ import {ConfigState, ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Button from "@material-ui/core/Button";
 import {ProcessManager} from "../../../../../controllers/process/processManager";
+import {SourceFileGenerator} from "../../../../../controllers/process/sourceFileGenerator";
 
 const styles = createStyles({
     root: {
@@ -37,9 +38,10 @@ class ProcessInfoView extends React.Component<Props, object> {
     };
 
     handleSyncSourceButtonClick = async () => {
-        const {processSelected} = this.props;
+        const {processSelected, projectDir} = this.props;
         const editorData = await this.processManager.getEditorData(processSelected);
         console.log('editor data - ', editorData);
+        await new SourceFileGenerator(processSelected, editorData, projectDir).generate();
     };
 
     render() {

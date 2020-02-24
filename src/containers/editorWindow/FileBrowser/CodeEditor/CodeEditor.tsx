@@ -9,6 +9,7 @@ import * as actions from "src/redux/modules/files/actions";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/mode-json";
+import "ace-builds/src-noconflict/mode-golang";
 import "ace-builds/src-noconflict/theme-tomorrow";
 
 const styles = createStyles({
@@ -41,6 +42,8 @@ class CodeEditor extends React.Component<Props, object> {
                 return 'yaml';
             case 'json':
                 return 'json';
+            case 'go':
+                return 'golang';
             default:
                 return 'plain_text';
         }

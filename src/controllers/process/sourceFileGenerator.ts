@@ -24,7 +24,16 @@ export class SourceFileGenerator {
         this.sourceDirPath = `${rootDir}/src/controllers`;
     }
 
+    checkAndCreateSourceDir = async () => {
+        try {
+            await this.fsHelper.checkPathExists(this.sourceDirPath);
+        } catch (e) {
+            await this.fsHelper.createDirByPath(this.sourceDirPath);
+        }
+    };
+
     generate = async () => {
+        await this.checkAndCreateSourceDir();
         await this.generateWorkflowConfig();
         await this.generateMainFile();
     };
@@ -44,6 +53,7 @@ export class SourceFileGenerator {
         });
         const content = Mustache.render(MainGoTemplate, {workflows: data});
         const filePath = `${this.sourceDirPath}/main.go`;
+        console.log(filePath, content);
         await this.fsHelper.createFile(filePath, content);
     };
 
