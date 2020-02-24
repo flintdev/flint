@@ -1,0 +1,26 @@
+package {{package}}
+
+import (
+	workflowFramework "workflow-engine/engine"
+	{{#steps}}
+	{{name}} "./steps/{{name}}"
+	{{/steps}}
+)
+
+func Definition() workflowFramework.Workflow {
+	w := workflowFramework.ParseDefinition("./definition.json")
+	return w
+}
+
+func Steps() map[string]func(kubeconfig *string, objName string) {
+	StepFuncMap := map[string]func(kubeconfig *string, objName string){
+	    {{#steps}}
+		"{{name}}": {{name}}.Execute,
+		{{/steps}}
+	}
+	return StepFuncMap
+}
+
+func Trigger(event workflowFramework.Event) bool {
+	return TriggerCondition(event)
+}
