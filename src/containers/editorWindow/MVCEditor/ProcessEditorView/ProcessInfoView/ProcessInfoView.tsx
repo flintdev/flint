@@ -40,7 +40,6 @@ class ProcessInfoView extends React.Component<Props, object> {
     handleSyncSourceButtonClick = async () => {
         const {processSelected, projectDir} = this.props;
         const editorData = await this.processManager.getEditorData(processSelected);
-        console.log('editor data - ', editorData);
         await new SourceFileGenerator(processSelected, editorData, projectDir).generate();
     };
 

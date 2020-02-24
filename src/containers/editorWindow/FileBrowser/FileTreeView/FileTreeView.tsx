@@ -130,6 +130,7 @@ class FileTreeView extends React.Component<Props, object> {
             projectDir,
             `${projectDir}/src`,
             `${projectDir}/src/models`,
+            `${projectDir}/src/controllers`,
         ]
     };
 

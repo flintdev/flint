@@ -80,7 +80,10 @@ export class SourceFileGenerator {
             if (node.data.type === StepType.TRIGGER) {
                 const nextSteps = this.getNextSteps(node);
                 definition['startAt'] = nextSteps[0].name;
-            } else if (node.data.type === StepType.CODE_BLOCK) {
+            } else if (node.data.type === StepType.END) {
+                const stepName = _.camelCase(node.data.label);
+                steps[stepName] = {nextSteps: []};
+            } else {
                 const stepName = _.camelCase(node.data.label);
                 const nextSteps = this.getNextSteps(node);
                 steps[stepName] = {nextSteps};
