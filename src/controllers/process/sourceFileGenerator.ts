@@ -1,6 +1,6 @@
 // src/controllers/process/sourceFileGenerator.ts
 
-import {EditorData} from "@flintdev/process-editor/dist";
+import {EditorData, EditorNode} from "@flintdev/process-editor/dist";
 import {ModelManager} from "../model/modelManager";
 import {FSHelper} from "../utils/fsHelper";
 import {ProcessManager} from "./processManager";
@@ -41,6 +41,7 @@ export class SourceFileGenerator {
         await this.generateFilesOfSteps();
         await this.generateInitGoFile();
         await this.generateTriggerFile();
+        await this.generateWorkflowDefinition();
     };
 
     private generateFilesOfSteps = async () => {
@@ -71,6 +72,38 @@ export class SourceFileGenerator {
     private generateWorkflowDefinition = async () => {
         const workflowDir = `${this.sourceDirPath}/workflows/${this.processName}`;
         await this.checkAndCreateDir(workflowDir);
+        let definition: any = {
+            name: this.processName,
+        };
+        let steps: any = {};
+        for (const node of Object.values(this.editorData.nodes)) {
+            if (node.data.type === StepType.TRIGGER) {
+                const nextSteps = this.getNextSteps(node);
+                definition['startAt'] = nextSteps[0].name;
+            } else if (node.data.type === StepType.CODE_BLOCK) {
+                const stepName = _.camelCase(node.data.label);
+                const nextSteps = this.getNextSteps(node);
+                steps[stepName] = {nextSteps};
+            }
+        }
+        definition['steps'] = steps;
+        const filePath = `${workflowDir}/definition.json`;
+        await this.fsHelper.createFile(filePath, JSON.stringify(definition, null, 4));
+    };
+
+    private getNextSteps = (node: any) => {
+        let nextSteps: any[] = [];
+        const {outputs} = node.data;
+        outputs.forEach((output: any) => {
+            const {name, condition} = output;
+            node.outputs[name].connections.forEach((node: any) => {
+                const nodeId = node.node;
+                let result: any = {name: _.camelCase(this.editorData.nodes[nodeId].data.label)};
+                if (!!condition && condition.operator !== 'always') result['condition'] = condition;
+                nextSteps.push(result);
+            });
+        });
+        return nextSteps;
     };
 
     private generateInitGoFile = async () => {
