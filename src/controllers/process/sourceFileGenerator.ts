@@ -38,6 +38,7 @@ export class SourceFileGenerator {
     };
 
     generate = async () => {
+        await this.removeSourceDir();
         await this.checkAndCreateDir(this.sourceDirPath);
         await this.generateWorkflowConfig();
         await this.generateMainFile();
@@ -49,7 +50,7 @@ export class SourceFileGenerator {
     };
 
     private removeSourceDir = async () => {
-        // this.fsHelper.
+        await this.fsHelper.removeDir(this.sourceDirPath);
     };
 
     private generateFilesOfSteps = async () => {

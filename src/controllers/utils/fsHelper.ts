@@ -79,7 +79,15 @@ export class FSHelper {
     };
 
     removeDir = (path: string) => {
-        
+        return new Promise((resolve, reject) => {
+            rimraf(path, {}, (err: Error) => {
+                if (!err) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            });
+        });
     };
 
     getDefaultPath = () => {
