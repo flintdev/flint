@@ -3,10 +3,8 @@
 import * as React from 'react';
 import CodeIcon from '@material-ui/icons/Code';
 import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
-import HighlightOffTwoToneIcon from '@material-ui/icons/HighlightOffTwoTone';
 import AssignmentTurnedInTwoToneIcon from '@material-ui/icons/AssignmentTurnedInTwoTone';
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
-import NewReleasesTwoToneIcon from '@material-ui/icons/NewReleasesTwoTone';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 export const stepOptions = [

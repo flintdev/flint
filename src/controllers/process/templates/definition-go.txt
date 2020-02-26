@@ -1,0 +1,17 @@
+package {{package}}
+
+import (
+	"encoding/json"
+	"fmt"
+	workflowFramework "github.com/flintdev/workflow-engine/engine"
+)
+
+func ParseDefinition() workflowFramework.Workflow {
+	var w workflowFramework.Workflow
+	definition := `{{{json}}}`
+	err := json.Unmarshal([]byte(definition), &w)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return w
+}

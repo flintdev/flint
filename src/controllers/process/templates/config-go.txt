@@ -1,0 +1,17 @@
+package workflows
+
+import (
+	"encoding/json"
+	"fmt"
+	workflowFramework "github.com/flintdev/workflow-engine/engine"
+)
+
+func ParseConfig() workflowFramework.Config {
+	var c workflowFramework.Config
+	config := `{{{configJson}}}`
+	err := json.Unmarshal([]byte(config), &c)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return c
+}

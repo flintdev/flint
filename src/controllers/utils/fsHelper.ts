@@ -5,6 +5,7 @@ import {Dirent} from "fs";
 
 const fs = window.require('fs');
 const homedir = window.require('os').homedir();
+const rimraf = window.require("rimraf");
 
 const FILES_IGNORE = [
     '.DS_Store'
@@ -77,9 +78,15 @@ export class FSHelper {
         });
     };
 
+    removeDir = (path: string) => {
+        
+    };
+
     getDefaultPath = () => {
         return `${homedir}/Flint/untitled`;
     };
+
+
 
     getHomeDir = () => {
         return homedir;

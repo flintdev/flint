@@ -6,6 +6,9 @@ import {FSHelper} from "../utils/fsHelper";
 import {ProcessManager} from "./processManager";
 import MainGoTemplate from './templates/main-go.txt';
 import InitGoTemplate from './templates/init-go.txt';
+import GoModTemplate from './templates/go-mod.txt';
+import ConfigGoTemplate from './templates/config-go.txt';
+import DefinitionGoTemplate from './templates/definition-go.txt';
 import * as Mustache from "mustache";
 import {StepType} from "../../containers/editorWindow/MVCEditor/ProcessEditorView/StepEditDialog/interface";
 import * as _ from 'lodash';
@@ -38,10 +41,15 @@ export class SourceFileGenerator {
         await this.checkAndCreateDir(this.sourceDirPath);
         await this.generateWorkflowConfig();
         await this.generateMainFile();
+        await this.generateGoModFile();
         await this.generateFilesOfSteps();
         await this.generateInitGoFile();
         await this.generateTriggerFile();
         await this.generateWorkflowDefinition();
+    };
+
+    private removeSourceDir = async () => {
+        // this.fsHelper.
     };
 
     private generateFilesOfSteps = async () => {
@@ -90,8 +98,12 @@ export class SourceFileGenerator {
             }
         }
         definition['steps'] = steps;
-        const filePath = `${workflowDir}/definition.json`;
-        await this.fsHelper.createFile(filePath, JSON.stringify(definition, null, 4));
+        const content = Mustache.render(DefinitionGoTemplate, {
+            json: JSON.stringify(definition, null, 4),
+            package: this.processName
+        });
+        const filePath = `${workflowDir}/definition.go`;
+        await this.fsHelper.createFile(filePath, content);
     };
 
     private getNextSteps = (node: any) => {
@@ -135,7 +147,15 @@ export class SourceFileGenerator {
         await this.fsHelper.createFile(filePath, content);
     };
 
+    private generateGoModFile = async () => {
+        const content = GoModTemplate;
+        const filePath = `${this.sourceDirPath}/go.mod`;
+        await this.fsHelper.createFile(filePath, content);
+    };
+
     private generateWorkflowConfig = async () => {
+        const workflowsDirPath = `${this.sourceDirPath}/workflows`;
+        await this.checkAndCreateDir(workflowsDirPath);
         const modelList = await this.modelManager.getModelList();
         let gvr: any = {};
         modelList.forEach((modelName: string) => {
@@ -147,8 +167,9 @@ export class SourceFileGenerator {
                 resources: plural
             };
         });
-        const configJson = {gvr};
-        const filePath = `${this.sourceDirPath}/config.json`;
-        await this.fsHelper.createFile(filePath, JSON.stringify(configJson, null, 4));
+        const configJson = JSON.stringify({gvr}, null, 4);
+        const content = Mustache.render(ConfigGoTemplate, {configJson});
+        const filePath = `${workflowsDirPath}/config.go`;
+        await this.fsHelper.createFile(filePath, content);
     };
 }

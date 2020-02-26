@@ -2,8 +2,9 @@ package main
 
 import (
 	workflowFramework "github.com/flintdev/workflow-engine/engine"
+	"controllers/workflows"
 	{{#workflows}}
-	{{name}} "./workflows/{{name}}"
+	{{name}} "controllers/workflows/{{name}}"
 	{{/workflows}}
 )
 
@@ -12,6 +13,6 @@ func main() {
 	{{#workflows}}
 	app.RegisterWorkflow({{name}}.Definition, {{name}}.Steps, {{name}}.Trigger)
 	{{/workflows}}
-	app.LoadConfig()
-	app.start()
+	app.RegisterConfig(workflows.ParseConfig)
+	app.Start()
 }
