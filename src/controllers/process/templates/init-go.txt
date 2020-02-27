@@ -4,7 +4,7 @@ import (
 	workflowFramework "github.com/flintdev/workflow-engine/engine"
     "github.com/flintdev/workflow-engine/handler"
 	{{#steps}}
-	{{name}} "controllers/workflows/{package}/{{name}}"
+	{{name}} "controllers/workflows/{{package}}/steps/{{name}}"
 	{{/steps}}
 )
 

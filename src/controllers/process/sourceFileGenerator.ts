@@ -54,13 +54,13 @@ export class SourceFileGenerator {
     };
 
     private generateFilesOfSteps = async () => {
-        const stepsDirPath = `${this.sourceDirPath}/workflows/${this.processName}/steps`;
-        await this.checkAndCreateDir(stepsDirPath);
         for (const node of Object.values(this.editorData.nodes)) {
             if (node.data.type === StepType.CODE_BLOCK) {
                 const {label, code} = node.data;
                 const stepName = _.camelCase(label);
-                const filePath = `${stepsDirPath}/${stepName}.go`;
+                const stepDirPath = `${this.sourceDirPath}/workflows/${this.processName}/steps/${stepName}`;
+                await this.checkAndCreateDir(stepDirPath);
+                const filePath = `${stepDirPath}/${stepName}.go`;
                 await this.fsHelper.createFile(filePath, code);
             }
         }
@@ -139,9 +139,9 @@ export class SourceFileGenerator {
     };
 
     private generateMainFile = async () => {
-        const modelList = await this.modelManager.getModelList();
-        const data = modelList.map((modelName: string) => {
-            return {name: modelName.toLowerCase()}
+        const processList = await this.processManager.getProcessList();
+        const data = processList.map((processName: string) => {
+            return {name: processName}
         });
         const content = Mustache.render(MainGoTemplate, {workflows: data});
         const filePath = `${this.sourceDirPath}/main.go`;
@@ -163,9 +163,9 @@ export class SourceFileGenerator {
             const singular: string = modelName.toLowerCase();
             const plural = `${modelName.toLowerCase()}s`;
             gvr[singular] = {
-                group: 'flintapp',
+                group: 'flintapp.io',
                 version: 'v1',
-                resources: plural
+                resource: plural
             };
         });
         const configJson = JSON.stringify({gvr}, null, 4);
