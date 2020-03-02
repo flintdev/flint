@@ -14,6 +14,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Typography from "@material-ui/core/Typography";
 import * as yaml from 'js-yaml';
 import AceEditor from "react-ace";
+import 'ace-builds/webpack-resolver';
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/theme-tomorrow_night";
 

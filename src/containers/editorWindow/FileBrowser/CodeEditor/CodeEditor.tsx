@@ -7,6 +7,7 @@ import { Dispatch } from "redux";
 import {FilesState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/files/actions";
 import AceEditor from "react-ace";
+import 'ace-builds/webpack-resolver';
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/mode-golang";
