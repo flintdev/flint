@@ -10,6 +10,7 @@ import HeaderView from "./HeaderView/HeaderView";
 import {MVC} from "../../../constants/editor";
 import ModelListView from "./ModelEditorView";
 import ProcessEditorView from "./ProcessEditorView";
+import UIEditorView from "./UIEditorView";
 
 const styles = createStyles({
     root: {
@@ -41,6 +42,7 @@ class MVCEditor extends React.Component<Props, object> {
                 <div className={classes.content}>
                     {currentView === MVC.Model && <ModelListView/>}
                     {currentView === MVC.Controller && <ProcessEditorView/>}
+                    {currentView === MVC.View && <UIEditorView/>}
                 </div>
             </div>
         )

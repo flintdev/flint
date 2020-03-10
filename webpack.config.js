@@ -27,7 +27,7 @@ module.exports = env => {
     return {
         context: __dirname,
         mode: mode,
-        devtool: 'source-map',
+        devtool: 'inline-source-map',
         resolve: {
             extensions: ['.ts', '.tsx', '.js'],
             modules: [
@@ -63,7 +63,8 @@ module.exports = env => {
                 {
                     enforce: "pre",
                     test: /\.js$/,
-                    loader: "source-map-loader"
+                    loader: "source-map-loader",
+                    exclude: /node_modules\/@atlaskit\/tree/
                 },
                 {
                     test: /\.(txt|yaml)$/,
@@ -83,7 +84,7 @@ module.exports = env => {
             new BundleTracker({
                 filename: './webpack-stats.json'
             }),
-            new webpack.EnvironmentPlugin(processEnv)
+            new webpack.EnvironmentPlugin(processEnv),
         ],
         target: target,
         stats: {

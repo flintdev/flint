@@ -10,13 +10,15 @@
     "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",
     "start-prod": "cross-env NODE_ENV=production platform=darwin electron .",
     "install-model-editor": "npm install @flintdev/model-editor@latest",
-    "install-process-editor": "npm install @flintdev/process-editor@latest"
+    "install-process-editor": "npm install @flintdev/process-editor@latest",
+    "install-ui-editor": "npm install @flintdev/ui-editor@latest",
+    "install-material-widgets": "npm install @flintdev/material-widgets@latest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/flintdev/flint.git"
   },
-  "author": "naitianliu",
+  "author": "Naitian Liu",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/flintdev/flint/issues"
@@ -50,11 +52,13 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@flintdev/material-widgets": "0.0.14",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.4",
-    "@material-ui/core": "^4.8.3",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/lab": "^4.0.0-alpha.39",
+    "@flintdev/ui-editor": "0.0.3",
+    "@material-ui/core": "^4.9.5",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.45",
     "ace-builds": "^1.4.8",
     "immutability-helper": "^3.0.1",
     "js-yaml": "^3.13.1",
