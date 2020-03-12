@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {ConfigState, EditorState, ModelEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
+import * as componentsActions from 'src/redux/modules/components/actions';
 import ModelListView from "./ModelListView";
 import Button from "@material-ui/core/Button";
 import SaveIcon from '@material-ui/icons/Save';
@@ -15,8 +16,6 @@ import Grid from '@material-ui/core/Grid';
 import TreeEditor from "./TreeEditor";
 import SchemaView from "./SchemaView";
 import {ModelManager} from "../../../../controllers/model/modelManager";
-import Toast from "../../../../components/Toast";
-import {ToastType} from "../../../../components/Toast/Toast";
 import ConfirmPopover from "../../../../components/ConfirmPopover";
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 import {themeColor} from "../../../../constants";
@@ -24,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import orange from "@material-ui/core/colors/orange";
 import SyncIcon from '@material-ui/icons/Sync';
+import {ToastType} from "../../../../components/interface";
 
 const styles = createStyles({
     root: {
@@ -128,20 +128,15 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, ModelEditorState, ConfigState {
     deleteModel: (modelName: string) => void,
     setCurrentRevision: (editor: number, source: number) => void,
+    toastOpen: (toastType: ToastType, message: string) => void,
 }
 
 interface State {
-    toastOpen: boolean,
-    toastType: ToastType,
-    toastMessage: string,
     anchorEl: undefined | HTMLButtonElement
 }
 
 class ModelEditorView extends React.Component<Props, object> {
     state: State = {
-        toastOpen: false,
-        toastType: 'success',
-        toastMessage: '',
         anchorEl: undefined
     };
     modelManager: ModelManager;
@@ -161,17 +156,8 @@ class ModelEditorView extends React.Component<Props, object> {
 
     handleToastOpen = () => {
         const {modelSelected} = this.props;
-        this.setState({
-            toastOpen: true,
-            toastType: 'success',
-            toastMessage: `${modelSelected} is saved successfully`,
-        });
-    };
-
-    handleToastClose = () => {
-        this.setState({
-            toastOpen: false,
-        });
+        const message = `${modelSelected} is saved successfully`;
+        this.props.toastOpen('success', message);
     };
 
     handleSaveButtonClick = async () => {
@@ -199,7 +185,6 @@ class ModelEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes, modelSelected, currentRevision} = this.props;
-        const {toastOpen, toastType, toastMessage} = this.state;
         const {anchorEl} = this.state;
         return (
             <div className={classes.root}>
@@ -294,12 +279,6 @@ class ModelEditorView extends React.Component<Props, object> {
                         </tbody>
                     </table>
                 </div>
-                <Toast
-                    open={toastOpen}
-                    onClose={this.handleToastClose}
-                    type={toastType}
-                    message={toastMessage}
-                />
 
                 <ConfirmPopover
                     anchorEl={anchorEl}
@@ -319,10 +298,11 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.modelEditor, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
     return {
         deleteModel: (modelName: string) => dispatch(actions.modelEditor.deleteModel(modelName)),
         setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
+        toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
     }
 };
 

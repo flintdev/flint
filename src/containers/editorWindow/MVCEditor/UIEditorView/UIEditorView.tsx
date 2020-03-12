@@ -4,13 +4,16 @@ import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { Dispatch } from "redux";
-import { StoreState } from "src/redux/state";
+import {ConfigState, StoreState, UIEditorState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import UIEditor from "@flintdev/ui-editor";
 import {ActionData, ComponentData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
 import {ActionOperationType, StateUpdaterOperationType} from "@flintdev/ui-editor/dist/constants";
 import {getWidgetConfiguration, getWidget} from '@flintdev/material-widgets';
 import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
+import {UIData, UIDataManager} from "../../../../controllers/ui/uiDataManager";
+import * as componentsActions from "src/redux/modules/components/actions";
+import {ToastType} from "../../../../components/interface";
 
 const styles = createStyles({
     root: {
@@ -26,8 +29,9 @@ const styles = createStyles({
     },
 });
 
-export interface Props extends WithStyles<typeof styles>{
+export interface Props extends WithStyles<typeof styles>, UIEditorState, ConfigState {
     addWidgetDialogOpen: () => void,
+    toastOpen: (toastType: ToastType, message: string) => void,
 }
 
 interface State {
@@ -45,9 +49,17 @@ class UIEditorView extends React.Component<Props, object> {
         components: [],
     };
     operations: any = {};
+    uiDataManager: UIDataManager;
     componentDidMount(): void {
-
+        this.uiDataManager = new UIDataManager(this.props.projectDir);
+        this.initActions().then(r => {});
     }
+
+    initActions = async () => {
+        await this.uiDataManager.checkAndCreateUIDir();
+        const data: UIData = await this.uiDataManager.getUIData();
+        this.setState({...data});
+    };
 
     handleAddComponentClick = () => {
         this.props.addWidgetDialogOpen();
@@ -105,8 +117,10 @@ class UIEditorView extends React.Component<Props, object> {
 
     };
 
-    saveButtonClick = () => {
-
+    saveButtonClick = async () => {
+        const data: UIData = {...this.state};
+        await this.uiDataManager.saveUIData(data);
+        this.props.toastOpen('success', 'UI data is saved successfully');
     };
 
     handleWidgetOnSelect = (data: ComponentData) => {
@@ -149,12 +163,14 @@ class UIEditorView extends React.Component<Props, object> {
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state.editor;
+    return {...state.editor.uiEditor, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
     return {
         addWidgetDialogOpen: () => dispatch(actions.uiEditor.addWidgetDialogOpen()),
+        toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
+
     }
 };
 

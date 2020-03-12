@@ -4,6 +4,10 @@ import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
+import { connect } from 'react-redux';
+import { Dispatch } from "redux";
+import * as actions from 'src/redux/modules/components/actions';
+import {ComponentsState, StoreState} from "../../redux/state";
 
 const styles = createStyles({
     root: {
@@ -11,13 +15,9 @@ const styles = createStyles({
     },
 });
 
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
-export interface Props extends WithStyles<typeof styles>{
-    open: boolean,
-    onClose: () => void,
-    type: ToastType,
-    message: string
+export interface Props extends WithStyles<typeof styles>, ComponentsState {
+    toastClose: () => void,
 }
 
 function Alert(props: AlertProps) {
@@ -37,11 +37,12 @@ class Toast extends React.Component<Props, object> {
         if (reason === 'clickaway') {
             return;
         }
-        this.props.onClose();
+        this.props.toastClose();
     };
 
     render() {
-        const {classes, open, onClose, type, message} = this.props;
+        const {classes, toast} = this.props;
+        const {open, type, message} = toast;
         return (
             <div className={classes.root}>
                 <Snackbar
@@ -51,7 +52,7 @@ class Toast extends React.Component<Props, object> {
                         horizontal: 'center',
                     }}
                     autoHideDuration={3000}
-                    onClose={onClose}
+                    onClose={this.props.toastClose}
                 >
                     <Alert onClose={this.handleClose} severity={type}>
                         {message}
@@ -62,4 +63,14 @@ class Toast extends React.Component<Props, object> {
     }
 }
 
-export default withStyles(styles)(Toast);
+const mapStateToProps = (state: StoreState) => {
+    return state.components;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<actions.ComponentsAction>) => {
+    return {
+        toastClose: () => dispatch(actions.toastClose()),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Toast));

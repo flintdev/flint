@@ -14,6 +14,7 @@ import {MainProcessCommunicator} from "../../controllers/mainProcessCommunicator
 import {LocalStorageManager} from "../../controllers/localStoreManager";
 import {NavigationSidebarConfig} from "../../constants/styles";
 import FileBrowser from "./FileBrowser";
+import Toast from "../../components/Toast";
 
 const styles = createStyles({
     root: {
@@ -84,6 +85,9 @@ class EditorContainer extends React.Component<Props, object> {
                         </tr>
                         </tbody>
                     </table>
+
+                    <Toast/>
+
                 </div>
                 }
             </ThemeProvider>

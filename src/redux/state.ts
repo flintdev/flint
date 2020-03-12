@@ -2,12 +2,21 @@
 import {MVC} from "../constants/editor";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 import {FileTreeNode} from "../interface";
+import {ToastType} from "../components/interface";
 
 export interface EditorState {
     navigation: NavigationState,
     modelEditor: ModelEditorState,
     processEditor: ProcessEditorState,
     uiEditor: UIEditorState,
+}
+
+export interface ComponentsState {
+    toast: {
+        open: boolean,
+        type: ToastType,
+        message: string,
+    }
 }
 
 export interface ConfigState {
@@ -64,6 +73,7 @@ export interface StoreState {
     config: ConfigState,
     editor: EditorState,
     files: FilesState,
+    components: ComponentsState,
 }
 
 export const initState: StoreState = {
@@ -114,5 +124,12 @@ export const initState: StoreState = {
         treeData: undefined,
         nodeSelected: undefined,
         fileContent: '',
+    },
+    components: {
+        toast: {
+            open: false,
+            type: 'info',
+            message: ''
+        }
     }
 };

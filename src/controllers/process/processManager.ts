@@ -2,7 +2,6 @@
 
 import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
-import {EditorData} from "@flintdev/model-editor/dist/interface";
 
 interface Config {
     processes: object[]
