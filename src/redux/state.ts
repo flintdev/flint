@@ -7,6 +7,7 @@ export interface EditorState {
     navigation: NavigationState,
     modelEditor: ModelEditorState,
     processEditor: ProcessEditorState,
+    uiEditor: UIEditorState,
 }
 
 export interface ConfigState {
@@ -40,6 +41,12 @@ export interface ProcessEditorState {
     stepEditDialog: {
         open: boolean,
         stepData: any | undefined
+    }
+}
+
+export interface UIEditorState {
+    addWidgetDialog: {
+        open: boolean
     }
 }
 
@@ -94,6 +101,11 @@ export const initState: StoreState = {
             stepEditDialog: {
                 open: false,
                 stepData: undefined
+            }
+        },
+        uiEditor: {
+            addWidgetDialog: {
+                open: false,
             }
         }
     },

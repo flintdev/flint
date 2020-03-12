@@ -10,7 +10,7 @@ import UIEditor from "@flintdev/ui-editor";
 import {ActionData, ComponentData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
 import {ActionOperationType, StateUpdaterOperationType} from "@flintdev/ui-editor/dist/constants";
 import {getWidgetConfiguration, getWidget} from '@flintdev/material-widgets';
-import * as _ from 'lodash';
+import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
 
 const styles = createStyles({
     root: {
@@ -27,7 +27,7 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>{
-
+    addWidgetDialogOpen: () => void,
 }
 
 interface State {
@@ -50,8 +50,7 @@ class UIEditorView extends React.Component<Props, object> {
     }
 
     handleAddComponentClick = () => {
-        // data = {};
-        // this.operations.addComponent(data);
+        this.props.addWidgetDialogOpen();
     };
 
     handleActionUpdate = (type: string, data: ActionData) => {
@@ -110,6 +109,10 @@ class UIEditorView extends React.Component<Props, object> {
 
     };
 
+    handleWidgetOnSelect = (data: ComponentData) => {
+        this.operations.addComponent(data);
+    };
+
     render() {
         const {classes} = this.props;
         const {actions, stateUpdaters, initialState, components} = this.state;
@@ -134,6 +137,11 @@ class UIEditorView extends React.Component<Props, object> {
                             getWidget: getWidget
                         }}
                     />
+
+                    <AddWidgetDialog
+                        widgetOnSelect={this.handleWidgetOnSelect}
+                    />
+
                 </div>
             </div>
         )
@@ -146,7 +154,7 @@ const mapStateToProps = (state: StoreState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
-
+        addWidgetDialogOpen: () => dispatch(actions.uiEditor.addWidgetDialogOpen()),
     }
 };
 
