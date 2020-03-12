@@ -26,7 +26,8 @@ export class WidgetManager {
         return {
             id: this.generateUniqueId(),
             name,
-            params
+            params: values,
+            children: [],
         }
     };
 
