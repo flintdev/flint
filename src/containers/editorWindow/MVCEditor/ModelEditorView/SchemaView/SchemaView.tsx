@@ -86,6 +86,7 @@ class SchemaView extends React.Component<Props, object> {
                             setOptions={{
                                 showLineNumbers: true,
                                 tabSize: 2,
+                                useWorker: false
                             }}
                         />
                     </CardContent>

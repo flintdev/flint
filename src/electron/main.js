@@ -24,15 +24,15 @@ function createStarterWindow() {
     starterWindow.on('close', event => {
         starterWindow = null;
     });
-    if (environment === 'development') {
-        starterWindow.webContents.openDevTools();
-    }
+    // if (environment === 'development') {
+    //     starterWindow.webContents.openDevTools();
+    // }
 }
 
 function createEditorWindow(projectDir) {
     editorWindow = new BrowserWindow({
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
         }
     });
     editorWindow.loadFile(path.join(__dirname, 'views/editor.html')).then(r => {

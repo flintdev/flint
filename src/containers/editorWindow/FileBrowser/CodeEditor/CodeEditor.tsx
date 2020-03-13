@@ -66,6 +66,7 @@ class CodeEditor extends React.Component<Props, object> {
                     readOnly={true}
                     setOptions={{
                         showLineNumbers: true,
+                        useWorker: false
                     }}
                 />
             </div>
