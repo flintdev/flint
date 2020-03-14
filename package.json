@@ -5,7 +5,7 @@
   "main": "src/electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dev": "cross-env NODE_ENV=development webpack --progress --config webpack.config.js",
+    "build-dev": "cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
     "build-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",
     "start-prod": "cross-env NODE_ENV=production platform=darwin electron .",
@@ -52,10 +52,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.17",
+    "@flintdev/material-widgets": "0.0.18",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.4",
-    "@flintdev/ui-editor": "0.0.3",
+    "@flintdev/ui-editor": "0.0.5",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",

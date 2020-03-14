@@ -59,6 +59,8 @@ class UIEditorView extends React.Component<Props, object> {
         await this.uiDataManager.checkAndCreateUIDir();
         const data: UIData = await this.uiDataManager.getUIData();
         this.setState({...data});
+        const {components} = data;
+        this.operations.updateComponents(components);
     };
 
     handleAddComponentClick = () => {
