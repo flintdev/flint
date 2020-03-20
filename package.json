@@ -57,7 +57,7 @@
     "@flintdev/material-widgets": "0.0.20",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.5",
-    "@flintdev/ui-editor": "0.0.12",
+    "@flintdev/ui-editor": "0.0.13",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",

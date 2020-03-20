@@ -1,0 +1,16 @@
+import * as types from './types';
+
+{{#updaters}}
+function {{actionName}} (args) {
+    return {
+        type: types.{{name}},
+        args
+    }
+}
+{{/updaters}}
+
+export const reduxActionMap = {
+    {{#updaters}}
+    [types.{{name}}]: {{actionName}}
+    {{/updaters}}
+};

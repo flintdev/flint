@@ -1,0 +1,13 @@
+import * as types from './types';
+import update from 'immutability-helper';
+
+export function reducer(state, action) {
+    switch (action.type) {
+        {{#updaters}}
+        case types.{{name}}:
+            return update(state, {{{data}}});
+        {{/updaters}}
+        default:
+            return state;
+    }
+}
