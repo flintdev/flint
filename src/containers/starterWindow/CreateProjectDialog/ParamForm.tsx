@@ -22,20 +22,20 @@ class ParamForm extends React.Component<Props, object> {
 
     componentDidMount(): void {
         const defaultLocation = new FSHelper().getDefaultPath();
-        this.setState({location: defaultLocation});
-        this.handleFormChange();
+        const params = {location: defaultLocation};
+        this.setState({...params});
+        this.handleFormChange(params);
     }
 
-    handleFormChange = () => {
-        const {location} = this.state;
-        const params = {location};
+    handleFormChange = (params: object) => {
         this.props.onChange(params);
     };
 
     private handleLocationInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const location = event.target.value;
-        this.setState({location});
-        this.handleFormChange();
+        const params = {location};
+        this.setState({...params});
+        this.handleFormChange(params);
     };
 
     render() {

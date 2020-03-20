@@ -5,6 +5,7 @@
   "main": "src/electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run start-dev",
     "build-dev": "cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
     "build-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
     "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",

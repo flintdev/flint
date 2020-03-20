@@ -78,10 +78,12 @@ app.on('certificate-error', (event, webContents, url, error, certificate, callba
 });
 
 app.on('activate', () => {
-    if (starterWindow === null) {
+    if (starterWindow === null && editorWindow === null) {
         createStarterWindow();
-    } else {
+    } else if (starterWindow !== null) {
         starterWindow.show();
+    } else if (editorWindow !== null) {
+        editorWindow.show();
     }
 });
 
