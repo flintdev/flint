@@ -1,0 +1,64 @@
+const path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+
+module.exports = {
+    context: __dirname,
+    mode: 'development',
+    entry: "./index.jsx",
+    devtool: 'inline-source-map',
+    output: {
+        path: path.resolve('../../dist/'),
+        filename: "index.js",
+    },
+    resolve: {
+        extensions: [".js", ".jsx"],
+        alias: {
+            ui: path.resolve('./ui'),
+        },
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)?$/,
+                exclude: /node_modules/,
+                loader: 'babel-loader',
+                query: {
+                    //specify that we will be dealing with React code
+                    presets: [
+                        "@babel/preset-env",
+                        "@babel/preset-react"
+                    ],
+                    plugins: [
+                        "@babel/plugin-proposal-class-properties",
+                        "@babel/plugin-transform-spread",
+                        "@babel/plugin-transform-modules-commonjs",
+                        ["@babel/plugin-transform-runtime",
+                            {
+                                "regenerator": true
+                            }
+                        ]
+                    ]
+                },
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader'],
+            },
+            {
+                test: /\.(txt|yaml)$/,
+                use: 'raw-loader',
+            },
+        ],
+    },
+    plugins: [
+        new HtmlWebPackPlugin({
+            template: "./ui/index.html",
+            filename: "./index.html"
+        })
+    ],
+    stats: {
+        errorDetails: true,
+        errors: true,
+        source: true,
+    }
+};
