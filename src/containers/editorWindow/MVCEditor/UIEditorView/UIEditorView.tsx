@@ -1,4 +1,4 @@
-//
+// src/containers/editorWindow/MVCEditor/UIEditorView/UIEditorView.tsx
 
 import * as React from 'react';
 import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
@@ -58,6 +58,7 @@ class UIEditorView extends React.Component<Props, object> {
     initActions = async () => {
         await this.uiDataManager.checkAndCreateUIDir();
         const data: UIData = await this.uiDataManager.getUIData();
+        if (!data) return;
         this.setState({...data});
         const {components} = data;
         this.operations.updateComponents(components);
