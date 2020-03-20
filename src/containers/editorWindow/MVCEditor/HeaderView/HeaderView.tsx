@@ -30,6 +30,10 @@ import SearchIcon from '@material-ui/icons/Search';
 import CheckIcon from '@material-ui/icons/Check';
 import HistoryIcon from '@material-ui/icons/History';
 import CallReceivedIcon from '@material-ui/icons/CallReceived';
+import CodeIcon from '@material-ui/icons/Code';
+import {ToastType} from "../../../../components/interface";
+import * as componentsActions from "../../../../redux/modules/components/actions";
+import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
 
 const styles = createStyles({
     root: {},
@@ -108,17 +112,24 @@ const ViewIconMap = {
 
 export interface Props extends WithStyles<typeof styles>, NavigationState, ConfigState {
     setCurrentView: (value: string) => void,
+    toastOpen: (toastType: ToastType, message: string) => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
     state = {};
-
+    uiSourceFileGenerator: UISourceFileGenerator;
     componentDidMount(): void {
-
+        const {projectDir} = this.props;
+        this.uiSourceFileGenerator = new UISourceFileGenerator(projectDir);
     }
 
     handleViewButtonClick = (value: string) => (event: React.MouseEvent<HTMLElement>) => {
         if (!!value) this.props.setCurrentView(value);
+    };
+
+    handleGenerateCode = async () => {
+        await this.uiSourceFileGenerator.generate();
+        this.props.toastOpen('success', 'Source code is generated successfully');
     };
 
     render() {
@@ -185,9 +196,15 @@ class HeaderView extends React.Component<Props, object> {
                                 <IconButton size={"small"} className={classes.actionIconButtonGrey}>
                                     <HistoryIcon/>
                                 </IconButton>
-
                                 <IconButton size={"small"} className={classes.actionIconButtonGrey}>
                                     <SearchIcon/>
+                                </IconButton>
+                                <IconButton
+                                    size={"small"}
+                                    className={classes.actionIconButtonGrey}
+                                    onClick={this.handleGenerateCode}
+                                >
+                                    <CodeIcon/>
                                 </IconButton>
                             </td>
                         </tr>
@@ -203,9 +220,10 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.navigation, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
     return {
         setCurrentView: (value: string) => dispatch(actions.navigation.setCurrentView(value)),
+        toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
     }
 };
 
