@@ -11,6 +11,7 @@ import 'ace-builds/webpack-resolver';
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/mode-golang";
+import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-tomorrow";
 
 const styles = createStyles({
@@ -43,6 +44,8 @@ class CodeEditor extends React.Component<Props, object> {
                 return 'yaml';
             case 'json':
                 return 'json';
+            case 'js':
+                return 'javascript';
             case 'go':
                 return 'golang';
             default:

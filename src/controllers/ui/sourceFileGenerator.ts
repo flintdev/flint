@@ -134,7 +134,7 @@ export class SourceFileGenerator {
             });
             let dataStr = JSON.stringify(data, null, 4).replace(/"/gi, '');
             const tempList = dataStr.split('\n');
-            dataStr = `${tempList.join('\n        ')}`;
+            dataStr = `${tempList.join(`\n${new Array(12).fill(' ').join('')}`)}`;
             return {
                 name: updater.name,
                 actionName: _.camelCase(updater.name),
