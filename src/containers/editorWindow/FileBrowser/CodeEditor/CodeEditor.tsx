@@ -12,6 +12,7 @@ import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/mode-golang";
 import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/theme-tomorrow";
 
 const styles = createStyles({
@@ -49,7 +50,7 @@ class CodeEditor extends React.Component<Props, object> {
             case 'go':
                 return 'golang';
             default:
-                return 'plain_text';
+                return postfix;
         }
     };
 
