@@ -38,9 +38,6 @@ const useTreeItemStyles = makeStyles(createStyles({
     labelText: {
         marginLeft: 5,
     },
-    emptySpan: {
-        marginRight: 25,
-    }
 }));
 
 export interface Props extends WithStyles<typeof styles>, FilesState {
@@ -60,7 +57,6 @@ function NodeLabel(props: NodeLabelProps) {
     const classes = useTreeItemStyles(props);
     return (
         <div className={classes.labelRoot}>
-            {type === 'file' && <span className={classes.emptySpan}/>}
             <LabelIcon className={classes.labelIcon}/>
             <Typography
                 variant={"body1"}
