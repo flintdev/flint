@@ -11,6 +11,7 @@ import ReduxStoreJS from './templates/redux-store-js.txt';
 import ReduxActionsJS from './templates/redux-actions-js.txt';
 import ReduxReducerJS from './templates/redux-reducer-js.txt';
 import ReduxTypesJS from './templates/redux-types-js.txt';
+import IndexJSX from './templates/index-jsx.txt';
 import * as Mustache from "mustache";
 import * as _ from 'lodash';
 import {ProjectManager} from "../project/projectManager";
@@ -82,11 +83,17 @@ export class SourceFileGenerator {
             path: `${this.sourceDirPath}/index.html`,
             content: Mustache.render(IndexHTML, {projectName: this.projectName})
         });
+        // index.jsx
+        files.push({
+            path: `${this.sourceDirPath}/index.jsx`,
+            content: IndexJSX
+        });
         await this.batchToCreateFiles(files);
     };
 
     private generateComponentFiles = async () => {
         let files: File[] = [];
+        const {components} = this.editorData;
 
     };
 
