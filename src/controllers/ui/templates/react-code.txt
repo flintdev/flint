@@ -1,0 +1,37 @@
+import * as React from 'react';
+import {connect} from 'react-redux';
+// widgets
+{{#widgets}}
+import {
+    {{name}},
+} from "@flintdev/material-widgets";
+{{/widgets}}
+// actions
+import * as actions from '../actions';
+
+class Root extends React.Component {
+    render() {
+        const {state} = this.props;
+        return (
+            <div>
+                {{{data}}}
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {state};
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        {{#actions}}
+        {{name}}: (args) => dispatch(actions.{{name}}(args)),
+        {{/actions}}
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Root);
+
+
