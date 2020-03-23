@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 // widgets
-{{#widgets}}
 import {
+    {{#widgets}}
     {{name}},
+    {{/widgets}}
 } from "@flintdev/material-widgets";
-{{/widgets}}
 // actions
 import * as actions from '../actions';
 
@@ -14,7 +14,7 @@ class Root extends React.Component {
         const {state} = this.props;
         return (
             <div>
-                {{{code}}}
+{{{code}}}
             </div>
         )
     }

@@ -16,64 +16,70 @@ export class ReactCodeFormatter {
     }
 
     getRenderData = () => {
-        const codeStrList: string[] = this.components.map(componentData => this.recurToGetCodeStr(12, componentData));
+        const codeStrList: string[] = this.components.map(componentData => this.recurToGetCodeStr(4, componentData));
+        let code = codeStrList.join('\n');
+        code = this.reformatStringWithIndent(12, code);
         return {
             widgets: this.widgetList.map(name => {return {name}}),
             actions: this.actionList.map(name => {return {name}}),
-            code: codeStrList.join('\n'),
+            code
         }
     };
 
     recurToGetCodeStr = (parentIndent: number, componentData: ComponentData): string => {
         const {name, params, events, children, tag} = componentData;
         if (!this.widgetList.includes(name)) this.widgetList.push(name);
-        const paramsStr = this.generateParamsStr(parentIndent + 4, params);
-        const eventsStr = !!events ? this.generateEventsStr(parentIndent + 4, events) : '';
-        let kvList: string[] = [];
+        const paramsStr = this.generateParamsStr(params);
+        const eventsStr = !!events ? this.generateEventsStr(events) : '';
+        let kvList: any[] = [];
         // params
-        kvList.push(`params={${paramsStr}}\n`);
+        kvList.push({kv: `params={${paramsStr}}`});
         // events
-        if (!!events && events.length > 0) kvList.push(`events={${eventsStr}}\n`);
+        if (!!events && events.length > 0) kvList.push({kv: `events={${eventsStr}}`});
         // tag
-        if (!!tag) kvList.push(`tag={"${tag}"}\n`);
+        if (!!tag) kvList.push({kv: `tag={"${tag}"}`});
         let codeStr = '';
         if (!!children && children.length > 0) {
-            const childCodeStrList: string[] = children.map(child => this.recurToGetCodeStr(parentIndent + 4, child));
+            const childCodeStrList: string[] = children.map(child => this.recurToGetCodeStr(parentIndent, child));
             codeStr = Mustache.render(ComponentWithChildren, {name, kvList, children: childCodeStrList.join('\n')});
+            return this.reformatStringWithIndent(parentIndent, codeStr);
         } else {
             codeStr = Mustache.render(ComponentWithoutChildren, {name, kvList});
+            return this.reformatStringWithIndent(parentIndent, codeStr);
         }
-        return this.reformatStringWithIndent(parentIndent, codeStr);
     };
 
-    generateParamsStr = (indent: number, params: any): string => {
+    generateParamsStr = (params: any): string => {
         let paramsStr = '';
-        const space = new Array(indent).fill(' ');
+        const space = new Array(8).fill(' ').join('');
+        const space2 = new Array(4).fill(' ').join('');
         Object.keys(params).forEach(key => {
-            const value: string = params[key];
-            if (value.includes('state::')) {
+            let value: string = params[key];
+            if (typeof value === "string" && value.includes('state::')) {
                 const statePath = value.split('::')[1];
-                paramsStr += `${space}${key}: state.${statePath.split('.').slice(1).join('.')},\n`
+                paramsStr += `${space}${key}: state.${statePath.split('.').slice(1).join('.')},\n`;
             } else {
-                paramsStr += `${space}${key}: "${value}",\n`
+                if (typeof value === "string") value = `"${value}"`;
+                paramsStr += `${space}${key}: ${value},\n`;
             }
         });
-        return `{\n${paramsStr}}`;
+        return `{\n${paramsStr}${space2}}`;
     };
 
-    generateEventsStr = (indent: number, events: any[]): string => {
+    generateEventsStr = (events: any[]): string => {
         let eventsStr = '';
-        const space = new Array(indent).fill(' ');
+        const space = new Array(8).fill(' ').join('');
+        const space2 = new Array(4).fill(' ').join('');
         events.forEach(item => {
             const {event, action} = item;
             if (!this.actionList.includes(action)) this.actionList.push(action);
             eventsStr += `${space}${event}: this.props.${action},\n`;
         });
-        return `{${eventsStr}}`;
+        return `{\n${eventsStr}${space2}}`;
     };
 
     private reformatStringWithIndent = (indent: number, text: string): string => {
-        const space = new Array(indent).fill(' ');
+        const space = new Array(indent).fill(' ').join('');
         const tempList = text.split('\n').map(line => space + line);
         return`${tempList.join('\n')}`;
     };
