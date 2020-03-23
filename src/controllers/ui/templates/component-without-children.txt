@@ -1,0 +1,5 @@
+<{{name}}
+    {{#kvList}}
+    {{kv}}
+    {{/kvList}}
+/>

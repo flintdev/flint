@@ -12,10 +12,12 @@ import ReduxActionsJS from './templates/redux-actions-js.txt';
 import ReduxReducerJS from './templates/redux-reducer-js.txt';
 import ReduxTypesJS from './templates/redux-types-js.txt';
 import IndexJSX from './templates/index-jsx.txt';
+import ReactCode from './templates/react-code.txt'
 import * as Mustache from "mustache";
 import * as _ from 'lodash';
 import {ProjectManager} from "../project/projectManager";
 import {StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
+import {ReactCodeFormatter} from "./reactCodeFormatter";
 
 interface File {
     path: string,
@@ -55,6 +57,7 @@ export class SourceFileGenerator {
         await this.loadEditorData();
         await this.generateConfigFiles();
         await this.generateReduxFiles();
+        await this.generateComponentFiles();
     };
 
     private removeSourceDir = async () => {
@@ -94,7 +97,14 @@ export class SourceFileGenerator {
     private generateComponentFiles = async () => {
         let files: File[] = [];
         const {components} = this.editorData;
-
+        const data = new ReactCodeFormatter(components).getRenderData();
+        const componentsDir = `${this.sourceDirPath}/components`;
+        await this.checkAndCreateDir(componentsDir);
+        files.push({
+            path: `${componentsDir}/Root.jsx`,
+            content: Mustache.render(ReactCode, data),
+        });
+        await this.batchToCreateFiles(files);
     };
 
     private generateReduxFiles = async () => {

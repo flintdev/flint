@@ -14,7 +14,7 @@ class Root extends React.Component {
         const {state} = this.props;
         return (
             <div>
-                {{{data}}}
+                {{{code}}}
             </div>
         )
     }
