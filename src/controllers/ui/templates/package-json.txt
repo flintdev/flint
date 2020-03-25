@@ -8,7 +8,7 @@
     "start": "webpack-dev-server --progress --color --mode development --config webpack.config.js",
     "build-dev": "webpack --config webpack.config.js -w",
     "build-prod": "webpack --config webpack.config.js --production-only",
-    "update-all": "npm install @flintdev/material-widgets@latest --save"
+    "update-all": "npm install @flintdev/material-widgets@latest @flintdev/action-kit@latest --save"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -38,7 +38,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
-      "@flintdev/material-widgets": "0.0.20",
+      "@flintdev/material-widgets": "latest",
+      "@flintdev/action-kit": "latest",
       "@material-ui/core": "^4.9.7",
       "@material-ui/icons": "^4.9.1",
       "@material-ui/lab": "^4.0.0-alpha.46",

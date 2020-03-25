@@ -1,0 +1,5 @@
+import {action} from "./action";
+import {actionAdapter} from "@flintdev/action-kit";
+import {reduxActionMap} from "../../redux/actions";
+
+export const {{name}} = actionAdapter(action, reduxActionMap);
