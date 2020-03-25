@@ -118,7 +118,7 @@ export class SourceFileGenerator {
         // actions root index.js
         files.push({
             path: `${actionsDir}/index.js`,
-            content: Mustache.render(ActionsRootIndexJS, {actions}, {}, ['<%', '%>'])
+            content: Mustache.render(ActionsRootIndexJS, {actions})
         });
         for (const action of actions) {
             // action.js

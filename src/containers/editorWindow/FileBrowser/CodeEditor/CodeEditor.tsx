@@ -49,6 +49,8 @@ class CodeEditor extends React.Component<Props, object> {
                 return 'golang';
             case 'py':
                 return 'python';
+            case 'babelrc':
+                return 'json';
             default:
                 return postfix;
         }
