@@ -12,6 +12,7 @@ import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/mode-golang";
 import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/mode-jsx";
 import "ace-builds/src-noconflict/theme-tomorrow";
@@ -40,16 +41,14 @@ class CodeEditor extends React.Component<Props, object> {
         const tempList = path.split('.');
         const postfix: string = tempList[tempList.length - 1];
         switch (postfix) {
-            case 'yaml':
-                return 'yaml';
             case 'yml':
                 return 'yaml';
-            case 'json':
-                return 'json';
             case 'js':
                 return 'javascript';
             case 'go':
                 return 'golang';
+            case 'py':
+                return 'python';
             default:
                 return postfix;
         }
