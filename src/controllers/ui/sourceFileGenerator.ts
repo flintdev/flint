@@ -4,6 +4,7 @@
 import {UIDataManager, UIData} from "./uiDataManager";
 import {FSHelper} from "../utils/fsHelper";
 import BabelRC from './templates/babelrc.txt';
+import NpmRC from './templates/npmrc.txt';
 import IndexHTML from './templates/index-html.txt';
 import PackageJSON from './templates/package-json.txt';
 import WebpackConfig from './templates/webpack-config.txt';
@@ -64,7 +65,11 @@ export class SourceFileGenerator {
     };
 
     private removeSourceDir = async () => {
-        await this.fsHelper.removeDir(this.sourceDirPath);
+        const excluded = ['node_modules'];
+        const dirs = await this.fsHelper.readDir(this.sourceDirPath);
+        for (const name in dirs) {
+            if (!excluded.includes(name)) await this.fsHelper.removeDir(`${this.sourceDirPath}/${name}`);
+        }
     };
 
     private generateConfigFiles = async () => {
@@ -83,6 +88,11 @@ export class SourceFileGenerator {
         files.push({
             path: `${this.sourceDirPath}/.babelrc`,
             content: BabelRC
+        });
+        // .npmrc
+        files.push({
+            path: `${this.sourceDirPath}/.npmrc`,
+            content: NpmRC
         });
         // index.html
         files.push({

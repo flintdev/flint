@@ -3,6 +3,10 @@
 import {FSHelper} from "../utils/fsHelper";
 import {FileTreeNode} from "../../interface";
 
+const excluded_path = [
+    'src/ui/node_modules'
+];
+
 export class SourceFileManager {
     rootDir: string;
     fsHelper: FSHelper;
@@ -31,6 +35,7 @@ export class SourceFileManager {
         for (let file of files) {
             const {name, type} = file;
             const path = `${parentPath}/${name}`;
+            if (this.isExcludedPath(path)) continue;
             if (type === 'dir') {
                 const children: FileTreeNode[] = await this.recurToChildren(path);
                 const node = {name, type, path, children};
@@ -41,5 +46,12 @@ export class SourceFileManager {
             }
         }
         return nodes;
+    };
+
+    private isExcludedPath = (absPath: string) => {
+        for (const path of excluded_path) {
+            if (absPath.includes(path)) return true;
+        }
+        return false;
     };
 }

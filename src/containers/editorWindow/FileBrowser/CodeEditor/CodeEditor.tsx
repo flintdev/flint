@@ -15,6 +15,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/mode-html";
 import "ace-builds/src-noconflict/mode-jsx";
+import "ace-builds/src-noconflict/mode-text";
 import "ace-builds/src-noconflict/theme-tomorrow";
 
 const styles = createStyles({
@@ -51,6 +52,8 @@ class CodeEditor extends React.Component<Props, object> {
                 return 'python';
             case 'babelrc':
                 return 'json';
+            case 'npmrc':
+                return 'text'
             default:
                 return postfix;
         }

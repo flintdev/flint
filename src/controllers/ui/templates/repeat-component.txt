@@ -1,7 +1,5 @@
 {<%path%>.map((item, index) => {
     return (
-        <React.Fragment key={index}>
 <%{code}%>
-        </React.Fragment
     )
 })}

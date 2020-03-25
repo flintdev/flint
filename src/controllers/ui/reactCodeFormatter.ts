@@ -33,6 +33,8 @@ export class ReactCodeFormatter {
         const paramsStr = this.generateParamsStr(params);
         const eventsStr = !!events ? this.generateEventsStr(events) : '';
         let kvList: any[] = [];
+        // key
+        if (!!repeat) kvList.push({kv: `key={index}`});
         // params
         kvList.push({kv: `params={${paramsStr}}`});
         // events
@@ -51,8 +53,7 @@ export class ReactCodeFormatter {
         if (!!repeat) {
             const {fieldPath} = repeat as any;
             const path = this.getDataPath(fieldPath);
-            console.log('path', path);
-            codeStr = this.reformatStringWithIndent(12, codeStr);
+            codeStr = this.reformatStringWithIndent(8, codeStr);
             codeStr = Mustache.render(RepeatComponent, {path, code: codeStr}, {}, ['<%', '%>']);
         }
         return this.reformatStringWithIndent(parentIndent, codeStr);

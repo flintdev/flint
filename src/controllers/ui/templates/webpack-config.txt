@@ -52,7 +52,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebPackPlugin({
-            template: "./ui/index.html",
+            template: "./index.html",
             filename: "./index.html"
         })
     ],
