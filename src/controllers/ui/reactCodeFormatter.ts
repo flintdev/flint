@@ -3,6 +3,7 @@
 import {ComponentData} from "@flintdev/ui-editor/dist/interface";
 import ComponentWithChildren from './templates/component-with-children.txt';
 import ComponentWithoutChildren from './templates/component-without-children.txt';
+import RepeatComponent from './templates/repeat-component.txt';
 import * as Mustache from "mustache";
 
 export class ReactCodeFormatter {
@@ -27,7 +28,7 @@ export class ReactCodeFormatter {
     };
 
     recurToGetCodeStr = (parentIndent: number, componentData: ComponentData): string => {
-        const {name, params, events, children, tag} = componentData;
+        const {name, params, events, children, display, repeat, tag} = componentData;
         if (!this.widgetList.includes(name)) this.widgetList.push(name);
         const paramsStr = this.generateParamsStr(params);
         const eventsStr = !!events ? this.generateEventsStr(events) : '';
@@ -39,14 +40,22 @@ export class ReactCodeFormatter {
         // tag
         if (!!tag) kvList.push({kv: `tag={"${tag}"}`});
         let codeStr = '';
+        // generate react component string
         if (!!children && children.length > 0) {
             const childCodeStrList: string[] = children.map(child => this.recurToGetCodeStr(parentIndent, child));
             codeStr = Mustache.render(ComponentWithChildren, {name, kvList, children: childCodeStrList.join('\n')});
-            return this.reformatStringWithIndent(parentIndent, codeStr);
         } else {
             codeStr = Mustache.render(ComponentWithoutChildren, {name, kvList});
-            return this.reformatStringWithIndent(parentIndent, codeStr);
         }
+        // repeat component
+        if (!!repeat) {
+            const {fieldPath} = repeat as any;
+            const path = this.getDataPath(fieldPath);
+            console.log('path', path);
+            codeStr = this.reformatStringWithIndent(12, codeStr);
+            codeStr = Mustache.render(RepeatComponent, {path, code: codeStr}, {}, ['<%', '%>']);
+        }
+        return this.reformatStringWithIndent(parentIndent, codeStr);
     };
 
     generateParamsStr = (params: any): string => {
@@ -57,7 +66,7 @@ export class ReactCodeFormatter {
             let value: string = params[key];
             if (typeof value === "string" && value.includes('state::')) {
                 const statePath = value.split('::')[1];
-                paramsStr += `${space}${key}: state.${statePath.split('.').slice(1).join('.')},\n`;
+                paramsStr += `${space}${key}: ${this.getDataPath(statePath)},\n`;
             } else {
                 if (typeof value === "string") value = `"${value}"`;
                 paramsStr += `${space}${key}: ${value},\n`;
@@ -82,6 +91,14 @@ export class ReactCodeFormatter {
         const space = new Array(indent).fill(' ').join('');
         const tempList = text.split('\n').map(line => space + line);
         return`${tempList.join('\n')}`;
+    };
+
+    private getDataPath = (fieldPath: string) => {
+        const parts = fieldPath.split('.');
+        let path = parts.slice(1).join('.');
+        let head = 'item';
+        if (parts[0] === '$') head = 'state';
+        return `${head}.${path}`;
     };
 
 }
