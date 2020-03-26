@@ -5,6 +5,7 @@ import ComponentWithChildren from './templates/component-with-children.txt';
 import ComponentWithoutChildren from './templates/component-without-children.txt';
 import RepeatComponent from './templates/repeat-component.txt';
 import * as Mustache from "mustache";
+import {DisplayInfo} from "@flintdev/ui-editor/dist/containers/ComponentEditPane/DisplayPane/interface";
 
 export class ReactCodeFormatter {
     components: ComponentData[];
@@ -49,12 +50,17 @@ export class ReactCodeFormatter {
         } else {
             codeStr = Mustache.render(ComponentWithoutChildren, {name, kvList});
         }
+        const displayCondition = this.getDisplayCondition(display as any);
         // repeat component
         if (!!repeat) {
             const {fieldPath} = repeat as any;
-            const path = this.getDataPath(fieldPath);
+            let path = this.getDataPath(fieldPath);
+            if (!!displayCondition) path = `${displayCondition} && ${path}`;
             codeStr = this.reformatStringWithIndent(8, codeStr);
             codeStr = Mustache.render(RepeatComponent, {path, code: codeStr}, {}, ['<%', '%>']);
+        } else if (!!displayCondition) {
+            codeStr = this.reformatStringWithIndent(4, codeStr);
+            codeStr = `{${displayCondition} &&\n${codeStr}}`;
         }
         return this.reformatStringWithIndent(parentIndent, codeStr);
     };
@@ -100,6 +106,14 @@ export class ReactCodeFormatter {
         let head = 'item';
         if (parts[0] === '$') head = 'state';
         return `${head}.${path}`;
+    };
+
+    private getDisplayCondition = (display?: DisplayInfo): string|null => {
+        if (!display) return null;
+        const {type, state, value} = display;
+        if (type === "always") return null;
+        const path = this.getDataPath(state);
+        return `${path} === "${value}"`;
     };
 
 }
