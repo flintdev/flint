@@ -109,6 +109,10 @@ const mainConfig = {
         libraryTarget: "umd",
         library: 'flintlib'
     },
+    node: {
+        __filename: true,
+        __dirname: true
+    },
     target: 'electron-main'
 };
 

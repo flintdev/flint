@@ -17,8 +17,7 @@ function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    // todo: path issue
-    starterWindow.loadFile(path.join(__dirname, `./starter.html`)).then(r => {});
+    starterWindow.loadFile(`./dist/bundles/${environment}/electron/starter.html`).then(r => {});
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
@@ -36,7 +35,7 @@ function createEditorWindow(projectDir: string) {
             nodeIntegration: true,
         }
     });
-    editorWindow.loadFile(`./editor.html`).then(r => {
+    editorWindow.loadFile(`./dist/bundles/${environment}/electron/editor.html`).then(r => {
         editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
         if (!!starterWindow) starterWindow.close();
