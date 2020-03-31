@@ -2,6 +2,7 @@
 
 import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'electron';
 import {CHANNEL} from './constants';
+import {edit} from "ace-builds";
 const path = require('path');
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
@@ -24,10 +25,6 @@ function createStarterWindow() {
     starterWindow.on('close', event => {
         starterWindow = null;
     });
-    starterWindow.webContents.openDevTools();
-    // if (environment === 'development') {
-    //     starterWindow.webContents.openDevTools();
-    // }
 }
 
 function createEditorWindow(projectDir: string) {
@@ -79,11 +76,11 @@ app.on('certificate-error', (event, webContents, url, error, certificate, callba
 });
 
 app.on('activate', () => {
-    if (starterWindow === null && editorWindow === null) {
+    if (!starterWindow && !editorWindow) {
         createStarterWindow();
-    } else if (starterWindow !== null) {
+    } else if (!!starterWindow) {
         starterWindow.show();
-    } else if (editorWindow !== null) {
+    } else if (!!editorWindow) {
         editorWindow.show();
     }
 });
