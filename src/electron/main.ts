@@ -17,13 +17,14 @@ function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    starterWindow.loadFile(`./dist/bundles/${environment}/electron/starter.html`).then(r => {});
+    starterWindow.loadFile(path.join(__dirname, 'starter.html')).then(r => {});
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
     starterWindow.on('close', event => {
         starterWindow = null;
     });
+    starterWindow.webContents.openDevTools();
     // if (environment === 'development') {
     //     starterWindow.webContents.openDevTools();
     // }
@@ -35,7 +36,7 @@ function createEditorWindow(projectDir: string) {
             nodeIntegration: true,
         }
     });
-    editorWindow.loadFile(`./dist/bundles/${environment}/electron/editor.html`).then(r => {
+    editorWindow.loadFile(path.join(__dirname, 'editor.html')).then(r => {
         editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
         if (!!starterWindow) starterWindow.close();

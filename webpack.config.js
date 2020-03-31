@@ -3,6 +3,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const environment = process.env.NODE_ENV;
 let filename, processEnv, filePath, mode, target;
@@ -25,7 +26,6 @@ if (environment === 'development') {
 }
 
 const commonConfig = {
-    context: __dirname,
     mode: mode,
     devtool: 'inline-source-map',
     resolve: {
@@ -70,12 +70,6 @@ const commonConfig = {
             }
         ]
     },
-    plugins: [
-        new BundleTracker({
-            filename: './webpack-stats.json'
-        }),
-        new webpack.EnvironmentPlugin(processEnv),
-    ],
     stats: {
         errorDetails: true,
         errors: true,
@@ -95,6 +89,12 @@ const rendererConfig = {
         libraryTarget: "umd",
         library: 'flintlib'
     },
+    plugins: [
+        new BundleTracker({
+            filename: './webpack-stats.json'
+        }),
+        new webpack.EnvironmentPlugin(processEnv),
+    ],
     target: 'electron-renderer'
 };
 
@@ -110,10 +110,21 @@ const mainConfig = {
         library: 'flintlib'
     },
     node: {
-        __filename: true,
-        __dirname: true
+        __filename: false,
+        __dirname: false
     },
-    target: 'electron-main'
+    target: 'electron-main',
+    plugins: [
+        new BundleTracker({
+            filename: './webpack-stats.json'
+        }),
+        new webpack.EnvironmentPlugin(processEnv),
+        new CopyPlugin([
+            { from: './src/electron/views/starter.html', to: `./` },
+            { from: './src/electron/views/editor.html', to: `./` },
+            { from: './resources/img/icon.png', to: `./` },
+        ]),
+    ],
 };
 
 module.exports = env => {

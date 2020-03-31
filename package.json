@@ -1,20 +1,24 @@
 {
   "name": "flint",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/bundles/development/electron/main.js",
+  "description": "low-code development platform based on kubernetes",
+  "main": "dist/bundles/production/electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run start-dev",
-    "build-dev": "mkdir -p ./dist/bundles/development/electron && cp ./src/electron/views/* ./dist/bundles/development/electron && cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
-    "build-prod": "cp ./src/electron/views/* ./dist/bundles/development/electron && cross-env NODE_ENV=production webpack --config webpack.config.js",
-    "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",
+    "rm-dist": "rimraf dist",
+    "cp-files-dev": "mkdir -p ./dist/bundles/development/electron && cp ./src/electron/views/* ./dist/bundles/development/electron",
+    "cp-files-prod": "mkdir -p ./dist/bundles/production/electron && cp ./src/electron/views/* ./dist/bundles/production/electron && cp ./resources/img/icon.png ./dist/",
+    "build-dev": "cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
+    "build-prod": "cross-env NODE_ENV=production webpack --progress --config webpack.config.js",
+    "start-dev": "cross-env NODE_ENV=development platform=darwin electron dist/bundles/development/electron/main.js",
     "start-prod": "cross-env NODE_ENV=production platform=darwin electron .",
     "install-model-editor": "npm install @flintdev/model-editor@latest",
     "install-process-editor": "npm install @flintdev/process-editor@latest",
     "install-ui-editor": "npm install @flintdev/ui-editor@latest",
     "install-material-widgets": "npm install @flintdev/material-widgets@latest",
-    "update-all": "npm install @flintdev/model-editor@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest"
+    "update-all": "npm install @flintdev/model-editor@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest",
+    "pack-app": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -34,6 +38,7 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
+    "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^6.0.3",
     "css-loader": "^3.4.2",
     "electron": "^7.1.7",
@@ -62,6 +67,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
     "ace-builds": "^1.4.8",
+    "electron-updater": "^4.2.5",
     "immutability-helper": "^3.0.1",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
@@ -76,5 +82,29 @@
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "typeface-roboto": "0.0.75"
+  },
+  "build": {
+    "appId": "io.flintdev.flint",
+    "productName": "Flint",
+    "files": [
+      "dist/bundles/production/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "icon": "dist/bundles/production/electron/icon.png",
+      "publish": [
+        {
+          "provider": "github",
+          "host": "github.com",
+          "owner": "flintdev",
+          "repo": "flint"
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
+    }
   }
 }
