@@ -1,11 +1,11 @@
 // electron - main.js
 
-const {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} = require('electron');
-const {CHANNEL} = require('./constants');
+import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'electron';
+import {CHANNEL} from './constants';
 const path = require('path');
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
-let starterWindow, editorWindow;
+let starterWindow: BrowserWindow, editorWindow: BrowserWindow;
 
 nativeTheme.themeSource = "light";
 
@@ -17,7 +17,8 @@ function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    starterWindow.loadFile(path.join(__dirname, 'views/starter.html')).then(r => {});
+    // todo: path issue
+    starterWindow.loadFile(path.join(__dirname, `./starter.html`)).then(r => {});
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
@@ -29,13 +30,13 @@ function createStarterWindow() {
     // }
 }
 
-function createEditorWindow(projectDir) {
+function createEditorWindow(projectDir: string) {
     editorWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
         }
     });
-    editorWindow.loadFile(path.join(__dirname, 'views/editor.html')).then(r => {
+    editorWindow.loadFile(`./editor.html`).then(r => {
         editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
         if (!!starterWindow) starterWindow.close();
@@ -89,7 +90,6 @@ app.on('activate', () => {
 
 app.on('before-quit', event => {
     console.log('app before quit');
-    app.quiting = true;
 });
 
 app.on('will-quit', event => {

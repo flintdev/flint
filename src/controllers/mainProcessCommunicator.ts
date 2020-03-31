@@ -1,6 +1,6 @@
 // src/controllers/mainProcessCommunicator.ts
 
-const {ipcRenderer} = require('electron');
+import {ipcRenderer} from 'electron';
 import {CHANNEL} from "../constants";
 
 export enum Error {
@@ -13,13 +13,8 @@ export class MainProcessCommunicator {
     switchFromStarterToEditorWindow = (projectDir: string) => {
         // open editorWindow window and close starterWindow window
         return new Promise((resolve, reject) => {
-            ipcRenderer.send(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, projectDir)
-                .then(() => {
-                    resolve()
-                })
-                .catch((err: Error) => {
-                    reject(err);
-                });
+            ipcRenderer.send(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, projectDir);
+            resolve();
         });
     };
 

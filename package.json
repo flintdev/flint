@@ -2,12 +2,12 @@
   "name": "flint",
   "version": "0.0.1",
   "description": "",
-  "main": "src/electron/main.js",
+  "main": "dist/bundles/development/electron/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run start-dev",
-    "build-dev": "cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
-    "build-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build-dev": "cp ./src/electron/views/* ./dist/bundles/development/electron && cross-env NODE_ENV=development webpack --progress --config webpack.config.js -w",
+    "build-prod": "cp ./src/electron/views/* ./dist/bundles/development/electron && cross-env NODE_ENV=production webpack --config webpack.config.js",
     "start-dev": "cross-env NODE_ENV=development platform=darwin electron .",
     "start-prod": "cross-env NODE_ENV=production platform=darwin electron .",
     "install-model-editor": "npm install @flintdev/model-editor@latest",
@@ -54,10 +54,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.39",
+    "@flintdev/material-widgets": "0.0.40",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.5",
-    "@flintdev/ui-editor": "0.0.22",
+    "@flintdev/ui-editor": "0.0.23",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",
