@@ -9,7 +9,7 @@ const ora = require('ora');
 const chalk = require('chalk');
 const pjsonStr = fs.readFileSync('./package.json');
 const pjson = JSON.parse(pjsonStr);
-const version = `v${pjson.version}`;
+const version = pjson.version;
 const {host, owner, repo} = pjson.build.mac.publish[0];
 const baseURL = `https://api.${host}/repos/${owner}/${repo}/releases`;
 //
@@ -22,8 +22,8 @@ const headers = {Authorization: `token ${githubToken}`};
 const createRelease = async () => {
     const spinner = ora(`Creating new release of version ${version}`).start();
     const data = {
-        tag_name: version,
-        name: version,
+        tag_name: `v${version}`,
+        name: `v${version}`,
         body: releaseContent,
         prerelease: true,
     };
