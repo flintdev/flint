@@ -8,3 +8,5 @@ node_modules/
 package-lock.json
 dist/
 webpack-stats.json
+.settings.json
+.DS_Store

@@ -18,7 +18,8 @@
     "install-ui-editor": "npm install @flintdev/ui-editor@latest",
     "install-material-widgets": "npm install @flintdev/material-widgets@latest",
     "update-all": "npm install @flintdev/model-editor@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest",
-    "pack-app": "electron-builder"
+    "pack-app": "electron-builder",
+    "publish-app": "node build/scripts/publish.js"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,8 @@
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/react-redux": "^7.1.5",
+    "bluebird": "^3.7.2",
+    "chalk": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
     "cross-env": "^6.0.3",
     "css-loader": "^3.4.2",
@@ -47,6 +50,9 @@
     "jest": "^25.1.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "mime-types": "^2.1.26",
+    "node-fetch": "^2.6.0",
+    "ora": "^4.0.3",
     "raw-loader": "^4.0.0",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.1.3",
