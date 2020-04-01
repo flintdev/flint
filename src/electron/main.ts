@@ -4,10 +4,12 @@ import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'elec
 import {CHANNEL} from './constants';
 import path = require('path');
 import {AutoUpdater} from "./utils/autoUpdater";
+import {MenuBuilder} from "./utils/menuBuilder";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow: BrowserWindow, editorWindow: BrowserWindow;
 let autoUpdater: AutoUpdater;
+let menuBuilder: MenuBuilder;
 
 nativeTheme.themeSource = "light";
 
@@ -45,15 +47,16 @@ async function createEditorWindow(projectDir: string) {
     });
     editorWindow.on('close', event => {
         editorWindow = null;
-        autoUpdater.removeAllListeners();
+        autoUpdater.stop();
         autoUpdater = null;
     });
-    if (environment === 'development') {
-        editorWindow.webContents.openDevTools();
-    }
     // init auto updater
     autoUpdater = new AutoUpdater(editorWindow);
     autoUpdater.initEventListeners();
+    //  init menu
+    menuBuilder = new MenuBuilder(editorWindow);
+    menuBuilder.build({autoUpdater});
+    // async actions
     await autoUpdater.checkForUpdates();
 }
 
