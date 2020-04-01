@@ -27,7 +27,13 @@ async function createStarterWindow() {
         starterWindow.show();
     });
     starterWindow.on('close', event => {
-        starterWindow = null;
+        // @ts-ignore
+        if (!app.quiting) {
+            event.preventDefault();
+            starterWindow.hide();
+        } else {
+            starterWindow = null;
+        }
     });
 }
 
@@ -40,15 +46,25 @@ async function createEditorWindow(projectDir: string) {
     editorWindow.loadFile(path.join(__dirname, 'editor.html')).then(r => {
         editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
-        if (!!starterWindow) starterWindow.close();
+        if (!!starterWindow) {
+            starterWindow.close();
+            starterWindow = null;
+        }
     });
     editorWindow.on('ready-to-show', () => {
         editorWindow.show();
     });
     editorWindow.on('close', event => {
-        editorWindow = null;
-        autoUpdater.stop();
-        autoUpdater = null;
+        // @ts-ignore
+        if (!app.quiting) {
+            event.preventDefault();
+            editorWindow.hide();
+        } else {
+            editorWindow = null;
+            autoUpdater.stop();
+            autoUpdater = null;
+        }
+
     });
     // init auto updater
     autoUpdater = new AutoUpdater(editorWindow);
@@ -98,6 +114,8 @@ app.on('activate', async () => {
 });
 
 app.on('before-quit', event => {
+    // @ts-ignore
+    app.quiting = true;
     console.log('app before quit');
 });
 

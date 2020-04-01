@@ -2,6 +2,7 @@
 
 import {app, dialog, BrowserWindow} from 'electron';
 import {autoUpdater} from "electron-updater";
+import {CHANNEL} from "../constants";
 
 export class AutoUpdater {
     mainWindow: BrowserWindow;
@@ -13,26 +14,40 @@ export class AutoUpdater {
 
     initEventListeners = () => {
         autoUpdater.on('checking-for-update', () => {
-            console.log('checking-for-update');
+            this.consoleLog('checking-for-update');
         });
         autoUpdater.on('update-available', (info) => {
-            console.log('update-available', info);
+            this.consoleLog('update-available');
+            this.consoleLog(info);
             if (this.updateAlert) this.showUpdateAvailableDialog().then(r => {});
         });
         autoUpdater.on('update-not-available', (info) => {
-            console.log('update-not-available', info);
+            this.consoleLog('update-not-available');
+            this.consoleLog(info);
             if (this.updateAlert) this.showNoUpdateDialog().then(r => {});
         });
         autoUpdater.on('download-progress', (progressObj) => {
             console.log('download-progress', progressObj);
+            this.consoleLog('download-progress');
+            this.consoleLog(progressObj);
+            // if (progressObj.percent === 100) {
+            //     this.showDownloadedDialog().then(r => {});
+            // }
         });
         autoUpdater.on('update-downloaded', (info) => {
-            console.log('update-downloaded', info);
+            this.consoleLog('update-downloaded');
+            this.consoleLog(info);
             this.showDownloadedDialog().then(r => {});
         });
         autoUpdater.on('error', (err) => {
             console.log('error', err);
+            this.consoleLog('error');
+            this.consoleLog(err);
         });
+    };
+
+    private consoleLog = (message: any) => {
+        this.mainWindow.webContents.send(CHANNEL.CONSOLE, message);
     };
 
     stop = () => {
@@ -64,6 +79,8 @@ export class AutoUpdater {
         };
         const result: Electron.MessageBoxReturnValue = await dialog.showMessageBox(options);
         if (result.response === 0) {
+            // @ts-ignore
+            app.quiting = true;
             autoUpdater.quitAndInstall();
         }
     };

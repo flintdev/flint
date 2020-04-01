@@ -39,4 +39,10 @@ export class MainProcessCommunicator {
         });
     };
 
+    initGlobalListeners = () => {
+        ipcRenderer.on(CHANNEL.CONSOLE, ((event, args) => {
+            console.log(args);
+        }));
+    };
+
 }
