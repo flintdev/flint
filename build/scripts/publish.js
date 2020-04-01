@@ -6,9 +6,10 @@ const Bluebird = require('bluebird');
 fetch.Promise = Bluebird;
 const mime = require('mime-types');
 const ora = require('ora');
+const chalk = require('chalk');
 const pjsonStr = fs.readFileSync('./package.json');
 const pjson = JSON.parse(pjsonStr);
-const version = pjson.version;
+const version = `v${pjson.version}`;
 const {host, owner, repo} = pjson.build.mac.publish[0];
 const baseURL = `https://api.${host}/repos/${owner}/${repo}/releases`;
 //

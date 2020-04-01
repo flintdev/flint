@@ -1,0 +1,4 @@
+provider: github
+host: github.com
+owner: flintdev
+repo: flint

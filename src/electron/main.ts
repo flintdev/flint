@@ -2,15 +2,16 @@
 
 import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'electron';
 import {CHANNEL} from './constants';
-import {edit} from "ace-builds";
-const path = require('path');
+import path = require('path');
+import {AutoUpdater} from "./utils/autoUpdater";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow: BrowserWindow, editorWindow: BrowserWindow;
+let autoUpdater: AutoUpdater;
 
 nativeTheme.themeSource = "light";
 
-function createStarterWindow() {
+async function createStarterWindow() {
     starterWindow = new BrowserWindow({
         width: 800,
         height: 600,
@@ -18,7 +19,8 @@ function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    starterWindow.loadFile(path.join(__dirname, 'starter.html')).then(r => {});
+    starterWindow.loadFile(path.join(__dirname, 'starter.html')).then(r => {
+    });
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
@@ -27,7 +29,7 @@ function createStarterWindow() {
     });
 }
 
-function createEditorWindow(projectDir: string) {
+async function createEditorWindow(projectDir: string) {
     editorWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
@@ -43,11 +45,16 @@ function createEditorWindow(projectDir: string) {
     });
     editorWindow.on('close', event => {
         editorWindow = null;
+        autoUpdater.removeAllListeners();
+        autoUpdater = null;
     });
     if (environment === 'development') {
         editorWindow.webContents.openDevTools();
     }
-
+    // init auto updater
+    autoUpdater = new AutoUpdater(editorWindow);
+    autoUpdater.initEventListeners();
+    await autoUpdater.checkForUpdates();
 }
 
 app.on('ready', async () => {
@@ -75,14 +82,16 @@ app.on('certificate-error', (event, webContents, url, error, certificate, callba
     callback(true);
 });
 
-app.on('activate', () => {
+app.on('activate', async () => {
     if (!starterWindow && !editorWindow) {
-        createStarterWindow();
+        await createStarterWindow();
     } else if (!!starterWindow) {
         starterWindow.show();
     } else if (!!editorWindow) {
         editorWindow.show();
     }
+    // check updates
+    if (!!autoUpdater) await autoUpdater.checkForUpdates();
 });
 
 app.on('before-quit', event => {

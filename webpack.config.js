@@ -123,6 +123,7 @@ const mainConfig = {
             { from: './src/electron/views/starter.html', to: `./` },
             { from: './src/electron/views/editor.html', to: `./` },
             { from: './resources/img/icon.png', to: `./` },
+            { from: './src/electron/utils/dev-app-update.yml', to: `./` },
         ]),
     ],
 };
