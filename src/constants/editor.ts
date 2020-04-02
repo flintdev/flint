@@ -21,9 +21,9 @@ export enum MVC {
 }
 
 export const MVCViews: Array<ModelView> = [
-    {key: MVC.Model, name: 'Models'},
     {key: MVC.View, name: 'Views'},
     {key: MVC.Controller, name: 'Controllers'},
+    {key: MVC.Model, name: 'Models'},
 ];
 
 export interface ModelView {

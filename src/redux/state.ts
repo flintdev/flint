@@ -88,7 +88,7 @@ export const initState: StoreState = {
     },
     editor: {
         navigation: {
-            currentView: MVC.Model,
+            currentView: MVC.View,
         },
         modelEditor: {
             modelList: [],
