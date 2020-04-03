@@ -38,6 +38,9 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
+      {{#libraries}}
+      "{{name}}": "^{{version}}",
+      {{/libraries}}
       "@flintdev/material-widgets": "latest",
       "@flintdev/action-kit": "latest",
       "@material-ui/core": "^4.9.7",

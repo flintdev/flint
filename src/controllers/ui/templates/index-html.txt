@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>{{projectName}}</title>
+    {{#dependencies}}
+    <script src="{{{src}}}"></script>
+    {{/dependencies}}
 </head>
 <body>
 

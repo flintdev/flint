@@ -74,6 +74,9 @@ export class SourceFileGenerator {
 
     private generateConfigFiles = async () => {
         let files: File[] = [];
+        const {settings} = this.editorData;
+        const dependencies = !!settings.dependencies ? settings.dependencies : [];
+        const libraries = !!settings.libraries ? settings.libraries : [];
         // webpack.config.js
         files.push({
             path: `${this.sourceDirPath}/webpack.config.js`,
@@ -82,7 +85,10 @@ export class SourceFileGenerator {
         // package.json
         files.push({
             path: `${this.sourceDirPath}/package.json`,
-            content: Mustache.render(PackageJSON, {projectName: this.projectName}),
+            content: Mustache.render(PackageJSON, {
+                projectName: this.projectName,
+                libraries
+            }),
         });
         // .babelrc
         files.push({
@@ -97,7 +103,10 @@ export class SourceFileGenerator {
         // index.html
         files.push({
             path: `${this.sourceDirPath}/index.html`,
-            content: Mustache.render(IndexHTML, {projectName: this.projectName})
+            content: Mustache.render(IndexHTML, {
+                projectName: this.projectName,
+                dependencies,
+            })
         });
         // index.jsx
         files.push({
