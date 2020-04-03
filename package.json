@@ -65,10 +65,10 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.41",
+    "@flintdev/material-widgets": "0.0.47",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.5",
-    "@flintdev/ui-editor": "0.0.24",
+    "@flintdev/ui-editor": "0.0.25",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.45",

@@ -15,7 +15,7 @@ export class WidgetManager {
 
     getWidgetData = (name: string): ComponentData => {
         const config = getWidgetConfiguration(name);
-        const {params} = config;
+        const {params, canvas} = config;
         let values: any = {};
         params.forEach((param: Param) => {
             param.items.forEach(item => {
@@ -28,6 +28,7 @@ export class WidgetManager {
             name,
             params: values,
             children: [],
+            canvas
         }
     };
 

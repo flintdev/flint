@@ -7,7 +7,7 @@ import { Dispatch } from "redux";
 import {ConfigState, StoreState, UIEditorState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import UIEditor from "@flintdev/ui-editor";
-import {ActionData, ComponentData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
+import {ActionData, ComponentData, SettingsData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
 import {ActionOperationType, StateUpdaterOperationType} from "@flintdev/ui-editor/dist/constants";
 import {getWidgetConfiguration, getWidget} from '@flintdev/material-widgets';
 import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
@@ -39,6 +39,7 @@ interface State {
     stateUpdaters: StateUpdaterData[],
     initialState: string,
     components: ComponentData[],
+    settings: SettingsData,
 }
 
 class UIEditorView extends React.Component<Props, object> {
@@ -47,6 +48,7 @@ class UIEditorView extends React.Component<Props, object> {
         stateUpdaters: [],
         initialState: '',
         components: [],
+        settings: {},
     };
     operations: any = {};
     uiDataManager: UIDataManager;
@@ -112,6 +114,10 @@ class UIEditorView extends React.Component<Props, object> {
         this.setState({initialState: value});
     };
 
+    handleSettingsChange = (settings: SettingsData) => {
+        this.setState({settings});
+    };
+
     handleComponentsOnUpdate = (components: ComponentData[]) => {
         this.setState({components});
     };
@@ -132,7 +138,7 @@ class UIEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes} = this.props;
-        const {actions, stateUpdaters, initialState, components} = this.state;
+        const {actions, stateUpdaters, initialState, components, settings} = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -144,6 +150,8 @@ class UIEditorView extends React.Component<Props, object> {
                         stateUpdaterOnUpdate={this.handleStateUpdatersOnUpdate}
                         actions={actions}
                         actionOnUpdate={this.handleActionUpdate}
+                        settings={settings}
+                        settingsOnUpdate={this.handleSettingsChange}
                         components={components}
                         componentsOnUpdate={this.handleComponentsOnUpdate}
                         componentOnSelect={this.handleComponentOnSelect}
