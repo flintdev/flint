@@ -1,11 +1,12 @@
 // electron - main.js
 
 import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'electron';
-import {CHANNEL} from './constants';
+import {CHANNEL} from "../constants";
 import path = require('path');
 import {AutoUpdater} from "./utils/autoUpdater";
 import {MenuBuilder} from "./utils/menuBuilder";
 import {startDebugging} from "./utils/startDebugging";
+import {DebugHelper} from "./utils/debugHelper";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow: BrowserWindow,
@@ -110,10 +111,12 @@ app.on('ready', async () => {
             });
     });
     ipcMain.on(CHANNEL.START_DEBUGGING, (event, args) => {
-        const {dir} = args;
+        const {dir, localStorageItems} = args;
         console.log('START_DEBUGGING', dir);
         // startDebugging(dir).then(r => {});
-        createDebugWindow().then(r => {});
+        createDebugWindow().then(r => {
+            new DebugHelper(debugWindow).loadLocalStorage(localStorageItems);
+        });
     });
 });
 

@@ -35,6 +35,7 @@ import {ToastType} from "../../../../components/interface";
 import * as componentsActions from "../../../../redux/modules/components/actions";
 import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
+import {UIDataManager} from "../../../../controllers/ui/uiDataManager";
 
 const styles = createStyles({
     root: {},
@@ -136,7 +137,10 @@ class HeaderView extends React.Component<Props, object> {
     handleRunClick = async () => {
         const {projectDir} = this.props;
         const dir = `${projectDir}/src/ui`;
-        await new MainProcessCommunicator().startDebugging(dir);
+        const uiData = await new UIDataManager(projectDir).getUIData();
+        const localStorage = uiData?.settings?.localStorage;
+        const localStorageItems = !!localStorage ? localStorage : [];
+        await new MainProcessCommunicator().startDebugging(dir, localStorageItems);
     };
 
     render() {

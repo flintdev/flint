@@ -2,7 +2,7 @@
 
 import {app, dialog, BrowserWindow} from 'electron';
 import {autoUpdater} from "electron-updater";
-import {CHANNEL} from "../constants";
+import {CHANNEL} from "../../constants";
 
 export class AutoUpdater {
     mainWindow: BrowserWindow;

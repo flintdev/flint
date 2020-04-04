@@ -45,9 +45,9 @@ export class MainProcessCommunicator {
         }));
     };
 
-    startDebugging = (dir: string) => {
+    startDebugging = (dir: string, localStorageItems: any[]) => {
         return new Promise((resolve, reject) => {
-            ipcRenderer.send(CHANNEL.START_DEBUGGING, {dir});
+            ipcRenderer.send(CHANNEL.START_DEBUGGING, {dir, localStorageItems});
             resolve();
         });
     };

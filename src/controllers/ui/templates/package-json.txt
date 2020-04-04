@@ -39,7 +39,7 @@
   },
   "dependencies": {
       {{#libraries}}
-      "{{name}}": "^{{version}}",
+      "{{{name}}}": "{{{version}}}",
       {{/libraries}}
       "@flintdev/material-widgets": "latest",
       "@flintdev/action-kit": "latest",
