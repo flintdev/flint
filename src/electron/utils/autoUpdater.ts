@@ -57,6 +57,7 @@ export class AutoUpdater {
 
     checkForUpdates = async (alert?: boolean) => {
         this.updateAlert = !!alert;
+        if (!!this.interval) clearInterval(this.interval);
         try {
             await autoUpdater.checkForUpdates();
             this.interval = setInterval(async () => {
