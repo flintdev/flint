@@ -71,7 +71,7 @@
     "@flintdev/ui-editor": "0.0.26",
     "@material-ui/core": "^4.9.5",
     "@material-ui/icons": "^4.9.1",
-    "@material-ui/lab": "^4.0.0-alpha.45",
+    "@material-ui/lab": "^4.0.0-alpha.47",
     "ace-builds": "^1.4.8",
     "electron-updater": "^4.2.0",
     "immutability-helper": "^3.0.1",

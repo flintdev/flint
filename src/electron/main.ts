@@ -5,9 +5,12 @@ import {CHANNEL} from './constants';
 import path = require('path');
 import {AutoUpdater} from "./utils/autoUpdater";
 import {MenuBuilder} from "./utils/menuBuilder";
+import {startDebugging} from "./utils/startDebugging";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
-let starterWindow: BrowserWindow, editorWindow: BrowserWindow;
+let starterWindow: BrowserWindow,
+    editorWindow: BrowserWindow,
+    debugWindow: BrowserWindow;
 let autoUpdater: AutoUpdater;
 let menuBuilder: MenuBuilder;
 
@@ -76,6 +79,24 @@ async function createEditorWindow(projectDir: string) {
     await autoUpdater.checkForUpdates();
 }
 
+async function createDebugWindow() {
+    debugWindow = new BrowserWindow({
+        width: 1024,
+        height: 800,
+        webPreferences: {
+            nodeIntegration: true,
+        }
+    });
+    await debugWindow.loadURL("http://localhost:8080");
+    debugWindow.webContents.openDevTools();
+    debugWindow.on('ready-to-show', () => {
+        debugWindow.show();
+    });
+    debugWindow.on('close', event => {
+        debugWindow = null;
+    });
+}
+
 app.on('ready', async () => {
     await createStarterWindow();
     ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
@@ -87,6 +108,12 @@ app.on('ready', async () => {
             .then(result => {
                 event.reply(CHANNEL.SELECT_DIRECTORY_REPLY, result.filePaths);
             });
+    });
+    ipcMain.on(CHANNEL.START_DEBUGGING, (event, args) => {
+        const {dir} = args;
+        console.log('START_DEBUGGING', dir);
+        // startDebugging(dir).then(r => {});
+        createDebugWindow().then(r => {});
     });
 });
 

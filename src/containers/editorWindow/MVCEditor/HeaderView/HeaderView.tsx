@@ -34,6 +34,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import {ToastType} from "../../../../components/interface";
 import * as componentsActions from "../../../../redux/modules/components/actions";
 import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
+import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {},
@@ -132,6 +133,12 @@ class HeaderView extends React.Component<Props, object> {
         this.props.toastOpen('success', 'Source code is generated successfully');
     };
 
+    handleRunClick = async () => {
+        const {projectDir} = this.props;
+        const dir = `${projectDir}/src/ui`;
+        await new MainProcessCommunicator().startDebugging(dir);
+    };
+
     render() {
         const {classes, projectDir, currentView} = this.props;
         const projectName = new ProjectManager(projectDir).getProjectName();
@@ -180,7 +187,7 @@ class HeaderView extends React.Component<Props, object> {
 
                             </td>
                             <td className={classes.tdRight}>
-                                <Fab size={"small"} className={classes.fabRun}>
+                                <Fab size={"small"} className={classes.fabRun} onClick={this.handleRunClick}>
                                     <PlayArrowIcon/>
                                 </Fab>
                                 <IconButton size={"small"} className={classes.actionIconButtonGreen}>

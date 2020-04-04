@@ -45,4 +45,10 @@ export class MainProcessCommunicator {
         }));
     };
 
+    startDebugging = (dir: string) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.send(CHANNEL.START_DEBUGGING, {dir});
+            resolve();
+        });
+    };
 }
