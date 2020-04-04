@@ -1,4 +1,4 @@
-//
+// src/containers/editorWindow/MVCEditor/HeaderView/HeaderView.tsx
 
 import * as React from 'react';
 import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
@@ -36,6 +36,7 @@ import * as componentsActions from "../../../../redux/modules/components/actions
 import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 import {UIDataManager} from "../../../../controllers/ui/uiDataManager";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = createStyles({
     root: {},
@@ -100,6 +101,12 @@ const styles = createStyles({
             backgroundColor: HeaderViewConfig.ActionIconColorGreenDark,
         }
     },
+    IconButtonCode: {
+        marginRight: 10,
+        width: HeaderViewConfig.FabButtonRadius,
+        height: HeaderViewConfig.FabButtonRadius,
+        border: '1px solid grey',
+    },
     viewButtonDefault: {
         color: themeColor.dimgrey,
         backgroundColor: HeaderViewConfig.ViewButtonBgColor,
@@ -120,6 +127,7 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
 class HeaderView extends React.Component<Props, object> {
     state = {};
     uiSourceFileGenerator: UISourceFileGenerator;
+
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.uiSourceFileGenerator = new UISourceFileGenerator(projectDir);
@@ -191,32 +199,37 @@ class HeaderView extends React.Component<Props, object> {
 
                             </td>
                             <td className={classes.tdRight}>
-                                <Fab size={"small"} className={classes.fabRun} onClick={this.handleRunClick}>
-                                    <PlayArrowIcon/>
-                                </Fab>
-                                <IconButton size={"small"} className={classes.actionIconButtonGreen}>
-                                    <BugReportIcon/>
-                                </IconButton>
+                                <Tooltip title={"Run & Open Debug Window"}>
+                                    <Fab size={"small"} className={classes.fabRun} onClick={this.handleRunClick}>
+                                        <PlayArrowIcon/>
+                                    </Fab>
+                                </Tooltip>
+                                <Tooltip title={"Generate Source Code"}>
+                                    <IconButton
+                                        size={"small"}
+                                        className={classes.IconButtonCode}
+                                        onClick={this.handleGenerateCode}
+                                    >
+                                        <CodeIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                                {/*<IconButton size={"small"} className={classes.actionIconButtonGreen}>*/}
+                                {/*    <BugReportIcon/>*/}
+                                {/*</IconButton>*/}
 
-                                <IconButton size={"small"} className={classes.actionIconButtonGreen}>
-                                    <CheckIcon/>
-                                </IconButton>
-                                <IconButton size={"small"} className={classes.actionIconButtonBlue}>
-                                    <CallReceivedIcon/>
-                                </IconButton>
-                                <IconButton size={"small"} className={classes.actionIconButtonGrey}>
-                                    <HistoryIcon/>
-                                </IconButton>
-                                <IconButton size={"small"} className={classes.actionIconButtonGrey}>
-                                    <SearchIcon/>
-                                </IconButton>
-                                <IconButton
-                                    size={"small"}
-                                    className={classes.actionIconButtonGrey}
-                                    onClick={this.handleGenerateCode}
-                                >
-                                    <CodeIcon/>
-                                </IconButton>
+                                {/*<IconButton size={"small"} className={classes.actionIconButtonGreen}>*/}
+                                {/*    <CheckIcon/>*/}
+                                {/*</IconButton>*/}
+                                {/*<IconButton size={"small"} className={classes.actionIconButtonBlue}>*/}
+                                {/*    <CallReceivedIcon/>*/}
+                                {/*</IconButton>*/}
+                                {/*<IconButton size={"small"} className={classes.actionIconButtonGrey}>*/}
+                                {/*    <HistoryIcon/>*/}
+                                {/*</IconButton>*/}
+                                {/*<IconButton size={"small"} className={classes.actionIconButtonGrey}>*/}
+                                {/*    <SearchIcon/>*/}
+                                {/*</IconButton>*/}
+
                             </td>
                         </tr>
                         </tbody>
@@ -231,7 +244,7 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.navigation, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | componentsActions.ComponentsAction>) => {
     return {
         setCurrentView: (value: string) => dispatch(actions.navigation.setCurrentView(value)),
         toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
