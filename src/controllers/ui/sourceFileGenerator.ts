@@ -66,9 +66,13 @@ export class SourceFileGenerator {
 
     private removeSourceDir = async () => {
         const excluded = ['node_modules'];
-        const dirs = await this.fsHelper.readDir(this.sourceDirPath);
-        for (const name in dirs) {
-            if (!excluded.includes(name)) await this.fsHelper.removeDir(`${this.sourceDirPath}/${name}`);
+        try {
+            const dirs = await this.fsHelper.readDir(this.sourceDirPath);
+            for (const name in dirs) {
+                if (!excluded.includes(name)) await this.fsHelper.removeDir(`${this.sourceDirPath}/${name}`);
+            }
+        } catch (err) {
+
         }
     };
 
