@@ -8,6 +8,7 @@ export class AutoUpdater {
     mainWindow: BrowserWindow;
     interval: any;
     updateAlert: boolean = false;
+    downloading: boolean = false;
     constructor(mainWindow: BrowserWindow) {
         this.mainWindow = mainWindow;
     }
@@ -20,11 +21,13 @@ export class AutoUpdater {
             this.consoleLog('update-available');
             this.consoleLog(info);
             if (this.updateAlert) this.showUpdateAvailableDialog().then(r => {});
+            this.downloading = false;
         });
         autoUpdater.on('update-not-available', (info) => {
             this.consoleLog('update-not-available');
             this.consoleLog(info);
             if (this.updateAlert) this.showNoUpdateDialog().then(r => {});
+            this.downloading = false;
         });
         autoUpdater.on('download-progress', (progressObj) => {
             console.log('download-progress', progressObj);
@@ -33,16 +36,19 @@ export class AutoUpdater {
             // if (progressObj.percent === 100) {
             //     this.showDownloadedDialog().then(r => {});
             // }
+            this.downloading = true
         });
         autoUpdater.on('update-downloaded', (info) => {
             this.consoleLog('update-downloaded');
             this.consoleLog(info);
+            this.downloading = false;
             this.showDownloadedDialog().then(r => {});
         });
         autoUpdater.on('error', (err) => {
             console.log('error', err);
             this.consoleLog('error');
             this.consoleLog(err);
+            this.downloading = false;
         });
     };
 
@@ -53,14 +59,20 @@ export class AutoUpdater {
     stop = () => {
         autoUpdater.removeAllListeners();
         if (!!this.interval) clearInterval(this.interval);
+        this.downloading = false;
     };
 
     checkForUpdates = async (alert?: boolean) => {
         this.updateAlert = !!alert;
+        if (this.downloading) {
+            if (this.updateAlert) await this.showUpdateAvailableDialog();
+            return;
+        }
         if (!!this.interval) clearInterval(this.interval);
         try {
             await autoUpdater.checkForUpdates();
             this.interval = setInterval(async () => {
+                if (this.downloading) return;
                 await autoUpdater.checkForUpdates();
             }, 10*60*1000);
         } catch (e) {
@@ -111,4 +123,5 @@ export class AutoUpdater {
         };
         await dialog.showMessageBox(options);
     };
+
 }
