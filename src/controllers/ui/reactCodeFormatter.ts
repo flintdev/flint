@@ -74,6 +74,9 @@ export class ReactCodeFormatter {
             if (typeof value === "string" && value.includes('state::')) {
                 const statePath = value.split('::')[1];
                 paramsStr += `${space}${key}: ${this.getDataPath(statePath)},\n`;
+            } else if (typeof value === "object") {
+                value = JSON.stringify(value);
+                paramsStr += `${space}${key}: ${value},\n`;
             } else {
                 if (typeof value === "string") value = `"${value}"`;
                 paramsStr += `${space}${key}: ${value},\n`;
