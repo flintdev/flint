@@ -10,3 +10,4 @@ dist/
 webpack-stats.json
 .settings.json
 .DS_Store
+.env

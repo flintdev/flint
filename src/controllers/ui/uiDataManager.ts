@@ -2,7 +2,13 @@
 
 import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
-import {ActionData, ComponentData, SettingsData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
+import {
+    ActionData,
+    ComponentData,
+    PerspectiveData,
+    SettingsData,
+    StateUpdaterData
+} from "@flintdev/ui-editor/dist/interface";
 
 const INITIAL_CONFIG = {};
 
@@ -12,6 +18,7 @@ export interface UIData {
     initialState: string,
     components: ComponentData[],
     settings: SettingsData,
+    perspectives: PerspectiveData[],
 }
 
 export class UIDataManager {

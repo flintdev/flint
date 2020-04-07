@@ -7,7 +7,13 @@ import { Dispatch } from "redux";
 import {ConfigState, StoreState, UIEditorState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import UIEditor from "@flintdev/ui-editor";
-import {ActionData, ComponentData, SettingsData, StateUpdaterData} from "@flintdev/ui-editor/dist/interface";
+import {
+    ActionData,
+    ComponentData,
+    PerspectiveData,
+    SettingsData,
+    StateUpdaterData
+} from "@flintdev/ui-editor/dist/interface";
 import {ActionOperationType, StateUpdaterOperationType} from "@flintdev/ui-editor/dist/constants";
 import {getWidgetConfiguration, getWidget} from '@flintdev/material-widgets';
 import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
@@ -40,6 +46,7 @@ interface State {
     initialState: string,
     components: ComponentData[],
     settings: SettingsData,
+    perspectives: PerspectiveData[]
 }
 
 class UIEditorView extends React.Component<Props, object> {
@@ -49,6 +56,7 @@ class UIEditorView extends React.Component<Props, object> {
         initialState: '',
         components: [],
         settings: {},
+        perspectives: []
     };
     operations: any = {};
     uiDataManager: UIDataManager;
@@ -118,6 +126,10 @@ class UIEditorView extends React.Component<Props, object> {
         this.setState({settings});
     };
 
+    handlePerspectivesOnUpdate = (perspectives: PerspectiveData[]) => {
+        this.setState({perspectives});
+    };
+
     handleComponentsOnUpdate = (components: ComponentData[]) => {
         this.setState({components});
     };
@@ -138,7 +150,7 @@ class UIEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes} = this.props;
-        const {actions, stateUpdaters, initialState, components, settings} = this.state;
+        const {actions, stateUpdaters, initialState, components, settings, perspectives} = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -152,6 +164,8 @@ class UIEditorView extends React.Component<Props, object> {
                         actionOnUpdate={this.handleActionUpdate}
                         settings={settings}
                         settingsOnUpdate={this.handleSettingsChange}
+                        perspectives={perspectives}
+                        perspectivesOnUpdate={this.handlePerspectivesOnUpdate}
                         components={components}
                         componentsOnUpdate={this.handleComponentsOnUpdate}
                         componentOnSelect={this.handleComponentOnSelect}

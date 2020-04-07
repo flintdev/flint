@@ -88,8 +88,8 @@ async function createDebugWindow() {
             nodeIntegration: true,
         }
     });
-    debugWindow.webContents.openDevTools();
     await debugWindow.loadURL("http://localhost:8080");
+    debugWindow.webContents.openDevTools();
     debugWindow.on('ready-to-show', () => {
         debugWindow.show();
     });

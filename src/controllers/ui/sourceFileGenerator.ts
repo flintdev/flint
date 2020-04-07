@@ -189,7 +189,7 @@ export class SourceFileGenerator {
         // redux state.js
         files.push({
             path: `${reduxDir}/state.js`,
-            content: initialState,
+            content: `export const initialState = ${initialState}`,
         });
         await this.batchToCreateFiles(files);
     };
