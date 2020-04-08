@@ -7,6 +7,14 @@
     <script src="{{{src}}}"></script>
     {{/dependencies}}
 </head>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+    }
+</style>
+
 <body>
 
 <div id="content" style="height: 100%"></div>

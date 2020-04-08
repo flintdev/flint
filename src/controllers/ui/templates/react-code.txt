@@ -9,11 +9,12 @@ import {
 // actions
 import * as actions from '../actions';
 
+const RootStyle = {height: '100%'};
 class Root extends React.Component {
     render() {
         const {state} = this.props;
         return (
-            <div>
+            <div style={RootStyle}>
 {{{code}}}
             </div>
         )

@@ -19,7 +19,8 @@
     "install-material-widgets": "npm install @flintdev/material-widgets@latest",
     "update-all": "npm install @flintdev/model-editor@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest",
     "pack-app": "electron-builder",
-    "publish-app": "node build/scripts/publish.js"
+    "publish-app": "node build/scripts/publish.js",
+    "pipeline-prod": "npm run build-prod && npm run pack-app && npm run publish-app"
   },
   "repository": {
     "type": "git",
@@ -67,7 +68,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.50",
+    "@flintdev/material-widgets": "0.0.51",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.6",
     "@flintdev/ui-editor": "0.0.27",
