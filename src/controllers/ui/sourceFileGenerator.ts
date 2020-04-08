@@ -161,7 +161,7 @@ export class SourceFileGenerator {
     };
 
     private generateReduxFiles = async () => {
-        const {initialState, stateUpdaters} = this.editorData;
+        let {initialState, stateUpdaters} = this.editorData;
         const reduxDir = `${this.sourceDirPath}/redux`;
         await this.checkAndCreateDir(reduxDir);
         let files: File[] = [];
@@ -187,6 +187,7 @@ export class SourceFileGenerator {
             content: ReduxStoreJS,
         });
         // redux state.js
+        initialState = !!initialState && initialState !== "" ? initialState : '{}';
         files.push({
             path: `${reduxDir}/state.js`,
             content: `export const initialState = ${initialState}`,
