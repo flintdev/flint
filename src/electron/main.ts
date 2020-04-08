@@ -81,6 +81,11 @@ async function createEditorWindow(projectDir: string) {
 }
 
 async function createDebugWindow() {
+    if (!!debugWindow) {
+        debugWindow.show();
+        debugWindow.reload();
+        return;
+    }
     debugWindow = new BrowserWindow({
         width: 1024,
         height: 800,
