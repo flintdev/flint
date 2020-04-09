@@ -1,6 +1,6 @@
 {
   "name": "flint",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "low-code development platform based on kubernetes",
   "main": "dist/bundles/production/electron/main.js",
   "scripts": {
