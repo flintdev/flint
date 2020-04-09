@@ -20,6 +20,10 @@ import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
 import {UIData, UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import * as componentsActions from "src/redux/modules/components/actions";
 import {ToastType} from "../../../../components/interface";
+import {OpenVSCodeCallback} from "@flintdev/ui-editor/src/containers/Toolbar/ActionsDialog/ActionsDialog";
+import {shell} from 'electron';
+import {UIActionHandler} from "../../../../controllers/ui/uiActionHandler";
+import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {
@@ -148,9 +152,26 @@ class UIEditorView extends React.Component<Props, object> {
         this.operations.addComponent(data);
     };
 
+    handleOpenVSCodeClick = (code: string, callback: OpenVSCodeCallback) => {
+        const action = async () => {
+            const uiActionHandler = new UIActionHandler();
+            await uiActionHandler.writeToTempActionFile(code);
+            await shell.openExternal(uiActionHandler.getVSCodeURL());
+            new MainProcessCommunicator().waitingWindowBackToActive(() => {
+                uiActionHandler.readTempActionFile().then(code => {
+                    callback.backToActionEditor(code);
+                });
+            });
+        };
+        action().then(r => {});
+    }
+
     render() {
         const {classes} = this.props;
         const {actions, stateUpdaters, initialState, components, settings, perspectives} = this.state;
+        // @ts-ignore
+        // @ts-ignore
+        // @ts-ignore
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -173,7 +194,9 @@ class UIEditorView extends React.Component<Props, object> {
                         saveOnClick={this.saveButtonClick}
                         handler={{
                             getWidgetConfig: getWidgetConfiguration,
-                            getWidget: getWidget
+                            getWidget: getWidget,
+                            // @ts-ignore
+                            openVSCode: this.handleOpenVSCodeClick,
                         }}
                     />
 

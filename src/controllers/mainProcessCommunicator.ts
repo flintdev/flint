@@ -8,6 +8,8 @@ export enum Error {
     INVALID_PROJECT_DIR
 }
 
+export type OnActiveFunc = () => void;
+
 export class MainProcessCommunicator {
 
     switchFromStarterToEditorWindow = (projectDir: string) => {
@@ -50,5 +52,11 @@ export class MainProcessCommunicator {
             ipcRenderer.send(CHANNEL.START_DEBUGGING, {dir, localStorageItems});
             resolve();
         });
+    };
+
+    waitingWindowBackToActive = (onActive: OnActiveFunc) => {
+        ipcRenderer.once(CHANNEL.EDITOR_WINDOW_ON_ACTIVE, () => {
+            onActive();
+        })
     };
 }
