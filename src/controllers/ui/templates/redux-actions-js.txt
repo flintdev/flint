@@ -11,6 +11,6 @@ function {{actionName}} (args) {
 
 export const reduxActionMap = {
     {{#updaters}}
-    [types.{{name}}]: {{actionName}}
+    [types.{{name}}]: {{actionName}},
     {{/updaters}}
 };
