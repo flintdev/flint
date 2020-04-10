@@ -169,9 +169,6 @@ class UIEditorView extends React.Component<Props, object> {
     render() {
         const {classes} = this.props;
         const {actions, stateUpdaters, initialState, components, settings, perspectives} = this.state;
-        // @ts-ignore
-        // @ts-ignore
-        // @ts-ignore
         return (
             <div className={classes.root}>
                 <div className={classes.content}>

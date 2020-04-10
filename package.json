@@ -1,6 +1,6 @@
 {
   "name": "flint",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "low-code development platform based on kubernetes",
   "main": "dist/bundles/production/electron/main.js",
   "scripts": {
@@ -68,7 +68,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.52",
+    "@flintdev/material-widgets": "0.0.56",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.6",
     "@flintdev/ui-editor": "0.0.32",

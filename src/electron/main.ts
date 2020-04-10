@@ -70,7 +70,6 @@ async function createEditorWindow(projectDir: string) {
         }
     });
     editorWindow.on('focus', () => {
-        console.log('editor window focus');
         editorWindow.webContents.send(CHANNEL.EDITOR_WINDOW_ON_ACTIVE);
     });
     // init auto updater
