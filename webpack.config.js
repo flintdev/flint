@@ -86,8 +86,7 @@ const rendererConfig = {
     output: {
         path: path.resolve(filePath),
         filename: filename,
-        libraryTarget: "umd",
-        library: 'flintlib'
+        libraryTarget: 'umd',
     },
     plugins: [
         new BundleTracker({
@@ -95,7 +94,12 @@ const rendererConfig = {
         }),
         new webpack.EnvironmentPlugin(processEnv),
     ],
-    target: 'electron-renderer'
+    target: 'electron-renderer',
+    externals: {
+        '@flintdev/material-widgets': 'materialWidgets',
+        'react': 'React',
+        'react-dom': 'ReactDOM'
+    }
 };
 
 const mainConfig = {
@@ -123,6 +127,8 @@ const mainConfig = {
             { from: './src/electron/views/starter.html', to: `./` },
             { from: './src/electron/views/editor.html', to: `./` },
             { from: './resources/img/icon.png', to: `./` },
+            { from: `./resources/scripts/${environment}/react.js`, to: `./` },
+            { from: `./resources/scripts/${environment}/react-dom.js`, to: `./` },
             { from: './src/electron/utils/dev-app-update.yml', to: `./` },
         ]),
     ],

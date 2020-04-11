@@ -1,8 +1,12 @@
 // src/controllers/ui/widgetManager.ts
-import {getWidgetConfiguration, getWidget, widgetInfo} from '@flintdev/material-widgets';
+import * as library from '@flintdev/material-widgets';
 import {ComponentData} from "@flintdev/ui-editor/dist/interface";
 import * as _ from 'lodash';
 import {Param} from "@flintdev/ui-editor/dist/components/ParamFormGenerator/interface";
+
+console.log('library', library);
+// @ts-ignore
+const {widgetInfo, getWidgetConfiguration, getWidget} = library;
 
 export class WidgetManager {
     constructor() {
@@ -15,6 +19,7 @@ export class WidgetManager {
 
     getWidgetData = (name: string): ComponentData => {
         const config = getWidgetConfiguration(name);
+        // @ts-ignore
         const {params, canvas} = config;
         let values: any = {};
         params.forEach((param: Param) => {

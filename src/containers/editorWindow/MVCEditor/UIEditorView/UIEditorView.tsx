@@ -15,7 +15,7 @@ import {
     StateUpdaterData
 } from "@flintdev/ui-editor/dist/interface";
 import {ActionOperationType, StateUpdaterOperationType} from "@flintdev/ui-editor/dist/constants";
-import {getWidgetConfiguration, getWidget} from '@flintdev/material-widgets';
+import * as library from '@flintdev/material-widgets';
 import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
 import {UIData, UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import * as componentsActions from "src/redux/modules/components/actions";
@@ -24,6 +24,8 @@ import {OpenVSCodeCallback} from "@flintdev/ui-editor/src/containers/Toolbar/Act
 import {shell} from 'electron';
 import {UIActionHandler} from "../../../../controllers/ui/uiActionHandler";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
+// @ts-ignore
+const {widgetInfo, getWidgetConfiguration, getWidget} = library;
 
 const styles = createStyles({
     root: {
@@ -190,7 +192,9 @@ class UIEditorView extends React.Component<Props, object> {
                         addComponentOnClick={this.handleAddComponentClick}
                         saveOnClick={this.saveButtonClick}
                         handler={{
+                            // @ts-ignore
                             getWidgetConfig: getWidgetConfiguration,
+                            // @ts-ignore
                             getWidget: getWidget,
                             // @ts-ignore
                             openVSCode: this.handleOpenVSCodeClick,

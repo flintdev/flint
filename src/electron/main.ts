@@ -119,7 +119,6 @@ app.on('ready', async () => {
     });
     ipcMain.on(CHANNEL.START_DEBUGGING, (event, args) => {
         const {dir, localStorageItems} = args;
-        console.log('START_DEBUGGING', dir);
         // startDebugging(dir).then(r => {});
         createDebugWindow().then(r => {
             new DebugHelper(debugWindow).loadLocalStorage(localStorageItems);

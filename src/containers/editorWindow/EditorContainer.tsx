@@ -68,28 +68,30 @@ class EditorContainer extends React.Component<Props, object> {
         const {classes, currentPageIndex, projectDir} = this.props;
         return (
             <ThemeProvider theme={theme}>
-                {!!projectDir &&
-                <div className={classes.root}>
-                    <table className={classes.table}>
-                        <tbody>
-                        <tr>
-                            <td className={classes.tdLeft} valign={"top"}>
-                                <NavigationSidebar/>
-                            </td>
-                            <td valign={"top"}>
-                                <div className={classes.contentContainer}>
-                                    {currentPageIndex === Page.Editor && <MVCEditor/>}
-                                    {currentPageIndex === Page.Files && <FileBrowser/>}
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <ThemeProvider theme={theme}>
+                    {!!projectDir &&
+                    <div className={classes.root}>
+                        <table className={classes.table}>
+                            <tbody>
+                            <tr>
+                                <td className={classes.tdLeft} valign={"top"}>
+                                    <NavigationSidebar/>
+                                </td>
+                                <td valign={"top"}>
+                                    <div className={classes.contentContainer}>
+                                        {currentPageIndex === Page.Editor && <MVCEditor/>}
+                                        {currentPageIndex === Page.Files && <FileBrowser/>}
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                    <Toast/>
+                        <Toast/>
 
-                </div>
-                }
+                    </div>
+                    }
+                </ThemeProvider>
             </ThemeProvider>
         )
     }
