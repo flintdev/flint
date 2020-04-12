@@ -11,6 +11,7 @@ import * as actions from "../../../redux/modules/starter/actions";
 import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Alert from '@material-ui/lab/Alert';
 
 const styles = createStyles({
     root: {
@@ -35,6 +36,11 @@ const styles = createStyles({
         marginBottom: 10,
         width: 300,
     },
+    alert: {
+        marginBottom: 20,
+        marginLeft: 30,
+        marginRight: 30,
+    },
     titleText: {
         fontSize: 24,
         fontWeight: 'bold'
@@ -49,13 +55,24 @@ export interface Props extends WithStyles<typeof styles>{
     createProjectDialogOpen?: () => void,
 }
 
-class ActionView extends React.Component<Props, object> {
-    state = {
+interface State {
+    preinstallStatus: 'not_started' | 'loading' | 'complete' | 'error',
+}
 
+class ActionView extends React.Component<Props, object> {
+    state: State = {
+        preinstallStatus: 'not_started'
     };
 
     componentDidMount(): void {
+        new MainProcessCommunicator().addListenerForPreinstallPlugins((args) => {
+            const {status} = args;
+            this.setState({preinstallStatus: status});
+        });
+    }
 
+    componentWillUnmount(): void {
+        new MainProcessCommunicator().removeListenerForPreinstallPlugins();
     }
 
     handleCreateButtonClick = () => {
@@ -66,7 +83,6 @@ class ActionView extends React.Component<Props, object> {
         const communicator = new MainProcessCommunicator();
         communicator.selectDirectory()
             .then((filePath: string) => {
-                console.log(filePath);
                 communicator.switchFromStarterToEditorWindow(filePath)
                     .then(() => {
 
@@ -83,6 +99,8 @@ class ActionView extends React.Component<Props, object> {
 
     render() {
         const {classes} = this.props;
+        const {preinstallStatus} = this.state;
+        const disabled = preinstallStatus !== 'complete';
         return (
             <div className={classes.root}>
                 <div className={classes.logoContainer}>
@@ -90,11 +108,18 @@ class ActionView extends React.Component<Props, object> {
                     <Typography className={classes.titleText}>{StarterConfig.ActionView.title}</Typography><br/>
                     <Typography className={classes.descriptionText}>{StarterConfig.ActionView.description}</Typography>
                 </div>
+                {preinstallStatus === 'loading' &&
+                <Alert severity={"info"} variant={"outlined"} className={classes.alert}>Checking and installing required plugins...</Alert>
+                }
+                {preinstallStatus === 'error' &&
+                <Alert severity={"error"} variant={"outlined"} className={classes.alert}>Unexpected error occurs</Alert>
+                }
                 <div className={classes.actionsContainer}>
                     <Button
                         variant={"outlined"}
                         className={classes.actionButton}
                         onClick={this.handleCreateButtonClick}
+                        disabled={disabled}
                     >
                         {StarterConfig.ActionView.action.create}
                     </Button><br/>
@@ -102,12 +127,14 @@ class ActionView extends React.Component<Props, object> {
                         variant={"outlined"}
                         className={classes.actionButton}
                         onClick={this.handleOpenButtonClick}
+                        disabled={disabled}
                     >
                         {StarterConfig.ActionView.action.open}
                     </Button><br/>
                     <Button
                         variant={"outlined"}
                         className={classes.actionButton}
+                        disabled={disabled}
                     >
                         {StarterConfig.ActionView.action.checkout}
                     </Button><br/>

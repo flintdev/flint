@@ -25,10 +25,12 @@
 <body>
 
 <div id="rootContainer"></div>
-<script src="./react.js"></script>
-<script src="./react-dom.js"></script>
-<script src="/Users/naitianliu/WebstormProjects/material-widgets/assets/plugin.js"></script>
-<script src="../editor.js"></script>
+<script src="{{dir}}/react.js"></script>
+<script src="{{dir}}/react-dom.js"></script>
+{{#plugins}}
+<script src="{{{path}}}"></script>
+{{/plugins}}
+<script src="{{dir}}/../editor.js"></script>
 
 </body>
 

@@ -59,4 +59,15 @@ export class MainProcessCommunicator {
             onActive();
         })
     };
+
+    addListenerForPreinstallPlugins = (statusUpdated: (args: any) => void) => {
+        ipcRenderer.on(CHANNEL.PREINSTALL_PLUGINS, (event, args) => {
+            console.log('args', args);
+            statusUpdated(args);
+        });
+    }
+
+    removeListenerForPreinstallPlugins = () => {
+        ipcRenderer.removeListener(CHANNEL.PREINSTALL_PLUGINS, () => {});
+    };
 }

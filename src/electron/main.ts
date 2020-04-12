@@ -7,6 +7,8 @@ import {AutoUpdater} from "./utils/autoUpdater";
 import {MenuBuilder} from "./utils/menuBuilder";
 import {startDebugging} from "./utils/startDebugging";
 import {DebugHelper} from "./utils/debugHelper";
+import {StarterMenuBuilder} from "./utils/starterMenuBuilder";
+import {PluginFileManager} from "../controllers/pluginFileManager";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow: BrowserWindow,
@@ -14,6 +16,7 @@ let starterWindow: BrowserWindow,
     debugWindow: BrowserWindow;
 let autoUpdater: AutoUpdater;
 let menuBuilder: MenuBuilder;
+let starterMenuBuilder: StarterMenuBuilder;
 
 nativeTheme.themeSource = "light";
 
@@ -26,6 +29,12 @@ async function createStarterWindow() {
         }
     });
     starterWindow.loadFile(path.join(__dirname, 'starter.html')).then(r => {
+        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'loading'});
+        new PluginFileManager().preinstallPlugins().then(r => {
+            starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'complete'});
+        }).catch(e => {
+            starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'error'});
+        });
     });
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
@@ -39,6 +48,8 @@ async function createStarterWindow() {
             starterWindow = null;
         }
     });
+    starterMenuBuilder = new StarterMenuBuilder(starterWindow);
+    starterMenuBuilder.build();
 }
 
 async function createEditorWindow(projectDir: string) {
@@ -47,7 +58,9 @@ async function createEditorWindow(projectDir: string) {
             nodeIntegration: true,
         }
     });
-    editorWindow.loadFile(path.join(__dirname, 'editor.html')).then(r => {
+    const templatePath = path.join(__dirname, 'editor.html');
+    const filePath = await new PluginFileManager().renderHtmlTemplateWithPluginFiles(__dirname, templatePath);
+    editorWindow.loadFile(filePath).then(r => {
         editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
         editorWindow.maximize();
         if (!!starterWindow) {

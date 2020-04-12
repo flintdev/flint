@@ -3,9 +3,14 @@
 import ErrnoException = NodeJS.ErrnoException;
 import {Dirent} from "fs";
 
-const fs = window.require('fs');
-const homedir = window.require('os').homedir();
-const rimraf = window.require("rimraf");
+// const fs = window.require('fs');
+// const homedir = window.require('os').homedir();
+// const rimraf = window.require("rimraf");
+
+import * as fs from "fs";
+import {homedir as homedirFunc} from "os";
+import * as rimraf from "rimraf";
+const homedir = homedirFunc();
 
 const FILES_IGNORE = [
     '.DS_Store'
@@ -94,7 +99,18 @@ export class FSHelper {
         return `${homedir}/Flint/untitled`;
     };
 
-
+    checkAndCreateDirWithWriteAccess = (dirPath: string) => {
+        return new Promise((resolve, reject) => {
+            fs.access(dirPath, fs.constants.W_OK, err => {
+                if (!!err) {
+                    fs.mkdir(dirPath, {recursive: true}, err1 => {
+                        if (!!err1) reject(err1)
+                        else resolve();
+                    })
+                } else resolve();
+            });
+        });
+    };
 
     getHomeDir = () => {
         return homedir;

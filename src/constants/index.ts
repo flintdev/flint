@@ -1,6 +1,7 @@
 // src/constants/index.ts
 
 import {createMuiTheme} from "@material-ui/core/styles";
+import {PluginData} from "../interface";
 
 export const themeColor = {
     primary: '#416CED',
@@ -46,4 +47,17 @@ export const CHANNEL = {
     CONSOLE: 'CONSOLE',
     START_DEBUGGING: 'START_DEBUGGING',
     EDITOR_WINDOW_ON_ACTIVE: 'EDITOR_WINDOW_ON_ACTIVE',
+    PREINSTALL_PLUGINS: 'PREINSTALL_PLUGINS',
+    STARTER_VIEW_LOADED: 'STARTER_VIEW_LOADED',
 };
+
+export const PluginProviders: PluginData[] = [
+    {
+        type: "widget",
+        id: 'material-widgets',
+        name: "Material Design Widgets",
+        owner: 'flintdev',
+        repo: 'material-widgets',
+        preinstalled: true,
+    }
+];
