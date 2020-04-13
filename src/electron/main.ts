@@ -9,6 +9,7 @@ import {startDebugging} from "./utils/startDebugging";
 import {DebugHelper} from "./utils/debugHelper";
 import {StarterMenuBuilder} from "./utils/starterMenuBuilder";
 import {PluginFileManager} from "../controllers/pluginFileManager";
+import {MigrationHandler} from "../migrations/migrationHandler";
 
 const environment = !!process.env.NODE_ENV ? process.env.NODE_ENV : 'production';
 let starterWindow: BrowserWindow,
@@ -122,7 +123,11 @@ app.on('ready', async () => {
     await createStarterWindow();
     ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
         const projectDir = args;
-        createEditorWindow(projectDir);
+        const action = async () => {
+            await new MigrationHandler(projectDir).migrate()
+            await createEditorWindow(projectDir);
+        };
+        action().then(r => {});
     });
     ipcMain.on(CHANNEL.SELECT_DIRECTORY, (event, args) => {
         dialog.showOpenDialog(starterWindow, {properties: ['openDirectory']})

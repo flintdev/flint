@@ -9,6 +9,7 @@ import {
     SettingsData,
     StateUpdaterData
 } from "@flintdev/ui-editor/dist/interface";
+import {UI_DATA_SCHEMA_VERSION} from "../../constants/data";
 
 const INITIAL_CONFIG = {};
 
@@ -73,12 +74,17 @@ export class UIDataManager {
         }
     };
 
-    private fetchConfigData = async () => {
-        const data = await this.fsHelper.readFile(this.configPath);
-        return JSON.parse(<string>data);
+    fetchConfigData = async () => {
+        try {
+            const data = await this.fsHelper.readFile(this.configPath);
+            return JSON.parse(<string>data);
+        } catch (err) {
+            return null;
+        }
     };
 
-    private saveConfigData = async (configJson: object) => {
+    saveConfigData = async (configJson: object) => {
+        _.set(configJson, ['schemaVersion'], UI_DATA_SCHEMA_VERSION);
         await this.fsHelper.createFile(this.configPath, JSON.stringify(configJson));
         return true
     };

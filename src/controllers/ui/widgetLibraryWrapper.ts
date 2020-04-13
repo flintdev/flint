@@ -2,11 +2,8 @@
 
 import {PluginIdLibraryMap} from "../../constants";
 
-const DefaultPluginId = 'material-widgets';
-
 export function getWidget(name: string, props: any) {
-    let tempList = name.split('::');
-    if (tempList.length === 1) tempList = [DefaultPluginId, ...tempList];
+    const tempList = name.split('::');
     const widgetName = tempList[1];
     const pluginId = tempList[0];
     const libraryName = PluginIdLibraryMap[pluginId];
@@ -16,8 +13,7 @@ export function getWidget(name: string, props: any) {
 }
 
 export function getWidgetConfiguration(name: string) {
-    let tempList = name.split('::');
-    if (tempList.length === 1) tempList = [DefaultPluginId, ...tempList];
+    const tempList = name.split('::');
     const widgetName = tempList[1];
     const pluginId = tempList[0];
     const libraryName = PluginIdLibraryMap[pluginId];
