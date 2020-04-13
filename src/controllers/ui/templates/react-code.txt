@@ -1,15 +1,14 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 // widgets
-import {
-    {{#widgets}}
-    {{name}},
-    {{/widgets}}
-} from "@flintdev/material-widgets";
+{{#widgets}}
+import { {{{componentName}}} as {{{elementName}}} } from "@flintdev/{{{pluginId}}}";
+{{/widgets}}
 // actions
 import * as actions from '../actions';
 
 const RootStyle = {height: '100%'};
+
 class Root extends React.Component {
     render() {
         const {state} = this.props;

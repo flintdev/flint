@@ -6,13 +6,16 @@ import ComponentWithoutChildren from './templates/component-without-children.txt
 import RepeatComponent from './templates/repeat-component.txt';
 import * as Mustache from "mustache";
 import {DisplayInfo} from "@flintdev/ui-editor/dist/containers/ComponentEditPane/DisplayPane/interface";
+import * as _ from 'lodash';
 
 export class ReactCodeFormatter {
     components: ComponentData[];
-    widgetList: string[];
+    widgetNameList: string[];
+    widgetList: any[];
     actionList: string[];
     constructor(components: ComponentData[]) {
         this.components = components;
+        this.widgetNameList = [];
         this.widgetList = [];
         this.actionList = [];
     }
@@ -22,15 +25,27 @@ export class ReactCodeFormatter {
         let code = codeStrList.join('\n');
         code = this.reformatStringWithIndent(12, code);
         return {
-            widgets: this.widgetList.map(name => {return {name}}),
+            widgets: this.widgetList,
             actions: this.actionList.map(name => {return {name}}),
             code
         }
     };
 
+    decodeName = (name: string) => {
+        const tempList = name.split("::");
+        let pluginId = tempList[0];
+        const componentName = tempList[1];
+        const elementName = `${_.capitalize(_.camelCase(pluginId))}${componentName}`;
+        return {elementName, componentName, pluginId};
+    };
+
     recurToGetCodeStr = (parentIndent: number, componentData: ComponentData): string => {
         const {name, params, events, children, display, repeat, tag} = componentData;
-        if (!this.widgetList.includes(name)) this.widgetList.push(name);
+        const {elementName, componentName, pluginId} = this.decodeName(name);
+        if (!this.widgetNameList.includes(name)) {
+            this.widgetNameList.push(name);
+            this.widgetList.push({elementName, componentName, pluginId});
+        }
         const paramsStr = this.generateParamsStr(params);
         const eventsStr = !!events ? this.generateEventsStr(events) : '';
         let kvList: any[] = [];
@@ -46,9 +61,9 @@ export class ReactCodeFormatter {
         // generate react component string
         if (!!children && children.length > 0) {
             const childCodeStrList: string[] = children.map(child => this.recurToGetCodeStr(parentIndent, child));
-            codeStr = Mustache.render(ComponentWithChildren, {name, kvList, children: childCodeStrList.join('\n')});
+            codeStr = Mustache.render(ComponentWithChildren, {name: elementName, kvList, children: childCodeStrList.join('\n')});
         } else {
-            codeStr = Mustache.render(ComponentWithoutChildren, {name, kvList});
+            codeStr = Mustache.render(ComponentWithoutChildren, {name: elementName, kvList});
         }
         const displayCondition = this.getDisplayCondition(display as any);
         // repeat component
