@@ -26,7 +26,9 @@ export class AutoUpdater {
         autoUpdater.on('update-not-available', (info) => {
             this.consoleLog('update-not-available');
             this.consoleLog(info);
-            if (this.updateAlert) this.showNoUpdateDialog().then(r => {});
+            if (this.updateAlert) this.showNoUpdateDialog().then(r => {
+                this.updateAlert = false;
+            });
             this.downloading = false;
         });
         autoUpdater.on('download-progress', (progressObj) => {
@@ -72,6 +74,7 @@ export class AutoUpdater {
         try {
             await autoUpdater.checkForUpdates();
             this.interval = setInterval(async () => {
+                this.updateAlert = false;
                 if (this.downloading) return;
                 await autoUpdater.checkForUpdates();
             }, 10*60*1000);
