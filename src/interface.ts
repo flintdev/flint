@@ -16,4 +16,5 @@ export interface PluginData {
     preinstalled?: boolean,
     currentVersion?: string,
     newVersion?: string,
+    libraryName?: string
 }

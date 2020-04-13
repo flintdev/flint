@@ -113,6 +113,14 @@ export class PluginFileManager {
         return pluginsWithNewUpdate;
     };
 
+    getInstalledPluginsSync = () => {
+        const dirs = this.fsHelper.readDirSync(this.widgetsDirPath);
+        return dirs.filter(dir => dir.type === 'dir').map(dir => {
+            const id = dir.name;
+            return this.pluginDataMap[id];
+        })
+    };
+
     preinstallPlugins = async () => {
         await this.checkAndCreateRootDir();
         let dirs = await this.fsHelper.readDir(this.widgetsDirPath);

@@ -3,10 +3,6 @@
 import ErrnoException = NodeJS.ErrnoException;
 import {Dirent} from "fs";
 
-// const fs = window.require('fs');
-// const homedir = window.require('os').homedir();
-// const rimraf = window.require("rimraf");
-
 import * as fs from "fs";
 import {homedir as homedirFunc} from "os";
 import * as rimraf from "rimraf";
@@ -63,6 +59,17 @@ export class FSHelper {
                 resolve(fileInfoList);
             })
         });
+    };
+
+    readDirSync = (path: string) => {
+        const files = fs.readdirSync(path, {withFileTypes: true});
+        const fileInfoList: FileInfo[] = files.filter(file => !FILES_IGNORE.includes(file.name)).map(file => {
+            return {
+                name: file.name,
+                type: file.isDirectory() ? 'dir' : 'file'
+            }
+        });
+        return fileInfoList;
     };
 
     readFile = (path: string) => {

@@ -96,7 +96,6 @@ const rendererConfig = {
     ],
     target: 'electron-renderer',
     externals: {
-        '@flintdev/material-widgets': 'materialWidgets',
         'react': 'React',
         'react-dom': 'ReactDOM'
     }

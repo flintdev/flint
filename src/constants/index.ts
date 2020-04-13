@@ -59,5 +59,10 @@ export const PluginProviders: PluginData[] = [
         owner: 'flintdev',
         repo: 'material-widgets',
         preinstalled: true,
+        libraryName: 'materialWidgets'
     }
 ];
+
+export const PluginIdLibraryMap: any = {
+    'material-widgets': 'materialWidgets'
+}
