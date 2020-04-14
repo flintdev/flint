@@ -29,20 +29,24 @@ export interface Props extends WithStyles<typeof styles>, NavigationState {
 
 class MVCEditor extends React.Component<Props, object> {
     state = {};
-
+    operations: any = {};
     componentDidMount(): void {
 
     }
+
+    handleBeforeGeneratingCode = async () => {
+        await this.operations.saveData();
+    };
 
     render() {
         const {classes, currentView} = this.props;
         return (
             <div className={classes.root}>
-                <HeaderView/>
+                <HeaderView beforeGeneratingCode={this.handleBeforeGeneratingCode}/>
                 <div className={classes.content}>
                     {currentView === MVC.Model && <ModelListView/>}
                     {currentView === MVC.Controller && <ProcessEditorView/>}
-                    {currentView === MVC.View && <UIEditorView/>}
+                    {currentView === MVC.View && <UIEditorView operations={this.operations}/>}
                 </div>
             </div>
         )

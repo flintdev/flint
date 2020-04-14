@@ -13,8 +13,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Paper from "@material-ui/core/Paper";
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import {MVC, MVCViews} from "../../../../constants/editor";
 import WebIcon from '@material-ui/icons/Web';
 import ControlCameraIcon from '@material-ui/icons/ControlCamera';
@@ -25,11 +23,6 @@ import {HeaderViewConfig} from "../../../../constants/styles";
 import IconButton from '@material-ui/core/IconButton';
 import Fab from '@material-ui/core/Fab';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import BugReportIcon from '@material-ui/icons/BugReport';
-import SearchIcon from '@material-ui/icons/Search';
-import CheckIcon from '@material-ui/icons/Check';
-import HistoryIcon from '@material-ui/icons/History';
-import CallReceivedIcon from '@material-ui/icons/CallReceived';
 import CodeIcon from '@material-ui/icons/Code';
 import {ToastType} from "../../../../components/interface";
 import * as componentsActions from "../../../../redux/modules/components/actions";
@@ -122,6 +115,8 @@ const ViewIconMap = {
 export interface Props extends WithStyles<typeof styles>, NavigationState, ConfigState {
     setCurrentView: (value: string) => void,
     toastOpen: (toastType: ToastType, message: string) => void,
+    increaseMark: () => void,
+    beforeGeneratingCode: () => Promise<void>,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -138,6 +133,7 @@ class HeaderView extends React.Component<Props, object> {
     };
 
     handleGenerateCode = async () => {
+        await this.props.beforeGeneratingCode();
         await this.uiSourceFileGenerator.generate();
         this.props.toastOpen('success', 'Source code is generated successfully');
     };
@@ -213,23 +209,6 @@ class HeaderView extends React.Component<Props, object> {
                                         <CodeIcon/>
                                     </IconButton>
                                 </Tooltip>
-                                {/*<IconButton size={"small"} className={classes.actionIconButtonGreen}>*/}
-                                {/*    <BugReportIcon/>*/}
-                                {/*</IconButton>*/}
-
-                                {/*<IconButton size={"small"} className={classes.actionIconButtonGreen}>*/}
-                                {/*    <CheckIcon/>*/}
-                                {/*</IconButton>*/}
-                                {/*<IconButton size={"small"} className={classes.actionIconButtonBlue}>*/}
-                                {/*    <CallReceivedIcon/>*/}
-                                {/*</IconButton>*/}
-                                {/*<IconButton size={"small"} className={classes.actionIconButtonGrey}>*/}
-                                {/*    <HistoryIcon/>*/}
-                                {/*</IconButton>*/}
-                                {/*<IconButton size={"small"} className={classes.actionIconButtonGrey}>*/}
-                                {/*    <SearchIcon/>*/}
-                                {/*</IconButton>*/}
-
                             </td>
                         </tr>
                         </tbody>
@@ -248,6 +227,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
     return {
         setCurrentView: (value: string) => dispatch(actions.navigation.setCurrentView(value)),
         toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
+        increaseMark: () => dispatch(actions.uiEditor.increaseMark())
     }
 };
 

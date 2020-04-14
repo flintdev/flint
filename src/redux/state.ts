@@ -56,7 +56,8 @@ export interface ProcessEditorState {
 export interface UIEditorState {
     addWidgetDialog: {
         open: boolean
-    }
+    },
+    _mark: number
 }
 
 export interface FilesState {
@@ -116,7 +117,8 @@ export const initState: StoreState = {
         uiEditor: {
             addWidgetDialog: {
                 open: false,
-            }
+            },
+            _mark: 0
         }
     },
     files: {

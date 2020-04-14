@@ -12,7 +12,9 @@ export function addWidgetDialogClose(): AddWidgetDialogClose {
     return { type: types.ADD_WIDGET_DIALOG_CLOSE }
 }
 
-
+export function increaseMark(): IncreaseMark {
+    return { type: types.INCREASE_MARK }
+}
 
 // interfaces
 
@@ -24,7 +26,12 @@ export interface AddWidgetDialogOpen {
     type: typeof types.ADD_WIDGET_DIALOG_OPEN,
 }
 
+export interface IncreaseMark {
+    type: typeof types.INCREASE_MARK,
+}
+
 export type UIEditorAction =
+    IncreaseMark |
     AddWidgetDialogOpen |
     AddWidgetDialogClose;
 

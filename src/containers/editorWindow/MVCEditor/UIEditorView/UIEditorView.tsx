@@ -40,6 +40,7 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, UIEditorState, ConfigState {
+    operations: any,
     addWidgetDialogOpen: () => void,
     toastOpen: (toastType: ToastType, message: string) => void,
 }
@@ -65,8 +66,16 @@ class UIEditorView extends React.Component<Props, object> {
     operations: any = {};
     uiDataManager: UIDataManager;
     componentDidMount(): void {
+        this.props.operations.saveData = async () => {
+            const data: UIData = {...this.state};
+            await this.uiDataManager.saveUIData(data);
+        };
         this.uiDataManager = new UIDataManager(this.props.projectDir);
         this.initActions().then(r => {});
+    }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<object>, snapshot?: any): void {
+
     }
 
     initActions = async () => {

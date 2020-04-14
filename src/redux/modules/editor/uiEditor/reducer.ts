@@ -19,6 +19,10 @@ export function reducer(state: UIEditorState, action: UIEditorAction) {
                     open: {$set: false}
                 }
             });
+        case types.INCREASE_MARK:
+            return update(state, {
+                _mark: {$set: state._mark + 1}
+            });
 
         default:
             return state;
