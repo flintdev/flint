@@ -30,6 +30,9 @@ import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controll
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 import {UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import Tooltip from "@material-ui/core/Tooltip";
+import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
+import NotificationListView from "./NotificationListView";
+import Badge from "@material-ui/core/Badge";
 
 const styles = createStyles({
     root: {},
@@ -94,11 +97,16 @@ const styles = createStyles({
             backgroundColor: HeaderViewConfig.ActionIconColorGreenDark,
         }
     },
-    IconButtonCode: {
+    IconButtonNotification: {
         marginRight: 10,
         width: HeaderViewConfig.FabButtonRadius,
         height: HeaderViewConfig.FabButtonRadius,
         border: '1px solid grey',
+    },
+    fabCode: {
+        marginRight: 10,
+        width: HeaderViewConfig.FabButtonRadius,
+        height: HeaderViewConfig.FabButtonRadius,
     },
     viewButtonDefault: {
         color: themeColor.dimgrey,
@@ -117,6 +125,7 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
     toastOpen: (toastType: ToastType, message: string) => void,
     increaseMark: () => void,
     beforeGeneratingCode: () => Promise<void>,
+    notificationPopoverOpen: (anchorEl: HTMLButtonElement) => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -145,6 +154,34 @@ class HeaderView extends React.Component<Props, object> {
         const localStorage = uiData?.settings?.localStorage;
         const localStorageItems = !!localStorage ? localStorage : [];
         await new MainProcessCommunicator().startDebugging(dir, localStorageItems);
+    };
+
+    handleNotificationClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        this.props.notificationPopoverOpen(event.currentTarget);
+    };
+
+    renderNotificationButton = () => {
+        const {classes, notifications} = this.props;
+        const hasNotifications = !!notifications && notifications.length > 0;
+        const button = (
+            <IconButton
+                size={"small"}
+                className={classes.IconButtonNotification}
+                onClick={this.handleNotificationClick}
+            >
+                <NotificationsNoneIcon/>
+            </IconButton>
+        );
+        return (
+            <React.Fragment>
+                {hasNotifications &&
+                <Badge badgeContent={notifications.length} color={"secondary"}>
+                    {button}
+                </Badge>
+                }
+                {!hasNotifications && button}
+            </React.Fragment>
+        )
     };
 
     render() {
@@ -201,19 +238,26 @@ class HeaderView extends React.Component<Props, object> {
                                     </Fab>
                                 </Tooltip>
                                 <Tooltip title={"Generate Source Code"}>
-                                    <IconButton
+                                    <Fab
                                         size={"small"}
-                                        className={classes.IconButtonCode}
+                                        className={classes.fabCode}
                                         onClick={this.handleGenerateCode}
+                                        color={"primary"}
                                     >
                                         <CodeIcon/>
-                                    </IconButton>
+                                    </Fab>
+                                </Tooltip>
+                                <Tooltip title={"Notifications"}>
+                                    {this.renderNotificationButton()}
                                 </Tooltip>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </Paper>
+
+                <NotificationListView/>
+
             </div>
         )
     }
@@ -227,7 +271,8 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
     return {
         setCurrentView: (value: string) => dispatch(actions.navigation.setCurrentView(value)),
         toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
-        increaseMark: () => dispatch(actions.uiEditor.increaseMark())
+        increaseMark: () => dispatch(actions.uiEditor.increaseMark()),
+        notificationPopoverOpen: (anchorEl: HTMLButtonElement) => dispatch(actions.navigation.notificationPopoverOpen(anchorEl)),
     }
 };
 

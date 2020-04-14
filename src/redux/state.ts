@@ -1,7 +1,7 @@
 // redux/state.ts
 import {MVC} from "../constants/editor";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
-import {FileTreeNode} from "../interface";
+import {FileTreeNode, Notification} from "../interface";
 import {ToastType} from "../components/interface";
 
 export interface EditorState {
@@ -26,6 +26,8 @@ export interface ConfigState {
 
 export interface NavigationState {
     currentView: string,
+    notificationPopoverAnchorEl: any,
+    notifications: Notification[],
 }
 
 export interface ModelEditorState {
@@ -90,6 +92,8 @@ export const initState: StoreState = {
     editor: {
         navigation: {
             currentView: MVC.View,
+            notificationPopoverAnchorEl: null,
+            notifications: [],
         },
         modelEditor: {
             modelList: [],

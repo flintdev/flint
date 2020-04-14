@@ -19,3 +19,11 @@ export interface PluginData {
     libraryName?: string,
     description?: string,
 }
+
+export type NotificationType = 'widget-update';
+
+export interface Notification {
+    type: NotificationType,
+    title: string,
+    subtitle: string,
+}
