@@ -29,14 +29,6 @@ async function createStarterWindow() {
             nodeIntegration: true
         }
     });
-    starterWindow.loadFile(path.join(__dirname, 'starter.html')).then(r => {
-        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'loading'});
-        new PluginFileManager().preinstallPlugins().then(r => {
-            starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'complete'});
-        }).catch(e => {
-            starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'error'});
-        });
-    });
     starterWindow.on('ready-to-show', () => {
         starterWindow.show();
     });
@@ -51,6 +43,17 @@ async function createStarterWindow() {
     });
     starterMenuBuilder = new StarterMenuBuilder(starterWindow);
     starterMenuBuilder.build();
+    //
+    await starterWindow.loadFile(path.join(__dirname, 'starter.html'));
+    starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'loading'});
+    try {
+        await new PluginFileManager().checkAndFetchPluginsConfig();
+        await new PluginFileManager().preinstallPlugins()
+        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'complete'});
+    } catch (e) {
+        console.log(e);
+        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'error'});
+    }
 }
 
 async function createEditorWindow(projectDir: string) {

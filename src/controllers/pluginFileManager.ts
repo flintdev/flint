@@ -7,23 +7,44 @@ import {GithubHelper} from "./utils/githubHelper";
 import * as request from 'request';
 import * as fs from 'fs';
 import {PluginData} from "../interface";
-import {PluginProviders} from "../constants";
+import {PluginRegistry} from "../constants";
 import * as Mustache from "mustache";
 
 const BUNDLE_FILE_NAME = 'plugin.js';
 
 export class PluginFileManager {
     widgetsDirPath: string;
+    configPath: string;
     fsHelper: FSHelper = new FSHelper();
     githubHelper: GithubHelper = new GithubHelper();
     pluginDataMap: any = {};
     constructor() {
         this.widgetsDirPath = `${app.getPath('userData')}/plugins/widgets`;
-        console.log('widgetsDirPath', this.widgetsDirPath);
-        PluginProviders.forEach(pluginData => {
-            const {id} = pluginData;
-            this.pluginDataMap[id] = pluginData;
-        })
+        this.configPath = `${app.getPath('userData')}/plugins/config.json`;
+
+    }
+
+    checkAndFetchPluginsConfig = async () => {
+        const configJson = await this.getPluginsConfigJson();
+        if (!configJson) {
+            await this.reloadPluginsConfigFromRegistry();
+        }
+    };
+
+    reloadPluginsConfigFromRegistry = async () => {
+        // fetch plugins info from plugin-registry
+        const {owner, repo, path} = PluginRegistry;
+        const content = await this.githubHelper.getFileContent(owner, repo, path);
+        await this.fsHelper.createFile(this.configPath, content);
+    };
+
+    getPluginsConfigJson = async () => {
+        try {
+            const content = await this.fsHelper.readFile(this.configPath);
+            return JSON.parse(content);
+        } catch (err) {
+            return null;
+        }
     }
 
     checkAndCreateRootDir = async () => {
@@ -113,20 +134,27 @@ export class PluginFileManager {
         return pluginsWithNewUpdate;
     };
 
-    getInstalledPluginsSync = () => {
+    getInstalledPlugins = async () => {
+        const configJson = await this.getPluginsConfigJson();
+        let pluginDataMap: any = {};
+        configJson.plugins.forEach((pluginData: any) => {
+            const {id} = pluginData;
+            this.pluginDataMap[id] = pluginData;
+        })
         const dirs = this.fsHelper.readDirSync(this.widgetsDirPath);
         return dirs.filter(dir => dir.type === 'dir').map(dir => {
             const id = dir.name;
-            return this.pluginDataMap[id];
+            return pluginDataMap[id];
         })
     };
 
     preinstallPlugins = async () => {
+        const configJson = await this.getPluginsConfigJson();
         await this.checkAndCreateRootDir();
         let dirs = await this.fsHelper.readDir(this.widgetsDirPath);
         dirs = dirs.filter(dir => dir.type === 'dir');
         if (dirs.length > 0) return;
-        const plugins = PluginProviders.filter(plugin => !!plugin.preinstalled);
+        const plugins = configJson.plugins.filter((plugin: any) => !!plugin.preinstalled);
         for (const plugin of plugins) {
             try {
                 await this.downloadPluginWithoutProgress(plugin);

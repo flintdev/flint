@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/flintdev/flint#readme",
   "devDependencies": {
+    "@types/atob": "^2.1.2",
     "@types/bluebird": "^3.5.30",
     "@types/jest": "^25.2.1",
     "@types/js-yaml": "^3.12.3",
@@ -80,6 +81,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.48",
     "ace-builds": "^1.4.9",
+    "atob": "^2.1.2",
     "electron-updater": "^4.2.5",
     "immutability-helper": "^3.0.2",
     "js-yaml": "^3.13.1",

@@ -51,18 +51,8 @@ export const CHANNEL = {
     STARTER_VIEW_LOADED: 'STARTER_VIEW_LOADED',
 };
 
-export const PluginProviders: PluginData[] = [
-    {
-        type: "widget",
-        id: 'material-widgets',
-        name: "Material Design Widgets",
-        owner: 'flintdev',
-        repo: 'material-widgets',
-        preinstalled: true,
-        libraryName: 'materialWidgets'
-    }
-];
-
-export const PluginIdLibraryMap: any = {
-    'material-widgets': 'materialWidgets'
+export const PluginRegistry = {
+    owner: 'flintdev',
+    repo: 'plugin-registry',
+    path: 'archive/plugins.json'
 }

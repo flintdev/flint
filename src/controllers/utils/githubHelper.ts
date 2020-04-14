@@ -6,6 +6,7 @@ import * as Bluebird from 'bluebird';
 fetch.Promise = Bluebird;
 const API_BASE_URL = `https://api.github.com`;
 const SITE_BASE_URL = 'https://github.com';
+const atob = require('atob');
 
 export class GithubHelper {
     headers: object = {
@@ -29,5 +30,16 @@ export class GithubHelper {
     getAssetDownloadURL = (owner: string, repo: string, releaseInfo: any, filename: string) => {
         const tag = releaseInfo.tag_name;
         return `${SITE_BASE_URL}/${owner}/${repo}/releases/download/${tag}/${filename}`;
+    };
+
+    getFileContent = async (owner: string, repo: string, path: string) => {
+        const url = `${API_BASE_URL}/repos/${owner}/${repo}/contents/${path}`;
+        const response = await fetch(url, {
+            headers: {...this.headers},
+            method: "GET"
+        });
+        const result = await response.json();
+        const contentEncode = result.content;
+        return atob(contentEncode);
     };
 }
