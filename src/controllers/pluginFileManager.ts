@@ -15,9 +15,11 @@ const BUNDLE_FILE_NAME = 'plugin.js';
 export class PluginFileManager {
     widgetsDirPath: string;
     configPath: string;
+    pluginsRootPath: string;
     fsHelper: FSHelper = new FSHelper();
     githubHelper: GithubHelper = new GithubHelper();
     constructor() {
+        this.pluginsRootPath = `${app.getPath('userData')}/plugins`;
         this.widgetsDirPath = `${app.getPath('userData')}/plugins/widgets`;
         this.configPath = `${app.getPath('userData')}/plugins/config.json`;
 
@@ -34,6 +36,7 @@ export class PluginFileManager {
         // fetch plugins info from plugin-registry
         const {owner, repo, path} = PluginRegistry;
         const content = await this.githubHelper.getFileContent(owner, repo, path);
+        await this.fsHelper.checkAndCreateDirWithWriteAccess(this.pluginsRootPath);
         await this.fsHelper.createFile(this.configPath, content);
     };
 
