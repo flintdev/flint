@@ -2,6 +2,8 @@
 
 import {ipcRenderer} from 'electron';
 import {CHANNEL} from "../constants";
+import {PluginData} from "../interface";
+import {plugins} from "pretty-format";
 
 export enum Error {
     CANCELLED,
@@ -29,6 +31,20 @@ export class MainProcessCommunicator {
             });
             ipcRenderer.send(CHANNEL.SELECT_DIRECTORY);
         });
+    };
+
+    installPlugin = (plugin: PluginData) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.INSTALL_PLUGIN_REPLY, (event, args) => {
+                const {status} = args;
+                resolve(status);
+            })
+            ipcRenderer.send(CHANNEL.INSTALL_PLUGIN, plugin);
+        });
+    };
+
+    relaunchEditorWindow = () => {
+        ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };
 
     receiveProjectDir = () => {
@@ -62,12 +78,17 @@ export class MainProcessCommunicator {
 
     addListenerForPreinstallPlugins = (statusUpdated: (args: any) => void) => {
         ipcRenderer.on(CHANNEL.PREINSTALL_PLUGINS, (event, args) => {
-            console.log('args', args);
             statusUpdated(args);
         });
     }
 
     removeListenerForPreinstallPlugins = () => {
         ipcRenderer.removeListener(CHANNEL.PREINSTALL_PLUGINS, () => {});
+    };
+
+    addNewPluginsListener = (notificationsReceived: (plugins: PluginData[]) => void) => {
+        ipcRenderer.on(CHANNEL.NEW_PLUGIN_UPDATES, (event, args) => {
+            notificationsReceived(args.plugins)
+        });
     };
 }

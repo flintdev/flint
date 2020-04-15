@@ -132,6 +132,7 @@ export class MenuBuilder {
                     label: 'Check For Updates',
                     click: async () => {
                         await this.autoUpdater.checkForUpdates(true);
+                        await this.autoUpdater.checkForPluginUpdates();
                     }
                 },
                 { type: 'separator' },

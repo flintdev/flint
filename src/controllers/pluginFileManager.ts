@@ -17,7 +17,6 @@ export class PluginFileManager {
     configPath: string;
     fsHelper: FSHelper = new FSHelper();
     githubHelper: GithubHelper = new GithubHelper();
-    pluginDataMap: any = {};
     constructor() {
         this.widgetsDirPath = `${app.getPath('userData')}/plugins/widgets`;
         this.configPath = `${app.getPath('userData')}/plugins/config.json`;
@@ -72,13 +71,12 @@ export class PluginFileManager {
         return new Promise((resolve, reject) => {
             this.downloadPlugin(pluginData, {
                 progress: (state: any) => {
-
                 },
                 error: (err: any) => {
                     reject(err);
                 },
                 success: () => {
-                    resolve()
+                    resolve();
                 }
             });
         });
@@ -91,7 +89,6 @@ export class PluginFileManager {
                 const downloadURL = this.githubHelper.getAssetDownloadURL(owner, repo, releaseInfo, BUNDLE_FILE_NAME);
                 progress(request(downloadURL), {})
                     .on('progress', (state: any) => {
-                        console.log('downloading in progress', state);
                         callback.progress(state);
                     })
                     .on('error', (err: any) => {
@@ -107,20 +104,26 @@ export class PluginFileManager {
                     })
                     .pipe(fs.createWriteStream(`${this.widgetsDirPath}/${id}/plugin.js`));
             }).catch(err => {
-                callback.error(err);
+                callback.error('getLatestRelease', err);
             });
         }).catch(err => {
-            callback.error(err);
+            callback.error('createWidgetPluginDir - err', err);
         });
     };
 
     checkForUpdates = async () => {
+        const configJson = await this.getPluginsConfigJson();
+        let pluginDataMap: any = {};
+        configJson.plugins.forEach((pluginData: any) => {
+            const {id} = pluginData;
+            pluginDataMap[id] = pluginData;
+        })
         const dirs = await this.fsHelper.readDir(this.widgetsDirPath);
         let pluginsWithNewUpdate: PluginData[] = [];
         for (const dir of dirs) {
             if (dir.type === "dir") {
                 const id = dir.name;
-                let pluginData = this.pluginDataMap[id];
+                let pluginData = pluginDataMap[id];
                 const version = await this.getCurrentVersion(id);
                 const result = await this.checkAvailableUpdatePerPlugin(pluginData, version)
                 if (!!result) {
@@ -139,7 +142,7 @@ export class PluginFileManager {
         let pluginDataMap: any = {};
         configJson.plugins.forEach((pluginData: any) => {
             const {id} = pluginData;
-            this.pluginDataMap[id] = pluginData;
+            pluginDataMap[id] = pluginData;
         })
         const dirs = this.fsHelper.readDirSync(this.widgetsDirPath);
         return dirs.filter(dir => dir.type === 'dir').map(dir => {
@@ -158,7 +161,6 @@ export class PluginFileManager {
         for (const plugin of plugins) {
             try {
                 await this.downloadPluginWithoutProgress(plugin);
-                console.log('plugin downloaded successfully');
             } catch (e) {
                 console.log('download plugin', e);
             }
@@ -174,7 +176,6 @@ export class PluginFileManager {
             return {path};
         })
         const template = await this.fsHelper.readFile(templatePath);
-        console.log('plugins', plugins);
         const htmlContent = Mustache.render(template, {plugins, dir: templateDir});
         const destPath = '/tmp/flin-editor.html';
         await this.fsHelper.createFile(destPath, htmlContent);

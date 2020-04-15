@@ -3,6 +3,7 @@
 import {app, dialog, BrowserWindow} from 'electron';
 import {autoUpdater} from "electron-updater";
 import {CHANNEL} from "../../constants";
+import {PluginFileManager} from "../../controllers/pluginFileManager";
 
 export class AutoUpdater {
     mainWindow: BrowserWindow;
@@ -32,7 +33,6 @@ export class AutoUpdater {
             this.downloading = false;
         });
         autoUpdater.on('download-progress', (progressObj) => {
-            console.log('download-progress', progressObj);
             this.consoleLog('download-progress');
             this.consoleLog(progressObj);
             // if (progressObj.percent === 100) {
@@ -77,9 +77,17 @@ export class AutoUpdater {
                 this.updateAlert = false;
                 if (this.downloading) return;
                 await autoUpdater.checkForUpdates();
+                await this.checkForPluginUpdates();
             }, 10*60*1000);
         } catch (e) {
             console.log('err - check for updates', e);
+        }
+    };
+
+    checkForPluginUpdates = async () => {
+        const pluginsWithNewUpdate = await new PluginFileManager().checkForUpdates();
+        if (pluginsWithNewUpdate.length > 0) {
+            this.mainWindow.webContents.send(CHANNEL.NEW_PLUGIN_UPDATES, {plugins: pluginsWithNewUpdate});
         }
     };
 

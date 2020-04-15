@@ -33,6 +33,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
 import NotificationListView from "./NotificationListView";
 import Badge from "@material-ui/core/Badge";
+import {Notification} from "../../../../interface";
+import WidgetUpdateDialog from "./WidgetUpdateDialog";
 
 const styles = createStyles({
     root: {},
@@ -126,6 +128,7 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
     increaseMark: () => void,
     beforeGeneratingCode: () => Promise<void>,
     notificationPopoverOpen: (anchorEl: HTMLButtonElement) => void,
+    addNotification: (notification: Notification) => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -135,6 +138,22 @@ class HeaderView extends React.Component<Props, object> {
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.uiSourceFileGenerator = new UISourceFileGenerator(projectDir);
+        new MainProcessCommunicator().addNewPluginsListener((plugins => {
+            const notification: Notification = {
+                type: "widget-update",
+                title: `${plugins.length} widget(s) have new updates`,
+                subtitle: plugins.map(plugin => plugin.name).join(', ')
+            }
+            let duplicated = false;
+            for (const item of this.props.notifications) {
+                if (item.type === "widget-update") {
+                    duplicated = true;
+                    break;
+                }
+            }
+            if (!duplicated) this.props.addNotification(notification);
+            localStorage.setItem('pluginsWithUpdate', JSON.stringify(plugins));
+        }));
     }
 
     handleViewButtonClick = (value: string) => (event: React.MouseEvent<HTMLElement>) => {
@@ -163,24 +182,19 @@ class HeaderView extends React.Component<Props, object> {
     renderNotificationButton = () => {
         const {classes, notifications} = this.props;
         const hasNotifications = !!notifications && notifications.length > 0;
-        const button = (
+        return (
             <IconButton
                 size={"small"}
                 className={classes.IconButtonNotification}
                 onClick={this.handleNotificationClick}
             >
-                <NotificationsNoneIcon/>
-            </IconButton>
-        );
-        return (
-            <React.Fragment>
                 {hasNotifications &&
                 <Badge badgeContent={notifications.length} color={"secondary"}>
-                    {button}
+                    <NotificationsNoneIcon/>
                 </Badge>
                 }
-                {!hasNotifications && button}
-            </React.Fragment>
+                {!hasNotifications && <NotificationsNoneIcon/>}
+            </IconButton>
         )
     };
 
@@ -257,7 +271,7 @@ class HeaderView extends React.Component<Props, object> {
                 </Paper>
 
                 <NotificationListView/>
-
+                <WidgetUpdateDialog/>
             </div>
         )
     }
@@ -273,6 +287,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
         toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
         increaseMark: () => dispatch(actions.uiEditor.increaseMark()),
         notificationPopoverOpen: (anchorEl: HTMLButtonElement) => dispatch(actions.navigation.notificationPopoverOpen(anchorEl)),
+        addNotification: (notification: Notification) => dispatch(actions.navigation.addNotification(notification)),
     }
 };
 

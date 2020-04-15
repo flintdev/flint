@@ -1,7 +1,7 @@
 // electron - main.js
 
 import {app, BrowserWindow, Menu, ipcMain, Tray, dialog, nativeTheme} from 'electron';
-import {CHANNEL} from "../constants";
+import {CHANNEL, LOADING_STATUS} from "../constants";
 import path = require('path');
 import {AutoUpdater} from "./utils/autoUpdater";
 import {MenuBuilder} from "./utils/menuBuilder";
@@ -18,7 +18,7 @@ let starterWindow: BrowserWindow,
 let autoUpdater: AutoUpdater;
 let menuBuilder: MenuBuilder;
 let starterMenuBuilder: StarterMenuBuilder;
-
+let projectDir: string;
 nativeTheme.themeSource = "light";
 
 async function createStarterWindow() {
@@ -64,14 +64,13 @@ async function createEditorWindow(projectDir: string) {
     });
     const templatePath = path.join(__dirname, 'editor.html');
     const filePath = await new PluginFileManager().renderHtmlTemplateWithPluginFiles(__dirname, templatePath);
-    editorWindow.loadFile(filePath).then(r => {
-        editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
-        editorWindow.maximize();
-        if (!!starterWindow) {
-            starterWindow.close();
-            starterWindow = null;
-        }
-    });
+    await editorWindow.loadFile(filePath);
+    editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
+    editorWindow.maximize();
+    if (!!starterWindow) {
+        starterWindow.close();
+        starterWindow = null;
+    }
     editorWindow.on('ready-to-show', () => {
         editorWindow.show();
     });
@@ -97,6 +96,7 @@ async function createEditorWindow(projectDir: string) {
     menuBuilder.build({autoUpdater});
     // async actions
     await autoUpdater.checkForUpdates();
+    await autoUpdater.checkForPluginUpdates();
 }
 
 async function createDebugWindow() {
@@ -125,7 +125,7 @@ async function createDebugWindow() {
 app.on('ready', async () => {
     await createStarterWindow();
     ipcMain.on(CHANNEL.OPEN_EDITOR_AND_CLOSE_STARTER, (event, args) => {
-        const projectDir = args;
+        projectDir = args;
         const action = async () => {
             await new MigrationHandler(projectDir).migrate()
             await createEditorWindow(projectDir);
@@ -144,6 +144,23 @@ app.on('ready', async () => {
         createDebugWindow().then(r => {
             new DebugHelper(debugWindow).loadLocalStorage(localStorageItems);
         });
+    });
+    ipcMain.on(CHANNEL.INSTALL_PLUGIN, (event, args) => {
+        const pluginData = args;
+        const action = async () => {
+            try {
+                await new PluginFileManager().downloadPluginWithoutProgress(pluginData);
+                event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.COMPLETE});
+            } catch (err) {
+                event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.FAILED});
+            }
+        };
+        action().then(r => {});
+    });
+    ipcMain.on(CHANNEL.RELAUNCH_EDITOR_WINDOW, () => {
+        editorWindow.close();
+        editorWindow = null;
+        createEditorWindow(projectDir);
     });
 });
 

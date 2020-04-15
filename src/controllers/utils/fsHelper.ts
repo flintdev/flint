@@ -29,7 +29,7 @@ export class FSHelper {
     createDirByPath = (path: string) => {
         return new Promise((resolve, reject) => {
             if (fs.existsSync(path)) {
-                reject(ErrorType.DirExists);
+                resolve();
             } else {
                 fs.mkdirSync(path, {recursive: true});
                 resolve();

@@ -19,6 +19,26 @@ export function reducer(state: NavigationState, action: NavigationAction) {
             return update(state, {
                 notificationPopoverAnchorEl: {$set: null}
             });
+        case types.ADD_NOTIFICATION:
+            return update(state, {
+                notifications: {$push: [action.notification]}
+            });
+        case types.RESET_NOTIFICATIONS:
+            return update(state, {
+                notifications: {$set: []}
+            });
+        case types.WIDGET_UPDATE_DIALOG_OPEN:
+            return update(state, {
+                widgetUpdateDialog: {
+                    open: {$set: true}
+                }
+            });
+        case types.WIDGET_UPDATE_DIALOG_CLOSE:
+            return update(state, {
+                widgetUpdateDialog: {
+                    open: {$set: false}
+                }
+            });
 
         default:
             return state;

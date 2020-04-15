@@ -24,7 +24,7 @@ const styles = createStyles({
         
     },
     paper: {
-        padding: 10,
+        padding: 0,
     },
     emptyText: {
         color: 'grey',
@@ -35,7 +35,8 @@ const styles = createStyles({
 });
 
 export interface Props extends WithStyles<typeof styles>, NavigationState {
-    notificationPopoverClose: () => void;
+    notificationPopoverClose: () => void,
+    widgetUpdateDialogOpen: () => void,
 }
 
 class NotificationListView extends React.Component<Props, object> {
@@ -56,6 +57,12 @@ class NotificationListView extends React.Component<Props, object> {
             );
         }
         else return <NotificationsNoneIcon/>
+    };
+
+    handleNotificationItemClick = (notification: Notification) => () => {
+        if (notification.type === "widget-update") {
+            this.props.widgetUpdateDialogOpen();
+        }
     };
 
     render() {
@@ -82,7 +89,7 @@ class NotificationListView extends React.Component<Props, object> {
                         <List>
                             {notifications.map((notification, i) => {
                                 return (
-                                    <ListItem button key={i}>
+                                    <ListItem button key={i} onClick={this.handleNotificationItemClick(notification)}>
                                         <ListItemIcon>
                                             {this.getNotificationIcon(notification.type)}
                                         </ListItemIcon>
@@ -108,6 +115,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         notificationPopoverClose: () => dispatch(actions.navigation.notificationPopoverClose()),
+        widgetUpdateDialogOpen: () => dispatch(actions.navigation.widgetUpdateDialogOpen()),
     }
 };
 

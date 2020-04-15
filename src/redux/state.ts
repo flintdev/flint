@@ -28,6 +28,9 @@ export interface NavigationState {
     currentView: string,
     notificationPopoverAnchorEl: any,
     notifications: Notification[],
+    widgetUpdateDialog: {
+        open: boolean
+    }
 }
 
 export interface ModelEditorState {
@@ -94,6 +97,9 @@ export const initState: StoreState = {
             currentView: MVC.View,
             notificationPopoverAnchorEl: null,
             notifications: [],
+            widgetUpdateDialog: {
+                open: false
+            }
         },
         modelEditor: {
             modelList: [],
