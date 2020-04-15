@@ -9,8 +9,8 @@ export class WidgetManager {
 
     }
 
-    getWidgetNameList = () => {
-        const pluginId = 'material-widgets'
+    getWidgetNameList = (pluginId: string) => {
+        if (!pluginId || pluginId === "") return [];
         const widgetInfo = getWidgetInfo(pluginId);
         return Object.keys(widgetInfo).sort().map(name => `${pluginId}::${name}`);
     };

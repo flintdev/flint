@@ -43,6 +43,16 @@ export class MainProcessCommunicator {
         });
     };
 
+    getInstalledPlugins = () => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, ((event, args) => {
+                const {plugins} = args;
+                resolve(plugins);
+            }))
+            ipcRenderer.send(CHANNEL.GET_INSTALLED_PLUGIN);
+        });
+    };
+
     relaunchEditorWindow = () => {
         ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };

@@ -16,11 +16,23 @@ import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {WidgetManager} from "../../../../../controllers/ui/widgetManager";
+import {PluginData} from "../../../../../interface";
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem";
+import Button from "@material-ui/core/Button";
+import {PluginFileManager} from "../../../../../controllers/pluginFileManager";
+import {MainProcessCommunicator} from "../../../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {
 
     },
+    tableHeader: {
+        width: '100%'
+    },
+    form: {
+        minWidth: 200
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, UIEditorState {
@@ -28,17 +40,31 @@ export interface Props extends WithStyles<typeof styles>, UIEditorState {
     addWidgetDialogClose: () => void,
 }
 
-class AddWidgetDialog extends React.Component<Props, object> {
-    state = {
+interface State {
+    installedPlugins: PluginData[],
+    allPlugins: PluginData[],
+    pluginIdSelected: string,
+}
 
+class AddWidgetDialog extends React.Component<Props, object> {
+    state: State = {
+        installedPlugins: [],
+        allPlugins: [],
+        pluginIdSelected: '',
     };
     widgetManager = new WidgetManager();
     componentDidMount(): void {
 
     }
 
-    onEnter = () => {
-
+    onEnter = async () => {
+        const plugins: any = await new MainProcessCommunicator().getInstalledPlugins();
+        this.setState({installedPlugins: plugins});
+        let {pluginIdSelected} = this.state;
+        if (pluginIdSelected === "") {
+            pluginIdSelected = plugins[0].id;
+            this.setState({pluginIdSelected});
+        }
     };
 
     handleWidgetSelect = (name: string) => () => {
@@ -46,11 +72,22 @@ class AddWidgetDialog extends React.Component<Props, object> {
         this.props.widgetOnSelect(data);
         this.props.addWidgetDialogClose();
     };
+    
+    handlePluginSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({
+            pluginIdSelected: event.target.value,
+        });
+    };
+
+    handleAddLibraryClick = () => {
+
+    };
 
     render() {
         const {classes, addWidgetDialog} = this.props;
         const {open} = addWidgetDialog;
-        const widgetNames = this.widgetManager.getWidgetNameList();
+        const {installedPlugins, allPlugins, pluginIdSelected} = this.state;
+        const widgetNames = this.widgetManager.getWidgetNameList(pluginIdSelected);
         return (
             <div className={classes.root}>
                 <Dialog
@@ -58,21 +95,55 @@ class AddWidgetDialog extends React.Component<Props, object> {
                     onClose={this.props.addWidgetDialogClose}
                     onEnter={this.onEnter}
                     fullWidth
+                    transitionDuration={0}
                     disableEnforceFocus={true}
                 >
-                    <List>
-                        {widgetNames.map((name, i) => {
-                            return (
-                                <ListItem
-                                    key={i}
-                                    button
-                                    onClick={this.handleWidgetSelect(name)}
-                                >
-                                    <ListItemText primary={name}/>
-                                </ListItem>
-                            )
-                        })}
-                    </List>
+                    <DialogTitle>
+                        <table className={classes.tableHeader}>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <TextField
+                                        className={classes.form}
+                                        value={pluginIdSelected}
+                                        onChange={this.handlePluginSelect}
+                                        label={"Component Library"}
+                                        select
+                                        variant={"outlined"}
+                                        size={"small"}
+                                    >
+                                        {installedPlugins.map((plugin, i) => {
+                                            return (
+                                                <MenuItem key={i} value={plugin.id}>{plugin.name}</MenuItem>
+                                            )
+                                        })}
+                                    </TextField>
+                                </td>
+                                <td align={"right"}>
+                                    <Button color={"primary"} onClick={this.handleAddLibraryClick}>Add Library</Button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </DialogTitle>
+                    <DialogContent>
+                        {!!pluginIdSelected && pluginIdSelected !== "" &&
+                        <List>
+                            {widgetNames.map((name, i) => {
+                                return (
+                                    <ListItem
+                                        key={i}
+                                        button
+                                        onClick={this.handleWidgetSelect(name)}
+                                    >
+                                        <ListItemText primary={name.split('::')[1]}/>
+                                    </ListItem>
+                                )
+                            })}
+                        </List>
+                        }
+                    </DialogContent>
+                    
                 </Dialog>
             </div>
         )

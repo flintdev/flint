@@ -19,7 +19,6 @@ import {green, red} from "@material-ui/core/colors";
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {MainProcessCommunicator} from "../../../../../controllers/mainProcessCommunicator";
 import ErrorIcon from '@material-ui/icons/Error';
-import {keys} from "@material-ui/core/styles/createBreakpoints";
 
 const styles = createStyles({
     root: {},

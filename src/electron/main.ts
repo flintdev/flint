@@ -162,6 +162,13 @@ app.on('ready', async () => {
         editorWindow = null;
         createEditorWindow(projectDir);
     });
+    ipcMain.on(CHANNEL.GET_INSTALLED_PLUGIN, (event, args) => {
+        const action = async () => {
+            const plugins = await new PluginFileManager().getInstalledPlugins();
+            event.reply(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, {plugins});
+        };
+        action().then(r => {});
+    });
 });
 
 app.on('window-all-closed', () => {
