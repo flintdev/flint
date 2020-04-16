@@ -2,28 +2,9 @@ package {{package}}
 
 import (
 	workflowFramework "github.com/flintdev/workflow-engine/engine"
-    "github.com/flintdev/workflow-engine/handler"
-	{{#steps}}
-	{{name}} "controllers/workflows/{{package}}/steps/{{name}}"
-	{{/steps}}
 )
 
 func Definition() workflowFramework.Workflow {
 	w := ParseDefinition()
 	return w
 }
-
-func Steps() map[string]func(handler handler.Handler) {
-	StepFuncMap := map[string]func(handler handler.Handler){
-		{{#steps}}
-        "{{name}}": {{name}}.Execute,
-        {{/steps}}
-	}
-	return StepFuncMap
-}
-
-func Trigger(event workflowFramework.Event) bool {
-	return TriggerCondition(event)
-}
-
-type FilePath string

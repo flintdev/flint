@@ -11,7 +11,7 @@ import (
 func main() {
 	app := workflowFramework.CreateApp()
 	{{#workflows}}
-	app.RegisterWorkflow({{name}}.Definition, {{name}}.Steps, {{name}}.Trigger)
+	app.RegisterWorkflow({{name}}.Definition)
 	{{/workflows}}
 	app.RegisterConfig(workflows.ParseConfig)
 	app.Start()

@@ -180,7 +180,7 @@ export class PluginFileManager {
         })
         const template = await this.fsHelper.readFile(templatePath);
         const htmlContent = Mustache.render(template, {plugins, dir: templateDir});
-        const destPath = '/tmp/flin-editor.html';
+        const destPath = '/tmp/flint-editor.html';
         await this.fsHelper.createFile(destPath, htmlContent);
         return destPath;
     };

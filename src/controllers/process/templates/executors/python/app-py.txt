@@ -1,0 +1,18 @@
+from flint import create_app
+from workflows import {{workflowNames}}
+
+workflows = {
+    {{#workflows}}
+    "{{name}}": {
+        {{#steps}}
+        "{{step}}": {{name}}.{{step}}.execute,
+        {{/steps}}
+    },
+    {{/workflows}}
+}
+
+app = create_app()
+app.register_workflows(workflows)
+
+if __name__ == "__main__":
+    app.start()
