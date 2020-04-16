@@ -60,7 +60,7 @@ export class PluginFileManager {
     checkAvailableUpdatePerPlugin = async (pluginData: PluginData, version: string) => {
         const {owner, repo} = pluginData;
         const releaseInfo = await this.githubHelper.getLatestRelease(owner, repo);
-        if (version !== releaseInfo['tag_name']) {
+        if (!!releaseInfo['tag_name'] && version !== releaseInfo['tag_name']) {
             return {
                 currentVersion: version,
                 newVersion: releaseInfo['tag_name']
