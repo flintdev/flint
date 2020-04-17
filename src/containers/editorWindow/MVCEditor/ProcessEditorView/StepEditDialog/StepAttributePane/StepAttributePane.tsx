@@ -84,7 +84,7 @@ class StepAttributePane extends React.Component<Props, object> {
         if (!attributes) return <div/>;
         return (
             <div className={classes.root}>
-                <Paper className={classes.paper}>
+                <Paper className={classes.paper} square={true}>
                     {!editing &&
                     <table className={classes.table}>
                         <tbody>

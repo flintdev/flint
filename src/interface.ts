@@ -27,3 +27,14 @@ export interface Notification {
     title: string,
     subtitle: string,
 }
+
+export enum TriggerEventType {
+    'ADDED'= "ADDED",
+    'MODIFIED' = 'MODIFIED',
+    'DELETED' = 'DELETED'
+}
+export interface TriggerData {
+    model: string,
+    eventType: TriggerEventType,
+    when: string
+}

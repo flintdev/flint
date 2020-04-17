@@ -2,6 +2,14 @@
 
 import {StepAttributes} from "../../containers/editorWindow/MVCEditor/ProcessEditorView/StepEditDialog/interface";
 
+export enum StepType {
+    Trigger = "Trigger",
+    End = "End",
+    Hub = "Hub",
+    Manual = "Manual",
+    CodeBlock = "Code Block",
+}
+
 export interface StepData {
     name: string,
     inputs: any,

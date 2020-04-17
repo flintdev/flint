@@ -8,8 +8,7 @@ import {ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Paper from '@material-ui/core/Paper';
 import AceEditor from "react-ace";
-// import 'ace-builds/webpack-resolver';
-import "ace-builds/src-noconflict/mode-golang";
+import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/theme-tomorrow";
 import {TemplateMap} from "./templates/templateMap";
 import {StepAttributes, StepType} from "../interface";
@@ -75,7 +74,7 @@ class CodeBlockPane extends React.Component<Props, object> {
             <div className={classes.root}>
                 <Paper className={classes.paper}>
                     <AceEditor
-                        mode="golang"
+                        mode="python"
                         theme="tomorrow"
                         fontSize={14}
                         onChange={this.handleCodeChange}

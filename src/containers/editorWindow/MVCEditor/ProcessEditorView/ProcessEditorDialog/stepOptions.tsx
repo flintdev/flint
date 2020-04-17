@@ -21,7 +21,13 @@ export const stepOptions = [
         "icon": <RadioButtonCheckedIcon/>
     },
     {
-        "type": "Approve/Reject",
+        "type": "Hub",
+        "group": "Standard",
+        "category": "Automation",
+        "icon": <RadioButtonCheckedIcon/>
+    },
+    {
+        "type": "Manual",
         "group": "Standard",
         "category": "Manual",
         "icon": <AssignmentTurnedInTwoToneIcon />
