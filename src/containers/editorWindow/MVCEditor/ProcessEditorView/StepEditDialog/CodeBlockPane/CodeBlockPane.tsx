@@ -19,9 +19,7 @@ const styles = createStyles({
     },
     paper: {
         padding: 10,
-        marginTop: 20,
-        marginBottom: 20,
-    }
+    },
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
@@ -82,7 +80,7 @@ class CodeBlockPane extends React.Component<Props, object> {
                         showPrintMargin={true}
                         showGutter={true}
                         highlightActiveLine={true}
-                        style={{width: '100%', height: 500}}
+                        style={{width: '100%'}}
                         setOptions={{
                             showLineNumbers: true,
                             tabSize: 4,

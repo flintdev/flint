@@ -9,15 +9,15 @@ import * as actions from "src/redux/modules/editor/actions";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from '@material-ui/icons/Add';
-import DialogForm, {Params, Callback} from "src/components/DialogForm";
+import * as componentsActions from 'src/redux/modules/components/actions';
 import {CreateProcessParamsDef} from "./definition";
 import {ProcessManager} from "../../../../../controllers/process/processManager";
 import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import List from '@material-ui/core/List';
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import {DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
 
 const styles = createStyles({
     root: {
@@ -47,6 +47,7 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState, ConfigState {
     setProcessList: (processList: string[]) => void,
     selectProcess: (value: string) => void,
+    openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
 }
 
 class ProcessListView extends React.Component<Props, object> {
@@ -75,18 +76,22 @@ class ProcessListView extends React.Component<Props, object> {
     };
 
     handleCreateDialogOpen = () => {
-        this.setState({createDialogOpen: true});
-    };
-
-    handleCreateDialogClose = () => {
-        this.setState({createDialogOpen: false});
-    };
-
-    handleCreateProcessSubmit = async (params: Params, callback: Callback) => {
-        const name = params.name as string;
-        await this.processManager.createProcess(name);
-        await this.reloadProcessList();
-        callback.close();
+        this.props.openDialogForm(
+            {},
+            {
+                forms: CreateProcessParamsDef,
+                title: "New Process",
+                submitLabel: "Create Process"
+            },
+            (values) => {
+                const action = async () => {
+                    const name = values.name as string;
+                    await this.processManager.createProcess(name);
+                    await this.reloadProcessList();
+                };
+                action().then(r => {});
+            }
+        );
     };
 
     handleListItemClick = (processName: string) => () => {
@@ -143,15 +148,6 @@ class ProcessListView extends React.Component<Props, object> {
                         )
                     })}
                 </List>
-
-                <DialogForm
-                    open={createDialogOpen}
-                    onClose={this.handleCreateDialogClose}
-                    title={"New Process"}
-                    submitButtonTitle={"Create Process"}
-                    forms={CreateProcessParamsDef}
-                    onSubmit={this.handleCreateProcessSubmit}
-                />
             </div>
         )
     }
@@ -161,10 +157,11 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.processEditor, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | componentsActions.ComponentsAction>) => {
     return {
         setProcessList: (processList: string[]) => dispatch(actions.processEditor.setProcessList(processList)),
         selectProcess: (value: string) => dispatch((actions.processEditor.selectProcess(value))),
+        openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
     }
 };
 

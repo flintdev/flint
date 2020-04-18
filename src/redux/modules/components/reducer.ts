@@ -21,6 +21,22 @@ export function reducer(state: ComponentsState, action: ComponentsAction) {
                     open: {$set: false}
                 }
             });
+        case types.OPEN_DIALOG_FORM:
+            return update(state, {
+                dialogForm: {
+                    open: {$set: true},
+                    initValues: {$set: action.initValues},
+                    data: {$set: action.data},
+                    onSubmit: {$set: action.onSubmit}
+                }
+            });
+        case types.CLOSE_DIALOG_FORM:
+            return update(state, {
+                dialogForm: {
+                    open: {$set: false}
+                }
+            });
+
         default:
             return state;
     }

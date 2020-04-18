@@ -5,61 +5,38 @@ import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from '@material-ui/core/Button';
 import {LOADING_STATUS} from "../../constants";
 import {TextField} from "@material-ui/core";
+import {ComponentsState, StoreState} from "../../redux/state";
+import {Dispatch} from "redux";
+import * as actions from "../../redux/modules/components/actions";
+import {connect} from "react-redux";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const styles = createStyles({
     root: {
 
     },
+    form: {
+        marginBottom: 10,
+    }
 });
 
-type FormType = 'input' | 'select';
-type FormValueType = string|number;
 
-export interface Form {
-    type: FormType,
-    key: string,
-    label: string,
-    placeholder?: string,
-    helperText?: string,
-    required?: boolean,
-    dataType?: string,
-    autofocus?: boolean,
-    defaultValue?: FormValueType,
-    options?: Array<FormValueType>
-}
-
-export interface Params {
-    [key: string]: FormValueType
-}
-
-export interface Callback {
-    setStatus: (status: LOADING_STATUS) => void,
-    close: () => void,
-}
-
-export interface Props extends WithStyles<typeof styles> {
-    open: boolean,
-    onClose: () => void,
-    title?: string,
-    submitButtonTitle?: string,
-    closeButtonTitle?: string,
-    forms: Form[],
-    onSubmit: (params: Params, callback: Callback) => void
+export interface Props extends WithStyles<typeof styles>, ComponentsState {
+    closeDialogForm: () => void
 }
 
 interface State {
-    params: Params,
-    loadingStatus: LOADING_STATUS,
+    values: any,
 }
 
 class DialogForm extends React.Component<Props, object> {
     state: State = {
-        params: {},
-        loadingStatus: LOADING_STATUS.NOT_STARTED
+        values: {},
     };
 
     componentDidMount(): void {
@@ -67,42 +44,41 @@ class DialogForm extends React.Component<Props, object> {
     }
 
     onEnter = () => {
-
-    };
-
-    handleSetStatus = (loadingStatus: LOADING_STATUS) => {
-        this.setState({loadingStatus});
+        const {initValues} = this.props.dialogForm;
+        this.setState({values: initValues});
     };
 
     handleSubmitButtonClick = () => {
-        const {params} = this.state;
-        const {onSubmit} = this.props;
-        const callback = {setStatus: this.handleSetStatus, close: this.props.onClose};
-        onSubmit(params, callback);
+        const {values} = this.state;
+        const {onSubmit} = this.props.dialogForm;
+        if (!!onSubmit) onSubmit(values);
+        this.props.closeDialogForm();
     };
 
     handleFormChange = (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
-        let {params} = this.state;
-        params[key] = value;
-        this.setState({params});
+        let {values} = this.state;
+        values[key] = value;
+        this.setState({values});
     };
     
-    getParamValueByKey = (key: string, defaultValue: FormValueType) => {
-        const {params} = this.state;
-        let value: FormValueType = params[key];
+    getParamValueByKey = (key: string, defaultValue: any) => {
+        const {values} = this.state;
+        let value = values[key];
         if (!!value) return value;
         if (!!defaultValue) return defaultValue;
         return '';
     };
 
     render() {
-        const {classes, open, onClose, title, submitButtonTitle, closeButtonTitle, forms} = this.props;
+        const {classes, dialogForm} = this.props;
+        const {open, data} = dialogForm;
+        const {forms, title, description, submitLabel, cancelLabel} = data;
         return (
             <div className={classes.root}>
                 <Dialog
                     open={open}
-                    onClose={onClose}
+                    onClose={this.props.closeDialogForm}
                     onEnter={this.onEnter}
                     fullWidth={true}
                 >
@@ -110,6 +86,9 @@ class DialogForm extends React.Component<Props, object> {
                     <DialogTitle>{title}</DialogTitle>
                     }
                     <DialogContent>
+                        {!!description &&
+                        <DialogContentText>{description}</DialogContentText>
+                        }
                         {forms.map((form, i) => {
                             const {type, key, label, placeholder, helperText, required, defaultValue, dataType, autofocus, options} = form;
                             const value = this.getParamValueByKey(key, defaultValue);
@@ -117,6 +96,7 @@ class DialogForm extends React.Component<Props, object> {
                                 <div key={i}>
                                     {type === "input" && 
                                     <TextField
+                                        className={classes.form}
                                         fullWidth
                                         value={value}
                                         label={label}
@@ -128,22 +108,43 @@ class DialogForm extends React.Component<Props, object> {
                                         onChange={this.handleFormChange(key)}
                                     />
                                     }
+                                    {type === "select" &&
+                                    <TextField
+                                        className={classes.form}
+                                        fullWidth
+                                        value={value}
+                                        label={label}
+                                        required={!!required}
+                                        helperText={helperText}
+                                        placeholder={placeholder}
+                                        type={dataType}
+                                        autoFocus={!!autofocus}
+                                        select
+                                        onChange={this.handleFormChange(key)}
+                                    >
+                                        {!!options && options.map((option, i) => {
+                                            return (
+                                                <MenuItem key={i} value={option}>{option}</MenuItem>
+                                            )
+                                        })}
+                                    </TextField>
+                                    }
                                 </div>
                             )
                         })}
                     </DialogContent>
                     <DialogActions>
                         <Button
-                            onClick={onClose}
+                            onClick={this.props.closeDialogForm}
                         >
-                            {!!closeButtonTitle ? closeButtonTitle : 'Close'}
+                            {!!cancelLabel ? cancelLabel : 'Close'}
                         </Button>
                         <Button
                             variant={"contained"}
                             color={"primary"}
                             onClick={this.handleSubmitButtonClick}
                         >
-                            {!!submitButtonTitle ? submitButtonTitle : 'Submit'}
+                            {!!submitLabel ? submitLabel : 'Submit'}
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -152,4 +153,14 @@ class DialogForm extends React.Component<Props, object> {
     }
 }
 
-export default withStyles(styles)(DialogForm);
+const mapStateToProps = (state: StoreState) => {
+    return state.components;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch<actions.ComponentsAction>) => {
+    return {
+        closeDialogForm: () => dispatch(actions.closeDialogForm()),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(DialogForm));

@@ -26,13 +26,15 @@ export interface StepData {
     }
 }
 
+export interface OutputCondition {
+    key: string,
+    value: string,
+    operator: 'always' | '==' | '>=' | '<=' | '>' | '<' | 'contains',
+}
+
 export interface Output {
     name: string,
-    condition?: {
-        key: string,
-        value: string,
-        operator: string,
-    }
+    condition?: OutputCondition
 }
 
 export class ProcessDataHandler {

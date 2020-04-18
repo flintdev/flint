@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {Dispatch} from "redux";
 import {ConfigState, ModelEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
+import * as componentsActions from 'src/redux/modules/components/actions';
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
@@ -13,11 +14,10 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
-import DialogForm from "../../../../../components/DialogForm";
-import {Callback, Params} from "../../../../../components/DialogForm";
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
+import {DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
 
 const styles = createStyles({
     root: {
@@ -65,11 +65,11 @@ export interface Props extends WithStyles<typeof styles>, ModelEditorState, Conf
     setDefaultEditorData: (editorData: EditorData) => void,
     setSchemaData: (schemaData: SchemaData) => void,
     setCurrentRevision: (editor: number, source: number) => void,
+    openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
 }
 
 class ModelListView extends React.Component<Props, object> {
     state = {
-        createDialogOpen: false,
         loadingStatus: LOADING_STATUS.NOT_STARTED,
     };
     modelManager: ModelManager;
@@ -86,14 +86,21 @@ class ModelListView extends React.Component<Props, object> {
     };
 
     handleCreateModelButtonClick = () => {
-        this.handleCreateDialogOpen();
-    };
-
-    handleCreateModelSubmit = async (params: Params, callback: Callback) => {
-        const name: string = params.name as string;
-        await this.modelManager.createModel(name);
-        await this.reloadModelList();
-        callback.close();
+        this.props.openDialogForm(
+            {},
+            {
+                forms: CreateModelParamsDef,
+                title: 'New Model',
+                submitLabel: 'Create Model'
+            },
+            (values) => {
+                const action = async () => {
+                    const name: string = values.name as string;
+                    await this.modelManager.createModel(name);
+                    await this.reloadModelList();
+                };
+                action().then(r => {});
+            });
     };
 
     reloadModelList = async () => {
@@ -102,14 +109,6 @@ class ModelListView extends React.Component<Props, object> {
         const modelList = await new ModelManager(projectDir).getModelList();
         this.props.setModelList(modelList);
         this.setState({loadingStatus: LOADING_STATUS.COMPLETE});
-    };
-
-    handleCreateDialogOpen = () => {
-        this.setState({createDialogOpen: true});
-    };
-
-    handleCreateDialogClose = () => {
-        this.setState({createDialogOpen: false});
     };
 
     handleModelBoxClick = (modelName: string) => async () => {
@@ -127,7 +126,7 @@ class ModelListView extends React.Component<Props, object> {
     render() {
         const {classes} = this.props;
         const {modelList, modelSelected} = this.props;
-        const {createDialogOpen, loadingStatus} = this.state;
+        const {loadingStatus} = this.state;
         return (
             <div className={classes.root}>
                 <table className={classes.table}>
@@ -177,15 +176,6 @@ class ModelListView extends React.Component<Props, object> {
                             </Paper>
                         )
                     })}
-
-                    <DialogForm
-                        open={createDialogOpen}
-                        onClose={this.handleCreateDialogClose}
-                        title={"New Model"}
-                        submitButtonTitle={"Create Model"}
-                        forms={CreateModelParamsDef}
-                        onSubmit={this.handleCreateModelSubmit}
-                    />
                 </div>
             </div>
         )
@@ -196,7 +186,7 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.modelEditor, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | componentsActions.ComponentsAction>) => {
     return {
         setModelList: (modelList: string[]) => dispatch(actions.modelEditor.setModelList(modelList)),
         selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
@@ -204,6 +194,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
         setDefaultEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setDefaultEditorData(editorData)),
         setSchemaData: (schemaData: SchemaData) => dispatch(actions.modelEditor.setSchemaData(schemaData)),
         setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
+        openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
     }
 };
 

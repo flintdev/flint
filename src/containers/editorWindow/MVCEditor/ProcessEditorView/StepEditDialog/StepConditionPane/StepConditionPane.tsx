@@ -53,7 +53,7 @@ export interface Props extends WithStyles<typeof styles> {
 }
 
 class StepConditionPane extends React.Component<Props, object> {
-    state = {
+    state: any = {
         editingIndex: -1,
         name: '',
         key: '',

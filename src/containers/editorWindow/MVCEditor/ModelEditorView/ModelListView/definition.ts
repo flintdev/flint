@@ -1,6 +1,6 @@
 // src/containers/editorWindow/MVCEditor/ModelEditorView/ModelListView/definition.ts
 
-import {Form} from "src/components/DialogForm";
+import {Form} from "../../../../../components/interface";
 
 export const CreateModelParamsDef: Form[] = [
     {

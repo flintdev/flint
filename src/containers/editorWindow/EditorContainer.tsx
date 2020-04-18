@@ -15,6 +15,7 @@ import {LocalStorageManager} from "../../controllers/localStoreManager";
 import {NavigationSidebarConfig} from "../../constants/styles";
 import FileBrowser from "./FileBrowser";
 import Toast from "../../components/Toast";
+import DialogForm from "../../components/DialogForm";
 
 const styles = createStyles({
     root: {
@@ -88,6 +89,7 @@ class EditorContainer extends React.Component<Props, object> {
                         </table>
 
                         <Toast/>
+                        <DialogForm/>
 
                     </div>
                     }

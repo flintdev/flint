@@ -1,1 +1,1 @@
-export { default, Params, Callback, Form } from './DialogForm';
+export { default } from './DialogForm';

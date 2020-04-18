@@ -18,10 +18,17 @@ import CodeBlockPane from "./CodeBlockPane";
 import StepConditionPane from "./StepConditionPane";
 import TriggerPane from "./TriggerPane/TriggerPane";
 import {TriggerData, TriggerEventType} from "../../../../../interface";
-import {Step} from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import StepOutputsPane from "./StepOutputsPane";
+
 
 const styles = createStyles({
     root: {},
+    content: {
+        marginTop: 10
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
@@ -38,6 +45,7 @@ interface State {
     code: string,
     outputs: Output[],
     triggerData: any,
+    tabIndex: number
 }
 
 class StepEditDialog extends React.Component<Props, object> {
@@ -45,7 +53,8 @@ class StepEditDialog extends React.Component<Props, object> {
         attributes: null,
         code: '',
         outputs: [],
-        triggerData: {}
+        triggerData: {},
+        tabIndex: 0
     };
     operations: Operations = {};
 
@@ -79,6 +88,10 @@ class StepEditDialog extends React.Component<Props, object> {
         }
     };
 
+    handleTabChange = (event: any, index: number) => {
+        this.setState({tabIndex: index});
+    };
+
     handleDialogClose = () => {
         this.props.stepEditDialogClose();
     };
@@ -104,7 +117,7 @@ class StepEditDialog extends React.Component<Props, object> {
     handleUpdateButtonClick = () => {
         let {attributes, code, outputs, triggerData} = this.state;
         const {stepData} = this.props.stepEditDialog;
-        if (stepData.data.type  === StepType.TRIGGER) {
+        if (stepData.data.type === StepType.TRIGGER) {
             code = JSON.stringify(triggerData);
         }
         const newStepData = new ProcessDataHandler().updateStepData(stepData, attributes, code, outputs);
@@ -126,7 +139,7 @@ class StepEditDialog extends React.Component<Props, object> {
     render() {
         const {classes, stepEditDialog} = this.props;
         const {open, stepData} = stepEditDialog;
-        const {attributes, code, outputs, triggerData} = this.state;
+        const {attributes, code, outputs, triggerData, tabIndex} = this.state;
         if (!stepData) return <div/>;
         return (
             <div className={classes.root}>
@@ -151,18 +164,35 @@ class StepEditDialog extends React.Component<Props, object> {
                         }
                         {stepData.data.type === StepType.CODE_BLOCK &&
                         <div>
-                            <CodeBlockPane
-                                attributes={attributes}
-                                code={code}
-                                onUpdated={this.handleCodeUpdated}
-                            />
-                            <StepConditionPane
-                                outputs={outputs}
-                                onUpdated={this.handleOutputsUpdated}
-                            />
+                            <Paper>
+                                <Tabs
+                                    value={tabIndex}
+                                    onChange={this.handleTabChange}
+                                    centered={true}
+                                    indicatorColor={"primary"}
+                                    textColor={"primary"}
+                                >
+                                    <Tab label={"Code Block"}/>
+                                    <Tab label={"Outputs"}/>
+                                </Tabs>
+                            </Paper>
+                            <div className={classes.content}>
+                                {tabIndex === 0 &&
+                                <CodeBlockPane
+                                    attributes={attributes}
+                                    code={code}
+                                    onUpdated={this.handleCodeUpdated}
+                                />
+                                }
+                                {tabIndex === 1 &&
+                                <StepOutputsPane
+                                    outputs={outputs}
+                                    onUpdated={this.handleOutputsUpdated}
+                                />
+                                }
+                            </div>
                         </div>
                         }
-
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleDialogClose}>Close</Button>

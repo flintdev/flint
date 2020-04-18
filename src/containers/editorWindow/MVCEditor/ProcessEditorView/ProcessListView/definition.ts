@@ -1,6 +1,6 @@
 // src/containers/editorWindow/MVCEditor/ProcessEditorView/ProcessListView/definition.ts
 
-import {Form} from 'src/components/DialogForm';
+import {Form} from "../../../../../components/interface";
 
 export const CreateProcessParamsDef: Form[] = [
     {
