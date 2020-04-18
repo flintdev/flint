@@ -23,6 +23,9 @@ import {green} from "@material-ui/core/colors";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import {DialogFormData, DialogFormSubmitFunc} from "../../../../../../components/interface";
+import * as componentsActions from "../../../../../../redux/modules/components/actions";
+import {OutputParamsDef} from "./formDefinition";
 
 const styles = createStyles({
     root: {
@@ -51,12 +54,9 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>{
     outputs: Output[],
-    onUpdated: (outputs: Output[]) => void
+    onUpdated: (outputs: Output[]) => void,
+    openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
 }
-
-const OutputConditionOptions = [
-    'always', '==', '>=', '<=', '>', '<', 'contains'
-];
 
 class StepOutputsPane extends React.Component<Props, object> {
     state = {
@@ -81,15 +81,49 @@ class StepOutputsPane extends React.Component<Props, object> {
     };
 
     handleEditButtonClick = (output: Output, index: number) => () => {
-
+        this.props.openDialogForm(
+            {
+                name: output.name,
+                key: output.condition.key,
+                operator: output.condition.operator,
+                value: output.condition.value,
+            },
+            {
+                forms: OutputParamsDef,
+                title: "Edit Output",
+                submitLabel: "Update"
+            },
+            (values) => {
+                const {name, key, value, operator} = values;
+                const output: Output = {name, condition: {key, value, operator}};
+                let {outputs} = this.props;
+                outputs[index] = output;
+                this.props.onUpdated([...outputs]);
+            }
+        );
     };
 
     handleDeleteButtonClick = (index: number) => () => {
-
+        let {outputs} = this.props;
+        outputs.splice(index, 1);
+        this.props.onUpdated([...outputs]);
     };
 
     handleAddClick = () => {
-
+        this.props.openDialogForm(
+            {},
+            {
+                forms: OutputParamsDef,
+                title: "Add Output",
+                submitLabel: "Add"
+            },
+            (values) => {
+                const {name, key, value, operator} = values;
+                const output: Output = {name, condition: {key, value, operator}};
+                const {outputs} = this.props;
+                this.props.onUpdated([...outputs, output]);
+            }
+        );
     };
 
     render() {
@@ -113,9 +147,11 @@ class StepOutputsPane extends React.Component<Props, object> {
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Condition</TableCell>
-                                    <TableCell align={"right"}>Action</TableCell>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Condition</TableCell>
+                                        <TableCell align={"right"}>Action</TableCell>
+                                    </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {outputs.map((output, i) => {
@@ -123,7 +159,7 @@ class StepOutputsPane extends React.Component<Props, object> {
                                             <TableRow key={i}>
                                                 <TableCell>{output.name}</TableCell>
                                                 <TableCell>{this.getConditionCell(output.condition)}</TableCell>
-                                                <TableCell>
+                                                <TableCell align={"right"}>
                                                     <IconButton
                                                         size={"small"}
                                                         color={"primary"}
@@ -156,8 +192,9 @@ const mapStateToProps = (state: StoreState) => {
     return state.editor.processEditor;
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | componentsActions.ComponentsAction>) => {
     return {
+        openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
 
     }
 };
