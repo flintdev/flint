@@ -2,9 +2,9 @@ package main
 
 import (
 	workflowFramework "github.com/flintdev/workflow-engine/engine"
-	"controllers/workflows"
+	"workflowEngine/workflows"
 	{{#workflows}}
-	{{name}} "controllers/workflows/{{name}}"
+	{{name}} "workflowEngine/workflows/{{name}}"
 	{{/workflows}}
 )
 

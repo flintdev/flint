@@ -118,13 +118,13 @@ class StepAttributePane extends React.Component<Props, object> {
                                 />
                             </Grid>
                             <Grid item xs={6}>
-
+                                <div className={classes.buttonContainer}>
+                                    <Button variant={"contained"} onClick={this.handleUpdateButtonClick}>Update</Button>
+                                    <Button onClick={this.handleCancelButtonClick}>Cancel</Button>
+                                </div>
                             </Grid>
                         </Grid>
-                        <div className={classes.buttonContainer}>
-                            <Button variant={"contained"} onClick={this.handleUpdateButtonClick}>Update</Button>
-                            <Button onClick={this.handleCancelButtonClick}>Cancel</Button>
-                        </div>
+
                     </div>
                     }
                 </Paper>

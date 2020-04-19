@@ -228,6 +228,8 @@ export class SourceFileGenerator {
     };
 
     private generateWorkflowConfig = async () => {
+        const workflowsDir = `${this.workflowEngineDirPath}/workflows`;
+        await this.checkAndCreateDir(workflowsDir);
         const modelList = await this.modelManager.getModelList();
         let gvr: any = {};
         modelList.forEach((modelName: string) => {
@@ -241,7 +243,7 @@ export class SourceFileGenerator {
         });
         const configJson = JSON.stringify({gvr}, null, 4);
         const content = Mustache.render(ConfigGoTemplate, {configJson});
-        const filePath = `${this.workflowEngineDirPath}/config.go`;
+        const filePath = `${workflowsDir}/config.go`;
         await this.fsHelper.createFile(filePath, content);
     };
 
