@@ -4,15 +4,27 @@ import {EditorData, EditorNode} from "@flintdev/process-editor/dist";
 import {ModelManager} from "../model/modelManager";
 import {FSHelper} from "../utils/fsHelper";
 import {ProcessManager} from "./processManager";
+// workflow engine templates
 import MainGoTemplate from './templates/main-go.txt';
 import InitGoTemplate from './templates/init-go.txt';
 import GoModTemplate from './templates/go-mod.txt';
 import ConfigGoTemplate from './templates/config-go.txt';
 import DefinitionGoTemplate from './templates/definition-go.txt';
 import WorkflowsManageSh from './templates/manage-sh.txt';
+// python executors templates
+import AppPyTemplate from './templates/executors/python/app-py.txt';
+import PyManageShTemplate from './templates/executors/python/manage-sh.txt';
+import RequirementsTemplate from './templates/executors/python/requirements.txt';
+import InitPyTemplate from './templates/executors/python/init-py.txt';
+//
 import * as Mustache from "mustache";
 import {StepType} from "../../containers/editorWindow/MVCEditor/ProcessEditorView/StepEditDialog/interface";
 import * as _ from 'lodash';
+
+interface File {
+    path: string,
+    content: string,
+}
 
 export class SourceFileGenerator {
     processNameList: string[] = [];
@@ -67,37 +79,71 @@ export class SourceFileGenerator {
     };
 
     private generateExecutors = async () => {
-
+        const workflows = await this.generateFilesOfSteps();
+        await this.generateRootFilesOfExecutors(workflows);
     };
 
     private removeSourceDir = async () => {
         await this.fsHelper.removeDir(this.sourceDirPath);
     };
 
-    // private generateFilesOfSteps = async () => {
-    //     for (const node of Object.values(this.editorData.nodes)) {
-    //         if (node.data.type === StepType.CODE_BLOCK) {
-    //             const {label, code} = node.data;
-    //             const stepName = _.camelCase(label);
-    //             const stepDirPath = `${this.sourceDirPath}/workflows/${this.processName}/steps/${stepName}`;
-    //             await this.checkAndCreateDir(stepDirPath);
-    //             const filePath = `${stepDirPath}/${stepName}.go`;
-    //             await this.fsHelper.createFile(filePath, code);
-    //         }
-    //     }
-    // };
+    // generate executor files
 
-    // private generateTriggerFile = async () => {
-    //     const workflowDir = `${this.sourceDirPath}/workflows/${this.processName}`;
-    //     await this.checkAndCreateDir(workflowDir);
-    //     for (const node of Object.values(this.editorData.nodes)) {
-    //         if (node.data.type === StepType.TRIGGER) {
-    //             const {label, code} = node.data;
-    //             const filePath = `${workflowDir}/trigger.go`;
-    //             await this.fsHelper.createFile(filePath, code);
-    //         }
-    //     }
-    // };
+    private generateRootFilesOfExecutors = async (workflows: any) => {
+        let files: File[] = [];
+        // app.py
+        files.push({
+            path: `${this.executorsDirPath}/app.py`,
+            content: Mustache.render(AppPyTemplate, {
+                workflowNames: this.processNameList.join(', '),
+                workflows
+            })
+        });
+        // manage.sh
+        files.push({
+            path: `${this.executorsDirPath}/manage.sh`,
+            content: PyManageShTemplate,
+        });
+        // requirements.txt
+        files.push({
+            path: `${this.executorsDirPath}/requirements.txt`,
+            content: RequirementsTemplate
+        });
+        await this.batchToCreateFiles(files);
+    };
+
+    private generateFilesOfSteps = async () => {
+        let workflows = [];
+        for (const processName of this.processNameList) {
+            if (!this.editorDataMap[processName]) continue;
+            const workflowDir = `${this.executorsDirPath}/workflows/${processName}`;
+            await this.checkAndCreateDir(workflowDir);
+            const editorData: EditorData = this.editorDataMap[processName];
+            let stepNameList = [];
+            for (const node of Object.values(editorData.nodes)) {
+                if (node.data.type === StepType.CODE_BLOCK) {
+                    const {label, code} = node.data;
+                    const stepName = _.camelCase(label);
+                    stepNameList.push(stepName);
+                    const stepFilePath = `${workflowDir}/${stepName}.py`;
+                    await this.fsHelper.createFile(stepFilePath, code);
+                }
+            }
+            // create __init__.py
+            const content = Mustache.render(InitPyTemplate, {
+                stepNames: stepNameList.join(', '),
+                steps: stepNameList.map(name => {return {name}})
+            });
+            const path = `${workflowDir}/__init__.py`;
+            await this.fsHelper.createFile(path, content);
+            //
+            const steps = stepNameList.map(step => {return {step}});
+            workflows.push({name: processName, steps});
+        }
+        return workflows;
+    };
+
+    // generate workflow engine files
 
     private generateWorkflowDefinition = async () => {
         for (const processName of this.processNameList) {
@@ -202,5 +248,12 @@ export class SourceFileGenerator {
     private generateWorkflowManageSh = async () => {
         const filePath = `${this.workflowEngineDirPath}/manage.sh`;
         await this.fsHelper.createFile(filePath, WorkflowsManageSh);
+    };
+
+    private batchToCreateFiles = async (files: File[]) => {
+        for (const file of files) {
+            const {path, content} = file;
+            await this.fsHelper.createFile(path, content);
+        }
     };
 }

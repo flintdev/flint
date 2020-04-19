@@ -129,7 +129,7 @@ class ProcessListView extends React.Component<Props, object> {
         const {classes, processList} = this.props;
         return (
             <div className={classes.root}>
-                <Container maxWidth={"lg"} className={classes.container}>
+                <Container maxWidth={"xl"} className={classes.container}>
                     <Paper className={classes.paper}>
                         <table className={classes.headerTable}>
                             <tbody>
