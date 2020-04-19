@@ -146,7 +146,7 @@ export class SourceFileGenerator {
                 const nodeId = node.node;
                 let result: any = {name: _.camelCase(editorData.nodes[nodeId].data.label)};
                 if (!!condition && condition.operator !== 'always') {
-                    result['when'] = `${condition.key} ${condition.operator} ${condition.value}`;
+                    result['when'] = `${JSON.stringify(condition.key)} ${condition.operator} ${JSON.stringify(condition.value)}`;
                 }
                 nextSteps.push(result);
             });
