@@ -13,11 +13,18 @@ import * as componentsActions from 'src/redux/modules/components/actions';
 import {CreateProcessParamsDef} from "./definition";
 import {ProcessManager} from "../../../../../controllers/process/processManager";
 import {LOADING_STATUS, themeColor} from "../../../../../constants";
-import List from '@material-ui/core/List';
-import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import {DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from "@material-ui/core/Paper";
+import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import Container from '@material-ui/core/Container';
 
 const styles = createStyles({
     root: {
@@ -27,6 +34,7 @@ const styles = createStyles({
     },
     headerTable: {
         width: '100%',
+        marginBottom: 20,
     },
     tdLeft: {
         paddingLeft: 20,
@@ -42,6 +50,9 @@ const styles = createStyles({
     deleteIcon: {
         color: themeColor.dimgrey,
     },
+    container: {
+        paddingTop: 20,
+    }
 });
 
 export interface Props extends WithStyles<typeof styles>, ProcessEditorState, ConfigState {
@@ -52,7 +63,6 @@ export interface Props extends WithStyles<typeof styles>, ProcessEditorState, Co
 
 class ProcessListView extends React.Component<Props, object> {
     state = {
-        createDialogOpen: false,
         loadingStatus: LOADING_STATUS.NOT_STARTED,
     };
     processManager: ProcessManager;
@@ -60,7 +70,8 @@ class ProcessListView extends React.Component<Props, object> {
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.processManager = new ProcessManager(projectDir);
-        this.initActions().then(r => {});
+        this.initActions().then(r => {
+        });
     }
 
     initActions = async () => {
@@ -89,7 +100,8 @@ class ProcessListView extends React.Component<Props, object> {
                     await this.processManager.createProcess(name);
                     await this.reloadProcessList();
                 };
-                action().then(r => {});
+                action().then(r => {
+                });
             }
         );
     };
@@ -104,50 +116,84 @@ class ProcessListView extends React.Component<Props, object> {
         await this.reloadProcessList();
     };
 
+    handleEditClick = (processName: string) => () => {
+
+    };
+
+    handleDeleteClick = (processName: string) => async () => {
+        await this.processManager.deleteProcess(processName);
+        await this.reloadProcessList();
+    };
+
     render() {
         const {classes, processList, processSelected} = this.props;
-        const {createDialogOpen} = this.state;
         return (
             <div className={classes.root}>
-                <table className={classes.headerTable}>
-                    <tbody>
-                    <tr>
-                        <td className={classes.tdLeft}>
-                            <Typography variant={"subtitle1"}>Processes</Typography>
-                        </td>
-                        <td className={classes.tdRight}>
-                            <IconButton
-                                onClick={this.handleCreateDialogOpen}
-                                color={"primary"}
-                            >
-                                <AddIcon/>
-                            </IconButton>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                <List>
-                    {processList.map((process, i) => {
-                        return (
-                            <ListItem
-                                key={i}
-                                dense={true}
-                                button={true}
-                                selected={process===processSelected}
-                                onClick={this.handleListItemClick(process)}
-                            >
-                                <ListItemText primary={process}/>
-                                <IconButton
-                                    size={"small"}
-                                    onClick={this.handleDeleteProcessClick(process)}
+                <Container maxWidth={"lg"} className={classes.container}>
+                    <table className={classes.headerTable}>
+                        <tbody>
+                        <tr>
+                            <td className={classes.tdLeft}>
+                                <Typography variant={"h6"}>Process List</Typography>
+                            </td>
+                            <td className={classes.tdRight}>
+                                <Button
+                                    onClick={this.handleCreateDialogOpen}
+                                    color={"primary"}
+                                    variant={"contained"}
                                 >
-                                    <DeleteOutlineIcon fontSize={"inherit"} className={classes.deleteIcon}/>
-                                </IconButton>
-                            </ListItem>
-                        )
-                    })}
-                </List>
+                                    <AddIcon/>&nbsp;New Process
+                                </Button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Process Name</TableCell>
+                                    <TableCell>Description</TableCell>
+                                    <TableCell>Tags</TableCell>
+                                    <TableCell>Created Time</TableCell>
+                                    <TableCell>Last Updated Time</TableCell>
+                                    <TableCell align={"right"}>Action</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {processList.map((processName, i) => {
+                                    return (
+                                        <TableRow key={i}>
+                                            <TableCell>{processName}</TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell></TableCell>
+                                            <TableCell align={"right"}>
+                                                <Button
+                                                    size={"small"}
+                                                    variant={"outlined"}
+                                                    color={"primary"}
+                                                    onClick={this.handleEditClick(processName)}
+                                                >
+                                                    <EditIcon/>&nbsp;Edit
+                                                </Button>&nbsp;&nbsp;
+                                                <IconButton
+                                                    size={"small"}
+                                                    color={"secondary"}
+                                                    onClick={this.handleDeleteClick(processName)}
+                                                >
+                                                    <DeleteOutlineIcon fontSize={"small"}/>
+                                                </IconButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </Container>
             </div>
         )
     }

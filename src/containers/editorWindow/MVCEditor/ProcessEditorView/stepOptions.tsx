@@ -6,6 +6,7 @@ import EmailTwoToneIcon from '@material-ui/icons/EmailTwoTone';
 import AssignmentTurnedInTwoToneIcon from '@material-ui/icons/AssignmentTurnedInTwoTone';
 import AddCircleTwoToneIcon from '@material-ui/icons/AddCircleTwoTone';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
 
 export const stepOptions = [
     {
@@ -24,7 +25,7 @@ export const stepOptions = [
         "type": "Hub",
         "group": "Standard",
         "category": "Automation",
-        "icon": <RadioButtonCheckedIcon/>
+        "icon": <AccountTreeOutlinedIcon/>
     },
     {
         "type": "Manual",

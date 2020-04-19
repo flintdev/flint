@@ -15,18 +15,6 @@ export function reducer(state: ProcessEditorState, action: ProcessEditorAction) 
             return update(state, {
                 processSelected: {$set: action.value}
             });
-        case types.PROCESS_EDITOR_DIALOG_OPEN:
-            return update(state, {
-                processEditorDialog: {
-                    open: {$set: true}
-                }
-            });
-        case types.PROCESS_EDITOR_DIALOG_CLOSE:
-            return update(state, {
-                processEditorDialog: {
-                    open: {$set: false}
-                }
-            });
         case types.STEP_EDIT_DIALOG_OPEN:
             return update(state, {
                 stepEditDialog: {
@@ -42,9 +30,15 @@ export function reducer(state: ProcessEditorState, action: ProcessEditorAction) 
             });
         case types.UPDATE_EDITOR_DATA:
             return update(state, {
-                processEditorDialog: {
-                    editorData: {$set: action.editorData}
-                }
+                editorData: {$set: action.editorData}
+            });
+        case types.EDIT_PROCESS:
+            return update(state, {
+                processSelected: {$set: action.processName}
+            });
+        case types.EXIT_EDITING:
+            return update(state, {
+                processSelected: {$set: undefined},
             });
 
         default:

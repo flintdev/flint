@@ -150,6 +150,7 @@ class StepEditDialog extends React.Component<Props, object> {
                     disableEnforceFocus={true}
                     maxWidth={this.determineDialogMaxWidth()}
                     fullWidth={true}
+                    transitionDuration={0}
                 >
                     <StepAttributePane
                         attributes={attributes}

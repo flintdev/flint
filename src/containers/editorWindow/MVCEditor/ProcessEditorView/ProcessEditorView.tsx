@@ -1,14 +1,13 @@
 // 
 
 import * as React from 'react';
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { Dispatch } from "redux";
-import { StoreState } from "src/redux/state";
+import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {Dispatch} from "redux";
+import {ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import ProcessListView from "./ProcessListView";
-import ProcessInfoView from "./ProcessInfoView";
-import ProcessEditorDialog from "./ProcessEditorDialog";
+import EditView from "./EditView";
 
 const styles = createStyles({
     root: {
@@ -21,71 +20,42 @@ const styles = createStyles({
         marginTop: 2,
         flexGrow: 1,
     },
-    table: {
-        width: '100%',
-        height: '100%',
-        border: 0,
-        cellSpacing: 0,
-        cellPadding: 0,
-        borderSpacing: 0,
-        borderCollapse: 'collapse',
-    },
-    tdLeft: {
-        width: 240,
-        borderRight: '1px solid #ddd',
-    },
-    tdRight: {
-        height: '100%',
-        display: 'flex',
-        flexFlow: "column",
-    },
 });
 
-export interface Props extends WithStyles<typeof styles>{
+export interface Props extends WithStyles<typeof styles>, ProcessEditorState {
 
 }
 
 class ProcessEditorView extends React.Component<Props, object> {
-    state = {
-
-    };
+    state = {};
 
     componentDidMount(): void {
 
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, processSelected} = this.props;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
-                    <table className={classes.table}>
-                        <tbody>
-                        <tr>
-                            <td className={classes.tdLeft} valign={"top"}>
-                                <ProcessListView/>
-                            </td>
-                            <td className={classes.tdRight} valign={"top"}>
-                                <ProcessInfoView/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    {!processSelected &&
+                    <ProcessListView/>
+                    }
+                    {!!processSelected &&
+                    <EditView/>
+                    }
                 </div>
-                <ProcessEditorDialog/>
             </div>
         )
     }
 }
 
 const mapStateToProps = (state: StoreState) => {
-    return state.editor;
+    return state.editor.processEditor;
 };
 
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
-    return {
-    
-    }
+    return {}
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProcessEditorView));

@@ -54,10 +54,7 @@ export interface ModelEditorState {
 export interface ProcessEditorState {
     processList: string[],
     processSelected: string | undefined,
-    processEditorDialog: {
-        open: boolean,
-        editorData: any | undefined,
-    },
+    editorData: any | undefined,
     stepEditDialog: {
         open: boolean,
         stepData: any | undefined
@@ -121,10 +118,7 @@ export const initState: StoreState = {
         processEditor: {
             processList: [],
             processSelected: undefined,
-            processEditorDialog: {
-                open: false,
-                editorData: undefined
-            },
+            editorData: undefined,
             stepEditDialog: {
                 open: false,
                 stepData: undefined
