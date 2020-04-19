@@ -27,6 +27,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import {ToastType} from "../../../../components/interface";
 import * as componentsActions from "../../../../redux/modules/components/actions";
 import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
+import {SourceFileGenerator as ProcessSourceFileGenerator} from "../../../../controllers/process/sourceFileGenerator";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 import {UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -134,10 +135,11 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
 class HeaderView extends React.Component<Props, object> {
     state = {};
     uiSourceFileGenerator: UISourceFileGenerator;
-
+    processSourceFileGenerator: ProcessSourceFileGenerator;
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.uiSourceFileGenerator = new UISourceFileGenerator(projectDir);
+        this.processSourceFileGenerator = new ProcessSourceFileGenerator(projectDir);
         new MainProcessCommunicator().addNewPluginsListener((plugins => {
             const notification: Notification = {
                 type: "widget-update",
@@ -163,6 +165,7 @@ class HeaderView extends React.Component<Props, object> {
     handleGenerateCode = async () => {
         await this.props.beforeGeneratingCode();
         await this.uiSourceFileGenerator.generate();
+        await this.processSourceFileGenerator.generate();
         this.props.toastOpen('success', 'Source code is generated successfully');
     };
 

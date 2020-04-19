@@ -27,7 +27,7 @@ if (environment === 'development') {
 
 const commonConfig = {
     mode: mode,
-    // devtool: 'inline-source-map',
+    devtool: 'inline-source-map',
     resolve: {
         extensions: ['.ts', '.tsx', '.js'],
         modules: [
