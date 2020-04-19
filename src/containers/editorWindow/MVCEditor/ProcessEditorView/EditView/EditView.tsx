@@ -16,7 +16,7 @@ import StepEditDialog from "../StepEditDialog/StepEditDialog";
 
 const styles = createStyles({
     root: {
-
+        height: '100%'
     },
 });
 
