@@ -114,6 +114,11 @@ export class PluginFileManager {
         });
     };
 
+    removePlugin = async (plugin: PluginData) => {
+        const path = `${this.widgetsDirPath}/${plugin.id}`;
+        await this.fsHelper.removeDir(path);
+    };
+
     checkForUpdates = async () => {
         const configJson = await this.getPluginsConfigJson();
         let pluginDataMap: any = {};

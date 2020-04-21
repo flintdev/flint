@@ -157,6 +157,14 @@ app.on('ready', async () => {
         };
         action().then(r => {});
     });
+    ipcMain.on(CHANNEL.REMOVE_PLUGIN, (event, args) => {
+        const pluginData = args;
+        const action = async () => {
+            await new PluginFileManager().removePlugin(pluginData);
+            event.reply(CHANNEL.REMOVE_PLUGIN_REPLY);
+        };
+        action().then(r => {});
+    });
     ipcMain.on(CHANNEL.RELAUNCH_EDITOR_WINDOW, () => {
         editorWindow.close();
         editorWindow = null;

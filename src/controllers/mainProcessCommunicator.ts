@@ -43,6 +43,15 @@ export class MainProcessCommunicator {
         });
     };
 
+    removePlugin = (plugin: PluginData) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.REMOVE_PLUGIN_REPLY, (event, args) => {
+                resolve();
+            })
+            ipcRenderer.send(CHANNEL.REMOVE_PLUGIN, plugin);
+        });
+    };
+
     getInstalledPlugins = () => {
         return new Promise((resolve, reject) => {
             ipcRenderer.once(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, ((event, args) => {

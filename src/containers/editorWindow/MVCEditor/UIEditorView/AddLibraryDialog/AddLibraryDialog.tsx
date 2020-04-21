@@ -1,9 +1,9 @@
 // src/containers/editorWindow/MVCEditor/UIEditorView/AddLibraryDialog/AddLibraryDialog.tsx
 
 import * as React from 'react';
-import { withStyles, WithStyles, createStyles } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
-import { Dispatch } from "redux";
+import {withStyles, WithStyles, createStyles} from '@material-ui/core/styles';
+import {connect} from 'react-redux';
+import {Dispatch} from "redux";
 import {StoreState, UIEditorState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Dialog from "@material-ui/core/Dialog";
@@ -15,11 +15,10 @@ import {PluginData} from "../../../../../interface";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import {MainProcessCommunicator} from "../../../../../controllers/mainProcessCommunicator";
+import {LOADING_STATUS} from "../../../../../constants";
 
 const styles = createStyles({
-    root: {
-
-    },
+    root: {},
     paperItem: {
         border: '1px solid grey',
         paddingTop: 10,
@@ -42,14 +41,14 @@ export interface Props extends WithStyles<typeof styles>, UIEditorState {
 
 interface State {
     allPlugins: PluginData[],
-    installedPluginMap: any
+    pluginStatusMap: any
     showActions: boolean,
 }
 
 class AddLibraryDialog extends React.Component<Props, object> {
     state: State = {
         allPlugins: [],
-        installedPluginMap: {},
+        pluginStatusMap: {},
         showActions: false
     };
 
@@ -59,11 +58,11 @@ class AddLibraryDialog extends React.Component<Props, object> {
 
     onEnter = async () => {
         const {plugins, installedPlugins} = await new MainProcessCommunicator().fetchAllPlugins();
-        let installedPluginMap: any = {};
+        let pluginStatusMap: any = {};
         installedPlugins.forEach((plugin: PluginData) => {
-            installedPluginMap[plugin.id] = true;
+            pluginStatusMap[plugin.id] = LOADING_STATUS.COMPLETE;
         });
-        this.setState({allPlugins: plugins, installedPluginMap});
+        this.setState({allPlugins: plugins, pluginStatusMap});
     };
 
     handleRelaunchClick = async () => {
@@ -71,17 +70,25 @@ class AddLibraryDialog extends React.Component<Props, object> {
     };
 
     handleRemovePluginClick = (plugin: PluginData) => async () => {
-
+        await new MainProcessCommunicator().removePlugin(plugin);
+        let {pluginStatusMap} = this.state;
+        delete pluginStatusMap[plugin.id];
+        this.setState({pluginStatusMap, showActions: true});
     };
 
     handleInstallPluginClick = (plugin: PluginData) => async () => {
-
+        let {pluginStatusMap} = this.state;
+        pluginStatusMap[plugin.id] = LOADING_STATUS.LOADING;
+        this.setState({pluginStatusMap});
+        const status = await new MainProcessCommunicator().installPlugin(plugin);
+        pluginStatusMap[plugin.id] = status;
+        this.setState({showActions: true, pluginStatusMap});
     };
 
     render() {
         const {classes, addLibraryDialog} = this.props;
         const {open} = addLibraryDialog;
-        const {allPlugins, installedPluginMap, showActions} = this.state;
+        const {allPlugins, pluginStatusMap, showActions} = this.state;
         return (
             <div className={classes.root}>
                 <Dialog
@@ -93,9 +100,9 @@ class AddLibraryDialog extends React.Component<Props, object> {
                 >
                     <DialogContent>
                         {allPlugins.map((plugin, i) => {
-                            const installed: boolean = !!installedPluginMap[plugin.id] ? installedPluginMap[plugin.id] : false;
+                            const status = pluginStatusMap[plugin.id];
                             return (
-                                <Paper className={classes.paperItem}>
+                                <Paper className={classes.paperItem} key={i}>
                                     <table className={classes.table}>
                                         <tbody>
                                         <tr>
@@ -104,7 +111,7 @@ class AddLibraryDialog extends React.Component<Props, object> {
                                                 <Typography variant={"body2"} className={classes.grey}>{plugin.description}</Typography>
                                             </td>
                                             <td align={"right"}>
-                                                {installed &&
+                                                {status === LOADING_STATUS.COMPLETE &&
                                                 <Button
                                                     size={"small"}
                                                     variant={"contained"}
@@ -114,7 +121,16 @@ class AddLibraryDialog extends React.Component<Props, object> {
                                                     Remove
                                                 </Button>
                                                 }
-                                                {!installed &&
+                                                {status === LOADING_STATUS.LOADING &&
+                                                <Button
+                                                    size={"small"}
+                                                    variant={"outlined"}
+                                                    disabled={true}
+                                                >
+                                                    Installing...
+                                                </Button>
+                                                }
+                                                {!status &&
                                                 <Button
                                                     size={"small"}
                                                     variant={"outlined"}
@@ -134,7 +150,8 @@ class AddLibraryDialog extends React.Component<Props, object> {
                     {showActions &&
                     <DialogActions>
                         <Button variant={"outlined"} onClick={this.props.addLibraryDialogClose}>Later</Button>
-                        <Button variant={"contained"} color={"primary"} onClick={this.handleRelaunchClick}>Relaunch</Button>
+                        <Button variant={"contained"} color={"primary"}
+                                onClick={this.handleRelaunchClick}>Relaunch to apply</Button>
                     </DialogActions>
                     }
                 </Dialog>
