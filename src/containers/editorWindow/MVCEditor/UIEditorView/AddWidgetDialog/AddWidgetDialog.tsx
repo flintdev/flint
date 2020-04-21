@@ -10,17 +10,14 @@ import {ComponentData} from "@flintdev/ui-editor/dist/interface";
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
 import List from '@material-ui/core/List';
 import ListItem, { ListItemProps } from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import {WidgetManager} from "../../../../../controllers/ui/widgetManager";
 import {PluginData} from "../../../../../interface";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
-import {PluginFileManager} from "../../../../../controllers/pluginFileManager";
 import {MainProcessCommunicator} from "../../../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
@@ -38,6 +35,7 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, UIEditorState {
     widgetOnSelect: (data: ComponentData) => void,
     addWidgetDialogClose: () => void,
+    addLibraryDialogOpen: () => void,
 }
 
 interface State {
@@ -80,7 +78,7 @@ class AddWidgetDialog extends React.Component<Props, object> {
     };
 
     handleAddLibraryClick = () => {
-
+        this.props.addLibraryDialogOpen();
     };
 
     render() {
@@ -157,6 +155,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
     return {
         addWidgetDialogClose: () => dispatch(actions.uiEditor.addWidgetDialogClose()),
+        addLibraryDialogOpen: () => dispatch(actions.uiEditor.addLibraryDialogOpen()),
     }
 };
 

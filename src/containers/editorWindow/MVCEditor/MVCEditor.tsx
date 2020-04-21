@@ -35,7 +35,7 @@ class MVCEditor extends React.Component<Props, object> {
     }
 
     handleBeforeGeneratingCode = async () => {
-        await this.operations.saveData();
+        if (!!this.operations.saveData) await this.operations.saveData();
     };
 
     render() {

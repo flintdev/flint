@@ -7,7 +7,6 @@ import {Dispatch} from "redux";
 import {ProcessEditorState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
 import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from '@material-ui/core/Button';
@@ -15,7 +14,6 @@ import {Output, ProcessDataHandler} from "../../../../../controllers/process/pro
 import StepAttributePane from "./StepAttributePane/StepAttributePane";
 import {StepAttributes, StepType} from "./interface";
 import CodeBlockPane from "./CodeBlockPane";
-import StepConditionPane from "./StepConditionPane";
 import TriggerPane from "./TriggerPane/TriggerPane";
 import {TriggerData, TriggerEventType} from "../../../../../interface";
 import Paper from "@material-ui/core/Paper";

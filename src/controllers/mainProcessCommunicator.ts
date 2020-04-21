@@ -53,6 +53,18 @@ export class MainProcessCommunicator {
         });
     };
 
+    fetchAllPlugins = (): any => {
+        // 1. fetch from remote plugin-registry
+        // 2. save in local config.json
+        // 3. read config.json
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.FETCH_ALL_PLUGINS_REPLY, ((event, args) => {
+                resolve(args);
+            }))
+            ipcRenderer.send(CHANNEL.FETCH_ALL_PLUGINS);
+        });
+    };
+
     relaunchEditorWindow = () => {
         ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };
@@ -101,4 +113,5 @@ export class MainProcessCommunicator {
             notificationsReceived(args.plugins)
         });
     };
+
 }

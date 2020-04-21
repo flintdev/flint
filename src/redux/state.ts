@@ -65,6 +65,9 @@ export interface UIEditorState {
     addWidgetDialog: {
         open: boolean
     },
+    addLibraryDialog: {
+        open: boolean,
+    }
     _mark: number
 }
 
@@ -127,6 +130,9 @@ export const initState: StoreState = {
         uiEditor: {
             addWidgetDialog: {
                 open: false,
+            },
+            addLibraryDialog: {
+                open: false
             },
             _mark: 0
         }

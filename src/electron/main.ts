@@ -169,6 +169,16 @@ app.on('ready', async () => {
         };
         action().then(r => {});
     });
+    ipcMain.on(CHANNEL.FETCH_ALL_PLUGINS, (event, args) => {
+        const action = async () => {
+            const pluginFileManager = new PluginFileManager();
+            await pluginFileManager.reloadPluginsConfigFromRegistry();
+            const {plugins} = await pluginFileManager.getPluginsConfigJson();
+            const installedPlugins = await pluginFileManager.getInstalledPlugins();
+            event.reply(CHANNEL.FETCH_ALL_PLUGINS_REPLY, {plugins, installedPlugins});
+        };
+        action().then(r => {});
+    });
 });
 
 app.on('window-all-closed', () => {

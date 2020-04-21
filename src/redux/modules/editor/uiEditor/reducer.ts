@@ -19,6 +19,18 @@ export function reducer(state: UIEditorState, action: UIEditorAction) {
                     open: {$set: false}
                 }
             });
+        case types.ADD_LIBRARY_DIALOG_OPEN:
+            return update(state, {
+                addLibraryDialog: {
+                    open: {$set: true}
+                }
+            });
+        case types.ADD_LIBRARY_DIALOG_CLOSE:
+            return update(state, {
+                addLibraryDialog: {
+                    open: {$set: false}
+                }
+            });
         case types.INCREASE_MARK:
             return update(state, {
                 _mark: {$set: state._mark + 1}

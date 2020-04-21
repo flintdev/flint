@@ -9,6 +9,7 @@ import {reducer as componentsReducer, ComponentsAction} from "./modules/componen
 
 export type Action = StarterAction & ConfigAction & EditorAction & FilesAction & ComponentsAction;
 
+// @ts-ignore
 export function reducer(state: StoreState, action: Action) {
     return {
         starter: starterReducer(state.starter, action),

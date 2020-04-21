@@ -24,6 +24,7 @@ import {shell} from 'electron';
 import {UIActionHandler} from "../../../../controllers/ui/uiActionHandler";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 import {getWidget, getWidgetConfiguration} from "../../../../controllers/ui/widgetLibraryWrapper";
+import AddLibraryDialog from "./AddLibraryDialog/AddLibraryDialog";
 
 const styles = createStyles({
     root: {
@@ -211,7 +212,7 @@ class UIEditorView extends React.Component<Props, object> {
                     <AddWidgetDialog
                         widgetOnSelect={this.handleWidgetOnSelect}
                     />
-
+                    <AddLibraryDialog/>
                 </div>
             </div>
         )
