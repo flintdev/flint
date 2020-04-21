@@ -58,9 +58,9 @@ export class SourceFileGenerator {
         await this.removeSourceDir();
         await this.checkAndCreateDir(this.sourceDirPath);
         await this.loadEditorData();
-        await this.generateConfigFiles();
         await this.generateReduxFiles();
-        await this.generateComponentFiles();
+        const packages = await this.generateComponentFiles();
+        await this.generateConfigFiles(packages);
         await this.generateActionFiles();
     };
 
@@ -76,7 +76,7 @@ export class SourceFileGenerator {
         }
     };
 
-    private generateConfigFiles = async () => {
+    private generateConfigFiles = async (packages: string[]) => {
         let files: File[] = [];
         const {settings} = this.editorData;
         const dependencies = !!settings.dependencies ? settings.dependencies : [];
@@ -91,7 +91,8 @@ export class SourceFileGenerator {
             path: `${this.sourceDirPath}/package.json`,
             content: Mustache.render(PackageJSON, {
                 projectName: this.projectName,
-                libraries
+                libraries,
+                packages: packages.map(item => {return {name: item}})
             }),
         });
         // .babelrc
@@ -131,6 +132,7 @@ export class SourceFileGenerator {
             content: Mustache.render(ReactCode, data),
         });
         await this.batchToCreateFiles(files);
+        return data.packages;
     };
 
     private generateActionFiles = async () => {

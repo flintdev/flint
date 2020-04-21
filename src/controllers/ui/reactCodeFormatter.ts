@@ -13,11 +13,13 @@ export class ReactCodeFormatter {
     widgetNameList: string[];
     widgetList: any[];
     actionList: string[];
+    packages: string[];
     constructor(components: ComponentData[]) {
         this.components = components;
         this.widgetNameList = [];
         this.widgetList = [];
         this.actionList = [];
+        this.packages = [];
     }
 
     getRenderData = () => {
@@ -27,7 +29,8 @@ export class ReactCodeFormatter {
         return {
             widgets: this.widgetList,
             actions: this.actionList.map(name => {return {name}}),
-            code
+            code,
+            packages: this.packages,
         }
     };
 
@@ -45,6 +48,7 @@ export class ReactCodeFormatter {
         if (!this.widgetNameList.includes(name)) {
             this.widgetNameList.push(name);
             this.widgetList.push({elementName, componentName, pluginId});
+            if (!this.packages.includes(pluginId)) this.packages.push(pluginId);
         }
         const paramsStr = this.generateParamsStr(params);
         const eventsStr = !!events ? this.generateEventsStr(events) : '';
