@@ -52,14 +52,16 @@ interface State {
     plugins: PluginData[],
     installStatusMap: {
         [key: string]: LOADING_STATUS
-    }
+    },
+    showActions: boolean
 }
 
 class WidgetUpdateDialog extends React.Component<Props, object> {
     state: State = {
         loadingStatus: LOADING_STATUS.NOT_STARTED,
         plugins: [],
-        installStatusMap: {}
+        installStatusMap: {},
+        showActions: false,
     };
 
     componentDidMount(): void {
@@ -95,6 +97,7 @@ class WidgetUpdateDialog extends React.Component<Props, object> {
             let {installStatusMap} = this.state;
             installStatusMap[plugin.id] = status;
             this.setState({installStatusMap});
+            if (status === LOADING_STATUS.COMPLETE) this.setState({showActions: true});
         } catch (err) {
             console.log('err', err);
         }
@@ -104,20 +107,10 @@ class WidgetUpdateDialog extends React.Component<Props, object> {
         new MainProcessCommunicator().relaunchEditorWindow();
     };
 
-    determineToDisplayActions = (): boolean => {
-        const {installStatusMap} = this.state;
-        if (!installStatusMap) return false;
-        if (Object.keys(installStatusMap).length === 0) return false;
-        for (let key in Object.keys(installStatusMap)) {
-            if (installStatusMap[key] === LOADING_STATUS.COMPLETE) return true;
-        }
-        return false;
-    };
-
     render() {
         const {classes, widgetUpdateDialog} = this.props;
         const {open} = widgetUpdateDialog;
-        const {plugins, loadingStatus, installStatusMap} = this.state;
+        const {plugins, loadingStatus, installStatusMap, showActions} = this.state;
         return (
             <div className={classes.root}>
                 <Dialog
@@ -165,7 +158,7 @@ class WidgetUpdateDialog extends React.Component<Props, object> {
                             )
                         })}
                     </DialogContent>
-                    {this.determineToDisplayActions() &&
+                    {showActions &&
                     <DialogActions>
                         <Button variant={"outlined"} onClick={this.props.widgetUpdateDialogClose}>Later</Button>
                         <Button variant={"contained"} color={"primary"} onClick={this.handleRelaunchClick}>Relaunch to Apply</Button>
