@@ -158,7 +158,7 @@ export class SourceFileGenerator {
             for (let node of Object.values(editorData.nodes)) {
                 if (node.data.type === StepType.TRIGGER) {
                     const nextSteps = this.getNextSteps(node, editorData);
-                    definition['startAt'] = nextSteps[0].name;
+                    definition['startAt'] = nextSteps.map(item => item.name);
                     definition['trigger'] = this.getTriggerData(node);
                 } else if (node.data.type === StepType.END) {
                     const stepName = _.camelCase(node.data.label);

@@ -3,7 +3,6 @@
 import {ipcRenderer} from 'electron';
 import {CHANNEL} from "../constants";
 import {PluginData} from "../interface";
-import {plugins} from "pretty-format";
 
 export enum Error {
     CANCELLED,
