@@ -15,11 +15,12 @@ import StepAttributePane from "./StepAttributePane/StepAttributePane";
 import {StepAttributes, StepType} from "./interface";
 import CodeBlockPane from "./CodeBlockPane";
 import TriggerPane from "./TriggerPane/TriggerPane";
-import {TriggerData, TriggerEventType} from "../../../../../interface";
+import {ManualData, TriggerData, TriggerEventType} from "../../../../../interface";
 import Paper from "@material-ui/core/Paper";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import StepOutputsPane from "./StepOutputsPane";
+import ManualPane from "./ManualPane";
 
 
 const styles = createStyles({
@@ -43,6 +44,7 @@ interface State {
     code: string,
     outputs: Output[],
     triggerData: any,
+    manualData: any,
     tabIndex: number
 }
 
@@ -52,6 +54,7 @@ class StepEditDialog extends React.Component<Props, object> {
         code: '',
         outputs: [],
         triggerData: {},
+        manualData: {},
         tabIndex: 0
     };
     operations: Operations = {};
@@ -72,7 +75,7 @@ class StepEditDialog extends React.Component<Props, object> {
         this.reset();
         this.operations = this.props.operations;
         const {stepData} = this.props.stepEditDialog;
-        const {attributes, code, outputs} = this.parseStepData();
+        let {attributes, code, outputs} = this.parseStepData();
         if (stepData.data.type === StepType.CODE_BLOCK) {
             this.setState({attributes, code, outputs});
         } else if (stepData.data.type === StepType.TRIGGER) {
@@ -83,6 +86,15 @@ class StepEditDialog extends React.Component<Props, object> {
                 triggerData = JSON.parse(code);
             }
             this.setState({attributes, code, outputs, triggerData});
+        } else if (stepData.data.type === StepType.MANUAL) {
+            let manualData: ManualData;
+            if (!code || code === "") {
+                manualData = {model: '', eventType: TriggerEventType.MODIFIED, outputs: []};
+            } else {
+                manualData = JSON.parse(code);
+                outputs = manualData.outputs;
+            }
+            this.setState({attributes, code, outputs, manualData});
         }
     };
 
@@ -113,10 +125,13 @@ class StepEditDialog extends React.Component<Props, object> {
     };
 
     handleUpdateButtonClick = () => {
-        let {attributes, code, outputs, triggerData} = this.state;
+        let {attributes, code, outputs, triggerData, manualData} = this.state;
         const {stepData} = this.props.stepEditDialog;
         if (stepData.data.type === StepType.TRIGGER) {
             code = JSON.stringify(triggerData);
+        } else if (stepData.data.type === StepType.MANUAL) {
+            code = JSON.stringify(manualData);
+            outputs = manualData.outputs;
         }
         const newStepData = new ProcessDataHandler().updateStepData(stepData, attributes, code, outputs);
         this.operations.updateStepData(newStepData);
@@ -127,17 +142,22 @@ class StepEditDialog extends React.Component<Props, object> {
         this.setState({triggerData});
     }
 
+    handleManualDataOnChange = (manualData: ManualData) => {
+        this.setState({manualData});
+    };
+
     determineDialogMaxWidth = () => {
         const {stepData} = this.props.stepEditDialog;
         if (!stepData) return 'md';
         if (stepData.data.type === StepType.TRIGGER) return 'sm';
+        if (stepData.data.type === StepType.MANUAL) return 'sm';
         return 'md';
     };
 
     render() {
         const {classes, stepEditDialog} = this.props;
         const {open, stepData} = stepEditDialog;
-        const {attributes, code, outputs, triggerData, tabIndex} = this.state;
+        const {attributes, code, outputs, triggerData, manualData, tabIndex} = this.state;
         if (!stepData) return <div/>;
         return (
             <div className={classes.root}>
@@ -159,6 +179,12 @@ class StepEditDialog extends React.Component<Props, object> {
                         <TriggerPane
                             data={triggerData}
                             onChange={this.handleTriggerDataOnChange}
+                        />
+                        }
+                        {stepData.data.type === StepType.MANUAL &&
+                        <ManualPane
+                            data={manualData}
+                            onChange={this.handleManualDataOnChange}
                         />
                         }
                         {stepData.data.type === StepType.CODE_BLOCK &&

@@ -1,5 +1,7 @@
 // src/interface.ts
 
+import {Output} from "./controllers/process/processDataHandler";
+
 export interface FileTreeNode {
     path: string,
     name: string,
@@ -33,8 +35,15 @@ export enum TriggerEventType {
     'MODIFIED' = 'MODIFIED',
     'DELETED' = 'DELETED'
 }
+
 export interface TriggerData {
     model: string,
     eventType: TriggerEventType,
     when: string
+}
+
+export interface ManualData {
+    model: string,
+    eventType: TriggerEventType,
+    outputs: Output[],
 }

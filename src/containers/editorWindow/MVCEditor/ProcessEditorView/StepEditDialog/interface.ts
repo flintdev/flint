@@ -10,5 +10,6 @@ export interface StepAttributes {
 export enum StepType {
     CODE_BLOCK = 'Code Block',
     TRIGGER = 'Trigger',
+    MANUAL = 'Manual',
     END = 'End',
 }
