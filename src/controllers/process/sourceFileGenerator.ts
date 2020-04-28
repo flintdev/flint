@@ -160,13 +160,20 @@ export class SourceFileGenerator {
                     const nextSteps = this.getNextSteps(node, editorData);
                     definition['startAt'] = nextSteps.map(item => item.name);
                     definition['trigger'] = this.getTriggerData(node);
+                } else if (node.data.type === StepType.MANUAL) {
+                    const stepName = _.camelCase(node.data.label);
+                    steps[stepName] = {
+                        type: 'manual',
+                        trigger: this.getManualStepTriggerData(node),
+                        nextSteps: this.getNextSteps(node, editorData),
+                    };
                 } else if (node.data.type === StepType.END) {
                     const stepName = _.camelCase(node.data.label);
                     steps[stepName] = {nextSteps: []};
                 } else {
                     const stepName = _.camelCase(node.data.label);
                     const nextSteps = this.getNextSteps(node, editorData);
-                    steps[stepName] = {nextSteps};
+                    steps[stepName] = {type: 'automation', nextSteps};
                 }
             }
             definition['steps'] = steps;
@@ -182,6 +189,14 @@ export class SourceFileGenerator {
     private getTriggerData = (node: any) => {
         return JSON.parse(node.data.code);
     }
+
+    private getManualStepTriggerData = (node: any) => {
+        const data = JSON.parse(node.data.code);
+        return {
+            model: data.model,
+            eventType: data.eventType,
+        }
+    };
 
     private getNextSteps = (node: any, editorData: EditorData) => {
         let nextSteps: any[] = [];

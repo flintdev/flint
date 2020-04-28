@@ -73,7 +73,7 @@
     "webpack-cli": "^3.3.11"
   },
   "dependencies": {
-    "@flintdev/material-widgets": "0.0.66",
+    "@flintdev/material-widgets": "0.0.68",
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/process-editor": "0.0.7",
     "@flintdev/ui-editor": "0.0.37",
