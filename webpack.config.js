@@ -11,7 +11,8 @@ if (environment === 'development') {
     filePath = './dist/bundles/development';
     filename = '[name].js';
     processEnv = {
-        NODE_ENV: 'development'
+        NODE_ENV: 'development',
+        CLIENT_APP: 'flint',
     };
     mode = 'development';
     target = 'electron-renderer';
@@ -19,7 +20,8 @@ if (environment === 'development') {
     filePath = './dist/bundles/production';
     filename = '[name].js';
     processEnv = {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        CLIENT_APP: 'flint',
     };
     mode = 'production';
     target = 'electron-renderer';

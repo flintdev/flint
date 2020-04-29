@@ -19,7 +19,8 @@ const styles = createStyles({
         height: "100%",
     },
     content: {
-        flexGrow: 1
+        flexGrow: 1,
+        width: '100%'
     },
 });
 
