@@ -1,5 +1,7 @@
 // src/constants/editorWindow.ts
 
+import {Output} from "../controllers/process/processDataHandler";
+
 export enum Page {
     Editor,
     Files,
@@ -30,3 +32,14 @@ export interface ModelView {
     key: MVC,
     name: string
 }
+
+export const AlwaysOutputs: Output[] = [
+    {
+        name: "Always",
+        condition: {
+            key: "",
+            operator: 'always',
+            value: ""
+        }
+    }
+];

@@ -64,9 +64,10 @@ async function createEditorWindow(projectDir: string) {
     });
     const templatePath = path.join(__dirname, 'editor.html');
     const filePath = await new PluginFileManager().renderHtmlTemplateWithPluginFiles(__dirname, templatePath);
+    editorWindow.maximize();
     await editorWindow.loadFile(filePath);
     editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
-    editorWindow.maximize();
+
     if (!!starterWindow) {
         starterWindow.close();
         starterWindow = null;

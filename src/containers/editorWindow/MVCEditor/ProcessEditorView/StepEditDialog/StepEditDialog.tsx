@@ -21,7 +21,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import StepOutputsPane from "./StepOutputsPane";
 import ManualPane from "./ManualPane";
-
+import {AlwaysOutputs} from "../../../../../constants/editor";
 
 const styles = createStyles({
     root: {},
@@ -129,6 +129,7 @@ class StepEditDialog extends React.Component<Props, object> {
         const {stepData} = this.props.stepEditDialog;
         if (stepData.data.type === StepType.TRIGGER) {
             code = JSON.stringify(triggerData);
+            outputs = AlwaysOutputs;
         } else if (stepData.data.type === StepType.MANUAL) {
             code = JSON.stringify(manualData);
             outputs = manualData.outputs;

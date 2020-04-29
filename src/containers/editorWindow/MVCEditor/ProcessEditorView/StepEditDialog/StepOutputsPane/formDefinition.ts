@@ -3,7 +3,7 @@
 import {Form} from "../../../../../../components/interface";
 
 const OutputConditionOptions = [
-    'always', '==', '>=', '<=', '>', '<', 'contains'
+    '==', '>=', '<=', '>', '<', 'contains'
 ];
 
 export const OutputParamsDef: Form[] = [
