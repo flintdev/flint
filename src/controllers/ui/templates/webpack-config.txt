@@ -1,14 +1,13 @@
 const path = require('path');
 const HtmlWebPackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+const commonConfig = {
     context: __dirname,
     mode: 'development',
-    entry: "./index.jsx",
     devtool: 'inline-source-map',
     output: {
         path: path.resolve('../../dist/'),
-        filename: "index.js",
+        filename: "[name].js",
     },
     resolve: {
         extensions: [".js", ".jsx"],
@@ -61,4 +60,27 @@ module.exports = {
         errors: true,
         source: true,
     }
+};
+
+module.exports = env => {
+    return [
+        {
+            ...commonConfig,
+            entry: {
+                index: "./index.jsx",
+            },
+            target: 'web',
+        },
+        {
+            ...commonConfig,
+            entry: {
+                server: "./server.js"
+            },
+            target: 'node',
+            node: {
+                __filename: false,
+                __dirname: false
+            },
+        }
+    ]
 };

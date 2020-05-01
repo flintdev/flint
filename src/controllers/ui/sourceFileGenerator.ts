@@ -13,6 +13,7 @@ import ReduxActionsJS from './templates/redux-actions-js.txt';
 import ReduxReducerJS from './templates/redux-reducer-js.txt';
 import ReduxTypesJS from './templates/redux-types-js.txt';
 import IndexJSX from './templates/index-jsx.txt';
+import ServerJS from './templates/server-js.txt';
 import ReactCode from './templates/react-code.txt'
 import ActionsRootIndexJS from './templates/actions-root-index-js.txt';
 import ActionIndexJS from './templates/action-index-js.txt';
@@ -118,6 +119,11 @@ export class SourceFileGenerator {
         files.push({
             path: `${this.sourceDirPath}/index.jsx`,
             content: IndexJSX
+        });
+        // server.js
+        files.push({
+            path: `${this.sourceDirPath}/server.js`,
+            content: ServerJS
         });
         await this.batchToCreateFiles(files);
     };

@@ -1,0 +1,18 @@
+const {server} = require('@flintdev/node-server');
+const path = require('path');
+const fs = require('fs');
+
+const filePath = path.join(__dirname + '/index.html');
+const html = fs.readFileSync(filePath).toString();
+
+server.init({
+    port: 8000,
+    host: '0.0.0.0',
+    html: html,
+    staticFiles: {
+        url: '/index.js',
+        path: path.join(__dirname + '/index.js')
+    }
+});
+
+server.start();
