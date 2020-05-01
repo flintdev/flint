@@ -36,6 +36,7 @@ import NotificationListView from "./NotificationListView";
 import Badge from "@material-ui/core/Badge";
 import {Notification} from "../../../../interface";
 import WidgetUpdateDialog from "./WidgetUpdateDialog";
+import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
 
 const styles = createStyles({
     root: {},
@@ -182,6 +183,10 @@ class HeaderView extends React.Component<Props, object> {
         this.props.notificationPopoverOpen(event.currentTarget);
     };
 
+    handleConfigButtonClick = () => {
+        // todo: handle config button click
+    };
+
     renderNotificationButton = () => {
         const {classes, notifications} = this.props;
         const hasNotifications = !!notifications && notifications.length > 0;
@@ -197,6 +202,19 @@ class HeaderView extends React.Component<Props, object> {
                 </Badge>
                 }
                 {!hasNotifications && <NotificationsNoneIcon/>}
+            </IconButton>
+        )
+    };
+
+    renderConfigButton = () => {
+        const {classes} = this.props;
+        return (
+            <IconButton
+                size={"small"}
+                className={classes.IconButtonNotification}
+                onClick={this.handleConfigButtonClick}
+            >
+                <BuildOutlinedIcon/>
             </IconButton>
         )
     };
@@ -264,9 +282,13 @@ class HeaderView extends React.Component<Props, object> {
                                         <CodeIcon/>
                                     </Fab>
                                 </Tooltip>
+                                <Tooltip title={"Configuration"}>
+                                    {this.renderConfigButton()}
+                                </Tooltip>
                                 <Tooltip title={"Notifications"}>
                                     {this.renderNotificationButton()}
                                 </Tooltip>
+
                             </td>
                         </tr>
                         </tbody>
