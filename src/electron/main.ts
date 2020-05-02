@@ -82,7 +82,7 @@ async function createEditorWindow(projectDir: string) {
             editorWindow.hide();
         } else {
             editorWindow = null;
-            autoUpdater.stop();
+            if (!!autoUpdater) autoUpdater.stop();
             autoUpdater = null;
         }
     });

@@ -30,6 +30,7 @@ export class WidgetManager {
             id: this.generateUniqueId(),
             name,
             params: values,
+            overlay: !!canvas && !!canvas.overlay,
             children: [],
             canvas
         }
