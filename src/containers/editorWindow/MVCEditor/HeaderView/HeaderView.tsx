@@ -131,6 +131,7 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
     beforeGeneratingCode: () => Promise<void>,
     notificationPopoverOpen: (anchorEl: HTMLButtonElement) => void,
     addNotification: (notification: Notification) => void,
+    settingsDialogOpen: () => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -184,7 +185,7 @@ class HeaderView extends React.Component<Props, object> {
     };
 
     handleConfigButtonClick = () => {
-        // todo: handle config button click
+        this.props.settingsDialogOpen();
     };
 
     renderNotificationButton = () => {
@@ -313,6 +314,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
         increaseMark: () => dispatch(actions.uiEditor.increaseMark()),
         notificationPopoverOpen: (anchorEl: HTMLButtonElement) => dispatch(actions.navigation.notificationPopoverOpen(anchorEl)),
         addNotification: (notification: Notification) => dispatch(actions.navigation.addNotification(notification)),
+        settingsDialogOpen: () => dispatch(actions.settings.settingsDialogOpen()),
     }
 };
 

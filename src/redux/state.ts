@@ -9,6 +9,11 @@ export interface EditorState {
     modelEditor: ModelEditorState,
     processEditor: ProcessEditorState,
     uiEditor: UIEditorState,
+    settings: SettingsState,
+}
+
+export interface SettingsState {
+    open: boolean
 }
 
 export interface ComponentsState {
@@ -135,6 +140,9 @@ export const initState: StoreState = {
                 open: false
             },
             _mark: 0
+        },
+        settings: {
+            open: false,
         }
     },
     files: {

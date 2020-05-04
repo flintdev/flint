@@ -5,8 +5,9 @@ import {reducer as modelEditorReducer, ModelEditorAction} from "./modelEditor/re
 import {reducer as navigationReducer, NavigationAction} from "./navigation/reducer";
 import {reducer as processEditorReducer, ProcessEditorAction} from "./processEditor/reducer";
 import {reducer as uiEditorReducer, UIEditorAction} from './uiEditor/reducer';
+import {reducer as settingsReducer, SettingsAction} from './settings/reducer';
 
-export type Action = NavigationAction & ModelEditorAction & ProcessEditorAction & UIEditorAction;
+export type Action = NavigationAction & ModelEditorAction & ProcessEditorAction & UIEditorAction & SettingsAction;
 
 export function reducer(state: EditorState, action: Action) {
     return {
@@ -14,6 +15,7 @@ export function reducer(state: EditorState, action: Action) {
         modelEditor: modelEditorReducer(state.modelEditor, action),
         processEditor: processEditorReducer(state.processEditor, action),
         uiEditor: uiEditorReducer(state.uiEditor, action),
+        settings: settingsReducer(state.settings, action),
     }
 }
 

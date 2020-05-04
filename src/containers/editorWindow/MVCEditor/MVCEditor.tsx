@@ -11,6 +11,7 @@ import {MVC} from "../../../constants/editor";
 import ModelListView from "./ModelEditorView";
 import ProcessEditorView from "./ProcessEditorView";
 import UIEditorView from "./UIEditorView";
+import SettingsView from "./SettingsView";
 
 const styles = createStyles({
     root: {
@@ -49,6 +50,7 @@ class MVCEditor extends React.Component<Props, object> {
                     {currentView === MVC.Controller && <ProcessEditorView/>}
                     {currentView === MVC.View && <UIEditorView operations={this.operations}/>}
                 </div>
+                <SettingsView/>
             </div>
         )
     }
