@@ -19,12 +19,13 @@ import AddWidgetDialog from "./AddWidgetDialog/AddWidgetDialog";
 import {UIData, UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import * as componentsActions from "src/redux/modules/components/actions";
 import {ToastType} from "../../../../components/interface";
-import {OpenVSCodeCallback} from "@flintdev/ui-editor/src/containers/Toolbar/ActionsDialog/ActionsDialog";
+import {OpenVSCodeCallback} from "@flintdev/ui-editor/dist/containers/Toolbar/StateActionsDialog/ActionsPane/ActionsPane";
 import {shell} from 'electron';
 import {UIActionHandler} from "../../../../controllers/ui/uiActionHandler";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
-import {getWidget, getWidgetConfiguration} from "../../../../controllers/ui/widgetLibraryWrapper";
+import {getWidget, getWidgetConfiguration, getWidgetInfo} from "../../../../controllers/ui/widgetLibraryWrapper";
 import AddLibraryDialog from "./AddLibraryDialog/AddLibraryDialog";
+import {PluginData} from "../../../../interface";
 
 const styles = createStyles({
     root: {
@@ -53,7 +54,8 @@ interface State {
     initialState: string,
     components: ComponentData[],
     settings: SettingsData,
-    perspectives: PerspectiveData[]
+    perspectives: PerspectiveData[],
+    plugins: PluginData[],
 }
 
 class UIEditorView extends React.Component<Props, object> {
@@ -63,7 +65,8 @@ class UIEditorView extends React.Component<Props, object> {
         initialState: '',
         components: [],
         settings: {},
-        perspectives: []
+        perspectives: [],
+        plugins: []
     };
     operations: any = {};
     uiDataManager: UIDataManager;
@@ -85,12 +88,10 @@ class UIEditorView extends React.Component<Props, object> {
         const data: UIData = await this.uiDataManager.getUIData();
         if (!data) return;
         this.setState({...data});
+        const plugins: any = await new MainProcessCommunicator().getInstalledPlugins();
+        this.setState({plugins});
         const {components} = data;
         this.operations.updateComponents(components);
-    };
-
-    handleAddComponentClick = () => {
-        this.props.addWidgetDialogOpen();
     };
 
     handleActionUpdate = (type: string, data: ActionData) => {
@@ -179,12 +180,13 @@ class UIEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes} = this.props;
-        const {actions, stateUpdaters, initialState, components, settings, perspectives} = this.state;
+        const {actions, stateUpdaters, initialState, components, settings, perspectives, plugins} = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
                     <UIEditor
                         operations={this.operations}
+                        plugins={plugins}
                         initialState={initialState}
                         stateUpdaters={stateUpdaters}
                         initialStateOnChange={this.handleInitialStateChange}
@@ -198,13 +200,13 @@ class UIEditorView extends React.Component<Props, object> {
                         components={components}
                         componentsOnUpdate={this.handleComponentsOnUpdate}
                         componentOnSelect={this.handleComponentOnSelect}
-                        addComponentOnClick={this.handleAddComponentClick}
                         saveOnClick={this.saveButtonClick}
                         handler={{
                             // @ts-ignore
                             getWidgetConfig: getWidgetConfiguration,
                             // @ts-ignore
                             getWidget: getWidget,
+                            getWidgetInfo: getWidgetInfo,
                             // @ts-ignore
                             openVSCode: this.handleOpenVSCodeClick,
                         }}
