@@ -83,9 +83,18 @@ export interface FilesState {
     fileContent: string|null,
 }
 
+interface CreateProjectDialog {
+    open: boolean
+}
+
+interface ValidationDialog {
+    open: boolean
+}
+
 export interface StoreState {
     starter: {
-        createProjectDialog: object
+        createProjectDialog: CreateProjectDialog,
+        validationDialog: ValidationDialog
     },
     config: ConfigState,
     editor: EditorState,
@@ -96,6 +105,9 @@ export interface StoreState {
 export const initState: StoreState = {
     starter: {
         createProjectDialog: {
+            open: false
+        },
+        validationDialog: {
             open: false
         }
     },

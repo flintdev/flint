@@ -18,6 +18,19 @@ export function reducer(state: object, action: StarterAction) {
                     open: {$set: false}
                 }
             });
+        case types.VALIDATION_DIALOG_OPEN:
+            return update(state, {
+                validationDialog: {
+                    open: {$set: true}
+                }
+            });
+        case types.VALIDATION_DIALOG_CLOSE:
+            return update(state, {
+                validationDialog: {
+                    open: {$set: false}
+                }
+            });
+
         default:
             return state;
     }
