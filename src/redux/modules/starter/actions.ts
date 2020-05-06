@@ -12,8 +12,8 @@ export function createProjectDialogClose(): CreateProjectDialogClose {
     return { type: types.CREATE_PROJECT_DIALOG_CLOSE };
 }
 
-export function validationDialogOpen(): ValidationDialogOpen {
-    return { type: types.VALIDATION_DIALOG_OPEN }
+export function validationDialogOpen(projectDirSelected: string): ValidationDialogOpen {
+    return { type: types.VALIDATION_DIALOG_OPEN, projectDirSelected }
 }
 
 export function validationDialogClose(): ValidationDialogClose {
@@ -28,6 +28,7 @@ export interface ValidationDialogClose {
 
 export interface ValidationDialogOpen {
     type: typeof types.VALIDATION_DIALOG_OPEN,
+    projectDirSelected: string,
 }
 
 export interface CreateProjectDialogOpen {

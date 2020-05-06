@@ -53,6 +53,7 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>{
     createProjectDialogOpen?: () => void,
+    validationDialogOpen: (projectDir: string) => void,
 }
 
 interface State {
@@ -79,18 +80,10 @@ class ActionView extends React.Component<Props, object> {
         this.props.createProjectDialogOpen();
     };
 
-    handleOpenButtonClick = () => {
+    handleOpenButtonClick = async () => {
         const communicator = new MainProcessCommunicator();
-        communicator.selectDirectory()
-            .then((filePath: string) => {
-                communicator.switchFromStarterToEditorWindow(filePath)
-                    .then(() => {
-
-                    });
-            })
-            .catch(err => {
-
-            });
+        const filePath = await communicator.selectDirectory();
+        this.props.validationDialogOpen(filePath.toString());
     };
 
     handleCheckoutButtonClick = () =>{
@@ -151,6 +144,7 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
     return {
         createProjectDialogOpen: () => dispatch(actions.createProjectDialogOpen()),
+        validationDialogOpen: (projectDir: string) => dispatch(actions.validationDialogOpen(projectDir)),
     }
 };
 

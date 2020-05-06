@@ -5,6 +5,7 @@ import {withStyles, WithStyles, createStyles, ThemeProvider} from '@material-ui/
 import ActionView from "./ActionView";
 import CreateProjectDialog from "./CreateProjectDialog";
 import {theme} from "../../constants";
+import ValidationDialog from "./ValidationDialog/ValidationDialog";
 
 const styles = createStyles({
     root: {
@@ -66,6 +67,7 @@ function StarterContainer(props: Props) {
                     </tbody>
                 </table>
                 <CreateProjectDialog/>
+                <ValidationDialog/>
             </div>
         </ThemeProvider>
     )

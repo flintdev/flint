@@ -21,7 +21,8 @@ export function reducer(state: object, action: StarterAction) {
         case types.VALIDATION_DIALOG_OPEN:
             return update(state, {
                 validationDialog: {
-                    open: {$set: true}
+                    open: {$set: true},
+                    projectDirSelected: {$set: action.projectDirSelected}
                 }
             });
         case types.VALIDATION_DIALOG_CLOSE:
