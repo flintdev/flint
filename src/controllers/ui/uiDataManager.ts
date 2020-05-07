@@ -92,11 +92,15 @@ export class UIDataManager {
     };
 
     getDependentPlugins = async () => {
-        const uiData: UIData = await this.getUIData();
-        const components = uiData.components;
-        this.plugins = [];
-        this.recurToGetPlugins(components);
-        return this.plugins;
+        try {
+            const uiData: UIData = await this.getUIData();
+            const components = uiData.components;
+            this.plugins = [];
+            this.recurToGetPlugins(components);
+            return this.plugins;
+        } catch (e) {
+            return [];
+        }
     };
 
     private recurToGetPlugins = (children?: ComponentData[]) => {
