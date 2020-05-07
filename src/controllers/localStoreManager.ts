@@ -5,6 +5,10 @@ export class LocalStorageManager {
         localStorage.projectDir = projectDir;
     }
 
+    clearProjectDir() {
+        localStorage.removeItem('projectDir');
+    }
+
     getProjectDir(): string {
         return localStorage.projectDir;
     }

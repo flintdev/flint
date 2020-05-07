@@ -67,7 +67,6 @@ async function createEditorWindow(projectDir: string) {
     editorWindow.maximize();
     await editorWindow.loadFile(filePath);
     editorWindow.webContents.send(CHANNEL.SEND_PROJECT_DIR, projectDir);
-
     if (!!starterWindow) {
         starterWindow.close();
         starterWindow = null;

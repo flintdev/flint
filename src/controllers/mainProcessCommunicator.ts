@@ -87,7 +87,7 @@ export class MainProcessCommunicator {
         ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };
 
-    receiveProjectDir = () => {
+    receiveProjectDir = (): Promise<string> => {
         return new Promise((resolve, reject) => {
             ipcRenderer.once(CHANNEL.SEND_PROJECT_DIR, (event: object, arg: string) => {
                 const projectDir = arg;

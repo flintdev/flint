@@ -76,6 +76,7 @@ class UIEditorView extends React.Component<Props, object> {
             await this.uiDataManager.saveUIData(data);
         };
         this.uiDataManager = new UIDataManager(this.props.projectDir);
+        console.log('this.props.projectDir', this.props.projectDir);
         this.initActions().then(r => {});
     }
 
@@ -86,6 +87,7 @@ class UIEditorView extends React.Component<Props, object> {
     initActions = async () => {
         await this.uiDataManager.checkAndCreateUIDir();
         const data: UIData = await this.uiDataManager.getUIData();
+        console.log('ui data', data);
         if (!data) return;
         this.setState({...data});
         const plugins: any = await new MainProcessCommunicator().getInstalledPlugins();

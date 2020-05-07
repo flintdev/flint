@@ -56,14 +56,22 @@ class EditorContainer extends React.Component<Props, object> {
     state = {};
 
     componentDidMount(): void {
-        const projectDir = new LocalStorageManager().getProjectDir();
-        if (!!projectDir) this.props.setProjectDir(projectDir);
-        new MainProcessCommunicator().receiveProjectDir()
-            .then((projectDir: string) => {
-                new LocalStorageManager().setProjectDir(projectDir);
-                this.props.setProjectDir(projectDir);
-            });
+        this.initActions().then(r => {});
     }
+
+    componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<object>, snapshot?: any) {
+        if (prevProps.projectDir !== this.props.projectDir) {
+            this.forceUpdate();
+        }
+    }
+
+    initActions = async () => {
+        let projectDir = new LocalStorageManager().getProjectDir();
+        if (!!projectDir) this.props.setProjectDir(projectDir);
+        projectDir = await new MainProcessCommunicator().receiveProjectDir();
+        new LocalStorageManager().setProjectDir(projectDir);
+        this.props.setProjectDir(projectDir);
+    };
 
     render() {
         const {classes, currentPageIndex, projectDir} = this.props;
