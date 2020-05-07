@@ -174,10 +174,28 @@ export class PluginFileManager {
             pluginDataMap[id] = pluginData;
         })
         const dirs = this.fsHelper.readDirSync(this.widgetsDirPath);
-        return dirs.filter(dir => dir.type === 'dir').map(dir => {
-            const id = dir.name;
-            return pluginDataMap[id];
+        const filteredPluginIdList = [];
+        for (const dir of dirs) {
+            const validPlugin = await this.validatePluginDir(dir.name);
+            if (dir.type === 'dir' && validPlugin) {
+                filteredPluginIdList.push(dir.name);
+            }
+        }
+        return filteredPluginIdList.map(pluginId => {
+            return pluginDataMap[pluginId];
         })
+    };
+
+    private validatePluginDir = async (pluginId: string) => {
+        const dirPath = `${this.widgetsDirPath}/${pluginId}`;
+        const infoPath = `${dirPath}/info.json`;
+        try {
+            const content = await this.fsHelper.readFile(infoPath);
+            const infoJson = JSON.parse(content);
+            return !!infoJson && !!infoJson.version;
+        } catch (e) {
+            return false;
+        }
     };
 
     preinstallPlugins = async () => {
