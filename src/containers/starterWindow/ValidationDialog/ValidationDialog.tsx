@@ -12,6 +12,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from "@material-ui/core/Typography";
+import {UIDataManager} from "../../../controllers/ui/uiDataManager";
+import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunicator";
 
 const styles = createStyles({
     root: {
@@ -42,7 +44,11 @@ class ValidationDialog extends React.Component<Props, object> {
     onEnter = async () => {
         this.setState({status: 'validating'});
         const {projectDirSelected} = this.props;
-
+        console.log('projectDirSelected', projectDirSelected);
+        const pluginIdList = await new UIDataManager(projectDirSelected).getDependentPlugins();
+        console.log('pluginIdList', pluginIdList);
+        const uninstalledPlugins = await new MainProcessCommunicator().getUninstalledDependentPlugins(pluginIdList);
+        console.log('uninstalledPlugins', uninstalledPlugins);
     };
 
     render() {

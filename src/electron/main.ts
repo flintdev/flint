@@ -178,6 +178,14 @@ app.on('ready', async () => {
         };
         action().then(r => {});
     });
+    ipcMain.on(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS, (event, args) => {
+        const pluginIdList = args;
+        const action = async () => {
+            const plugins = await new PluginFileManager().getUninstalledDependentPlugins(pluginIdList);
+            event.reply(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS_REPLY, {plugins});
+        };
+        action().then(r => {});
+    });
     ipcMain.on(CHANNEL.FETCH_ALL_PLUGINS, (event, args) => {
         const action = async () => {
             const pluginFileManager = new PluginFileManager();

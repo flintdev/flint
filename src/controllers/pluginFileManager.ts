@@ -57,6 +57,27 @@ export class PluginFileManager {
         }
     };
 
+    getUninstalledDependentPlugins = async (dependentPluginIdList: string[]) => {
+        const configJson = await this.getPluginsConfigJson();
+        let pluginDataMap: any = {};
+        configJson.plugins.forEach((pluginData: any) => {
+            const {id} = pluginData;
+            pluginDataMap[id] = pluginData;
+        });
+        const installedPlugins = await this.getInstalledPlugins();
+        let uninstalledPlugins = [];
+        for (const pluginId of dependentPluginIdList) {
+            let installed = false;
+            for (const pluginData of installedPlugins) {
+                if (pluginData.id === pluginId) installed = true;
+            }
+            if (!installed) {
+                uninstalledPlugins.push(pluginDataMap[pluginId]);
+            }
+        }
+        return uninstalledPlugins;
+    };
+
     checkAvailableUpdatePerPlugin = async (pluginData: PluginData, version: string) => {
         const {owner, repo} = pluginData;
         const releaseInfo = await this.githubHelper.getLatestRelease(owner, repo);

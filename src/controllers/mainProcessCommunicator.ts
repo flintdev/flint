@@ -51,12 +51,22 @@ export class MainProcessCommunicator {
         });
     };
 
+    getUninstalledDependentPlugins = (pluginIdList: string[]) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS_REPLY, ((event, args) => {
+                const {plugins} = args;
+                resolve(plugins);
+            }));
+            ipcRenderer.send(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS, pluginIdList);
+        });
+    }
+
     getInstalledPlugins = () => {
         return new Promise((resolve, reject) => {
             ipcRenderer.once(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, ((event, args) => {
                 const {plugins} = args;
                 resolve(plugins);
-            }))
+            }));
             ipcRenderer.send(CHANNEL.GET_INSTALLED_PLUGIN);
         });
     };

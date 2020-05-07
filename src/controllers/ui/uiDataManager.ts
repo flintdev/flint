@@ -28,12 +28,14 @@ export class UIDataManager {
     dirPath: string;
     configPath: string;
     sourceDirPath: string;
+    plugins: string[]; // for recurToGetPlugins function only
     constructor(rootDir: string) {
         this.rootDir = rootDir;
         this.fsHelper = new FSHelper();
         this.dirPath = `${this.rootDir}/.flint/ui`;
         this.configPath = `${this.rootDir}/.flint/ui/config.json`;
         this.sourceDirPath = `${this.rootDir}/src/ui`;
+        this.plugins = [];
     }
 
     checkAndCreateUIDir = async () => {
@@ -87,6 +89,25 @@ export class UIDataManager {
         _.set(configJson, ['schemaVersion'], UI_DATA_SCHEMA_VERSION);
         await this.fsHelper.createFile(this.configPath, JSON.stringify(configJson));
         return true
+    };
+
+    getDependentPlugins = async () => {
+        const uiData: UIData = await this.getUIData();
+        const components = uiData.components;
+        this.plugins = [];
+        this.recurToGetPlugins(components);
+        return this.plugins;
+    };
+
+    private recurToGetPlugins = (children?: ComponentData[]) => {
+        if (!children) return;
+        children.forEach(component => {
+            const pluginId = component.name.split('::')[0];
+            if (!this.plugins.includes(pluginId)) {
+                this.plugins.push(pluginId);
+            }
+            this.recurToGetPlugins(component.children);
+        })
     };
 
 
