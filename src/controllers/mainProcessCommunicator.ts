@@ -51,7 +51,7 @@ export class MainProcessCommunicator {
         });
     };
 
-    getUninstalledDependentPlugins = (pluginIdList: string[]) => {
+    getUninstalledDependentPlugins = (pluginIdList: string[]): Promise<PluginData[]> => {
         return new Promise((resolve, reject) => {
             ipcRenderer.once(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS_REPLY, ((event, args) => {
                 const {plugins} = args;
