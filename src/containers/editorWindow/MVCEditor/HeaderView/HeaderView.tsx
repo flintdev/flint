@@ -38,6 +38,7 @@ import {Notification} from "../../../../interface";
 import WidgetUpdateDialog from "./WidgetUpdateDialog";
 import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
 import HistoryIcon from '@material-ui/icons/History';
+import RevisionListView from "./RevisionListView";
 
 const styles = createStyles({
     root: {},
@@ -133,6 +134,7 @@ export interface Props extends WithStyles<typeof styles>, NavigationState, Confi
     notificationPopoverOpen: (anchorEl: HTMLButtonElement) => void,
     addNotification: (notification: Notification) => void,
     settingsDialogOpen: () => void,
+    revisionPopoverOpen: (anchorEl: HTMLButtonElement) => void,
 }
 
 class HeaderView extends React.Component<Props, object> {
@@ -189,8 +191,8 @@ class HeaderView extends React.Component<Props, object> {
         this.props.settingsDialogOpen();
     };
 
-    handleHistoryClick = () => {
-
+    handleHistoryClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        this.props.revisionPopoverOpen(event.currentTarget);
     };
 
     renderHistoryButton = () => {
@@ -318,6 +320,7 @@ class HeaderView extends React.Component<Props, object> {
 
                 <NotificationListView/>
                 <WidgetUpdateDialog/>
+                <RevisionListView/>
 
             </div>
         )
@@ -336,6 +339,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
         notificationPopoverOpen: (anchorEl: HTMLButtonElement) => dispatch(actions.navigation.notificationPopoverOpen(anchorEl)),
         addNotification: (notification: Notification) => dispatch(actions.navigation.addNotification(notification)),
         settingsDialogOpen: () => dispatch(actions.settings.settingsDialogOpen()),
+        revisionPopoverOpen: (anchorEl: HTMLButtonElement) => dispatch(actions.navigation.revisionPopoverOpen(anchorEl)),
     }
 };
 

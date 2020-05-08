@@ -10,6 +10,7 @@ export class GitHelper {
     projectDir: string;
     fsHelper = new FSHelper();
     datetimeHelper = new DatetimeHelper();
+
     constructor(projectDir: string) {
         this.projectDir = projectDir;
         this.repoDir = `${projectDir}/.flint`;
@@ -29,13 +30,29 @@ export class GitHelper {
         await git.init({fs, dir: this.repoDir});
     };
 
+    private addFiles = async () => {
+        const repo = {fs, dir: this.repoDir};
+        await git.statusMatrix(repo).then((status) =>
+            Promise.all(
+                status.map(([filepath, , worktreeStatus]) =>
+                    // isomorphic-git may report a changed file as unmodified, so always add if not removing
+                    worktreeStatus ? git.add({...repo, filepath}) : git.remove({...repo, filepath})
+                )
+            )
+        );
+    };
+
     commitWithTimestamp = async () => {
         const gitExist = await this.checkGitFiles();
         if (!gitExist) await this.initRepo();
+        await this.addFiles();
         await git.commit({
             fs,
             dir: this.repoDir,
             message: this.datetimeHelper.getCurrentTimestamp(),
+            author: {
+                name: 'flint',
+            },
         });
     };
 
