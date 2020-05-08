@@ -37,6 +37,7 @@ import Badge from "@material-ui/core/Badge";
 import {Notification} from "../../../../interface";
 import WidgetUpdateDialog from "./WidgetUpdateDialog";
 import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
+import HistoryIcon from '@material-ui/icons/History';
 
 const styles = createStyles({
     root: {},
@@ -188,6 +189,23 @@ class HeaderView extends React.Component<Props, object> {
         this.props.settingsDialogOpen();
     };
 
+    handleHistoryClick = () => {
+
+    };
+
+    renderHistoryButton = () => {
+        const {classes} = this.props;
+        return (
+            <IconButton
+                size={"small"}
+                className={classes.IconButtonNotification}
+                onClick={this.handleHistoryClick}
+            >
+                <HistoryIcon/>
+            </IconButton>
+        )
+    };
+
     renderNotificationButton = () => {
         const {classes, notifications} = this.props;
         const hasNotifications = !!notifications && notifications.length > 0;
@@ -283,13 +301,15 @@ class HeaderView extends React.Component<Props, object> {
                                         <CodeIcon/>
                                     </Fab>
                                 </Tooltip>
+                                <Tooltip title={"Revision History"}>
+                                    {this.renderHistoryButton()}
+                                </Tooltip>
                                 <Tooltip title={"Configuration"}>
                                     {this.renderConfigButton()}
                                 </Tooltip>
                                 <Tooltip title={"Notifications"}>
                                     {this.renderNotificationButton()}
                                 </Tooltip>
-
                             </td>
                         </tr>
                         </tbody>
@@ -298,6 +318,7 @@ class HeaderView extends React.Component<Props, object> {
 
                 <NotificationListView/>
                 <WidgetUpdateDialog/>
+
             </div>
         )
     }

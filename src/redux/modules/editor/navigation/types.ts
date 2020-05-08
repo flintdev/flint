@@ -8,3 +8,7 @@ export const RESET_NOTIFICATIONS = 'editorWindow/mvcEditor/navigation/RESET_NOTI
 // widgetUpdateDialog
 export const WIDGET_UPDATE_DIALOG_OPEN = 'editorWindow/mvcEditor/navigation/WIDGET_UPDATE_DIALOG_OPEN';
 export const WIDGET_UPDATE_DIALOG_CLOSE = 'editorWindow/mvcEditor/navigation/WIDGET_UPDATE_DIALOG_CLOSE';
+//
+export const REVISION_POPOVER_OPEN = 'editorWindow/mvcEditor/navigation/REVISION_POPOVER_OPEN';
+export const REVISION_POPOVER_CLOSE = 'editorWindow/mvcEditor/navigation/REVISION_POPOVER_CLOSE';
+//

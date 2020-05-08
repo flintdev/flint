@@ -38,7 +38,8 @@ export interface ConfigState {
 export interface NavigationState {
     currentView: string,
     notificationPopoverAnchorEl: any,
-    notifications: Notification[],
+    notifications: Notification[]
+    revisionPopoverAnchorEl: any,
     widgetUpdateDialog: {
         open: boolean
     }
@@ -122,6 +123,7 @@ export const initState: StoreState = {
             currentView: MVC.View,
             notificationPopoverAnchorEl: null,
             notifications: [],
+            revisionPopoverAnchorEl: null,
             widgetUpdateDialog: {
                 open: false
             }

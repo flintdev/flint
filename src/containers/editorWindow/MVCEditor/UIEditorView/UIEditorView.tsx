@@ -70,6 +70,7 @@ class UIEditorView extends React.Component<Props, object> {
     };
     operations: any = {};
     uiDataManager: UIDataManager;
+    mainProcessCommunicator = new MainProcessCommunicator();
     componentDidMount(): void {
         this.props.operations.saveData = async () => {
             const data: UIData = {...this.state};
@@ -157,8 +158,10 @@ class UIEditorView extends React.Component<Props, object> {
     };
 
     saveButtonClick = async () => {
+        const {projectDir} = this.props;
         const data: UIData = {...this.state};
         await this.uiDataManager.saveUIData(data);
+        await this.mainProcessCommunicator.gitCommit(projectDir);
         this.props.toastOpen('success', 'UI data is saved successfully');
     };
 

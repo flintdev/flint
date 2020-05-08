@@ -39,7 +39,14 @@ export function reducer(state: NavigationState, action: NavigationAction) {
                     open: {$set: false}
                 }
             });
-
+        case types.REVISION_POPOVER_OPEN:
+            return update(state, {
+                revisionPopoverAnchorEl: {$set: action.anchorEl}
+            });
+        case types.REVISION_POPOVER_CLOSE:
+            return update(state, {
+                revisionPopoverAnchorEl: {$set: null}
+            });
         default:
             return state;
     }

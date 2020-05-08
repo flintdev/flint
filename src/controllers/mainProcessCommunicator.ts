@@ -78,8 +78,27 @@ export class MainProcessCommunicator {
         return new Promise((resolve, reject) => {
             ipcRenderer.once(CHANNEL.FETCH_ALL_PLUGINS_REPLY, ((event, args) => {
                 resolve(args);
-            }))
+            }));
             ipcRenderer.send(CHANNEL.FETCH_ALL_PLUGINS);
+        });
+    };
+
+    gitLog = (projectDir: string): Promise<any[]> => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.GIT_LOG_REPLY, (event, args) => {
+                const {commits} = args;
+                resolve(commits);
+            });
+            ipcRenderer.send(CHANNEL.GIT_LOG, {projectDir});
+        });
+    };
+
+    gitCommit = (projectDir: string) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.GIT_COMMIT_REPLY, (event, args) => {
+                resolve();
+            });
+            ipcRenderer.send(CHANNEL.GIT_COMMIT, {projectDir});
         });
     };
 

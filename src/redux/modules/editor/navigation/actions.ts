@@ -33,7 +33,24 @@ export function widgetUpdateDialogClose(): WidgetUpdateDialogClose {
     return { type: types.WIDGET_UPDATE_DIALOG_CLOSE }
 }
 
+export function revisionPopoverOpen(anchorEl: HTMLButtonElement): RevisionPopoverOpen {
+    return { type: types.REVISION_POPOVER_OPEN, anchorEl }
+}
+
+export function revisionPopoverClose(): RevisionPopoverClose {
+    return { type: types.REVISION_POPOVER_CLOSE }
+}
+
 // interfaces
+
+export interface RevisionPopoverOpen {
+    type: typeof types.REVISION_POPOVER_OPEN,
+    anchorEl: HTMLButtonElement
+}
+
+export interface RevisionPopoverClose {
+    type: typeof types.REVISION_POPOVER_CLOSE,
+}
 
 export interface ResetNotifications {
     type: typeof types.RESET_NOTIFICATIONS,
@@ -67,6 +84,8 @@ export interface WidgetUpdateDialogClose {
 }
 
 export type NavigationAction =
+    RevisionPopoverOpen |
+    RevisionPopoverClose |
     WidgetUpdateDialogOpen |
     WidgetUpdateDialogClose |
     AddNotification |
