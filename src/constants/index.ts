@@ -65,6 +65,8 @@ export const CHANNEL = {
     GIT_COMMIT_REPLY: 'GIT_COMMIT_REPLY',
     GIT_LOG: 'GIT_LOG',
     GIT_LOG_REPLY: 'GIT_LOG_REPLY',
+    GIT_RESET: 'GIT_RESET',
+    GIT_RESET_REPLY: 'GIT_RESET_REPLY',
 };
 
 export const PluginRegistry = {

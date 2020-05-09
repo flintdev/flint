@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Dispatch } from "redux";
 import {ConfigState, NavigationState, StoreState} from "src/redux/state";
 import * as actions from "src/redux/modules/editor/actions";
+import * as componentsActions from "src/redux/modules/components/actions";
 import Popover from "@material-ui/core/Popover";
 import Paper from "@material-ui/core/Paper";
 import List from '@material-ui/core/List';
@@ -16,6 +17,7 @@ import Typography from "@material-ui/core/Typography";
 import HistoryIcon from '@material-ui/icons/History';
 import {MainProcessCommunicator} from "../../../../../controllers/mainProcessCommunicator";
 import {DatetimeHelper} from "../../../../../controllers/utils/datetimeHelper";
+import {ConfirmationDialogSubmitFunc} from "../../../../../components/interface";
 
 const styles = createStyles({
     root: {
@@ -39,6 +41,8 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>, NavigationState, ConfigState {
     revisionPopoverClose: () => void,
+    openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => void,
+
 }
 
 interface State {
@@ -68,7 +72,20 @@ class RevisionListView extends React.Component<Props, object> {
     };
 
     handleRevisionClick = (revision: any) => () => {
-
+        const {projectDir} = this.props;
+        this.props.revisionPopoverClose();
+        this.props.openConfirmationDialog(
+            'warning',
+            'Are you sure to rollback to the previous revision?',
+            `Revision saved time: ${revision.time}. Please note: all revisions records after this revision will be gone.`,
+            'Rollback',
+            () => {
+                this.mainProcessCommunicator.gitReset(projectDir, revision.id)
+                    .then(r => {
+                        location.reload();
+                    });
+            }
+        )
     };
 
     render() {
@@ -119,9 +136,10 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.navigation, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
     return {
         revisionPopoverClose: () => dispatch(actions.navigation.revisionPopoverClose()),
+        openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => dispatch(componentsActions.openConfirmationDialog(type, title, description, submitLabel, onSubmit)),
     }
 };
 

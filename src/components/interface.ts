@@ -28,3 +28,4 @@ export interface DialogFormData {
 
 export type DialogFormSubmitFunc = (values: any) => void;
 
+export type ConfirmationDialogSubmitFunc = () => void;

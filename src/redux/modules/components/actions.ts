@@ -1,7 +1,12 @@
 // src/redux/modules/components/actions.ts
 
 import * as types from './types';
-import {DialogFormData, DialogFormSubmitFunc, ToastType} from "../../../components/interface";
+import {
+    ConfirmationDialogSubmitFunc,
+    DialogFormData,
+    DialogFormSubmitFunc,
+    ToastType
+} from "../../../components/interface";
 
 // functions
 
@@ -25,9 +30,34 @@ export function closeDialogForm(): CloseDialogForm {
     return { type: types.CLOSE_DIALOG_FORM }
 }
 
+export function openConfirmationDialog(
+    messageType: string,
+    title: string,
+    description?: string,
+    submitLabel?: string,
+    onSubmit?: ConfirmationDialogSubmitFunc,
+): OpenConfirmationDialog {
+    return { type: types.OPEN_CONFIRMATION_DIALOG, messageType, title, description, submitLabel, onSubmit}
+}
 
+export function closeConfirmationDialog(): CloseConfirmationDialog {
+    return { type: types.CLOSE_CONFIRMATION_DIALOG }
+}
 
 // interfaces
+
+export interface CloseConfirmationDialog {
+    type: typeof types.CLOSE_CONFIRMATION_DIALOG,
+}
+
+export interface OpenConfirmationDialog {
+    type: typeof types.OPEN_CONFIRMATION_DIALOG,
+    messageType: string,
+    title: string,
+    submitLabel?: string,
+    description?: string,
+    onSubmit?: ConfirmationDialogSubmitFunc,
+}
 
 export interface ToastOpen {
     type: typeof types.TOAST_OPEN,
@@ -51,6 +81,8 @@ export interface CloseDialogForm {
 }
 
 export type ComponentsAction =
+    OpenConfirmationDialog |
+    CloseConfirmationDialog |
     OpenDialogForm |
     CloseDialogForm |
     ToastOpen |

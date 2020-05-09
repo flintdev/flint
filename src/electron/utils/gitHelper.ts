@@ -4,6 +4,7 @@ import * as git from 'isomorphic-git'
 import * as fs from "fs";
 import {FSHelper} from "../../controllers/utils/fsHelper";
 import {DatetimeHelper} from "../../controllers/utils/datetimeHelper";
+import {exec} from "child_process";
 
 export class GitHelper {
     repoDir: string;
@@ -62,5 +63,14 @@ export class GitHelper {
             dir: this.repoDir,
         });
         return commits;
+    };
+
+    reset = async (commitId: string) => {
+        return new Promise((resolve, reject) => {
+            exec(`git reset --hard ${commitId}`, {cwd: this.repoDir}, (error, stdout, stderr) => {
+                if (!error) resolve();
+                else reject(error);
+            });
+        });
     };
 }

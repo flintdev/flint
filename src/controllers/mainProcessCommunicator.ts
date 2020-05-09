@@ -102,6 +102,15 @@ export class MainProcessCommunicator {
         });
     };
 
+    gitReset = (projectDir: string, commitId: string) => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.GIT_RESET_REPLY, (event, args) => {
+                resolve();
+            });
+            ipcRenderer.send(CHANNEL.GIT_RESET, {projectDir, commitId});
+        });
+    };
+
     relaunchEditorWindow = () => {
         ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };

@@ -36,6 +36,23 @@ export function reducer(state: ComponentsState, action: ComponentsAction) {
                     open: {$set: false}
                 }
             });
+        case types.OPEN_CONFIRMATION_DIALOG:
+            return update(state, {
+                confirmationDialog: {
+                    open: {$set: true},
+                    type: {$set: action.messageType},
+                    title: {$set: action.title},
+                    description: {$set: action.description},
+                    submitLabel: {$set: action.submitLabel},
+                    onSubmit: {$set: action.onSubmit},
+                }
+            });
+        case types.CLOSE_CONFIRMATION_DIALOG:
+            return update(state, {
+                confirmationDialog: {
+                    open: {$set: false}
+                }
+            });
 
         default:
             return state;

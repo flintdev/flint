@@ -2,7 +2,7 @@
 import {MVC} from "../constants/editor";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
 import {FileTreeNode, Notification} from "../interface";
-import {DialogFormData, DialogFormSubmitFunc, ToastType} from "../components/interface";
+import {ConfirmationDialogSubmitFunc, DialogFormData, DialogFormSubmitFunc, ToastType} from "../components/interface";
 
 export interface EditorState {
     navigation: NavigationState,
@@ -27,6 +27,14 @@ export interface ComponentsState {
         initValues: any,
         data: DialogFormData,
         onSubmit?: DialogFormSubmitFunc
+    },
+    confirmationDialog: {
+        open: boolean,
+        type: string,
+        title: string,
+        description?: string,
+        submitLabel?: string,
+        onSubmit?: ConfirmationDialogSubmitFunc
     }
 }
 
@@ -180,6 +188,11 @@ export const initState: StoreState = {
                 forms: [],
                 title: "",
             }
+        },
+        confirmationDialog: {
+            open: false,
+            type: '',
+            title: '',
         }
     }
 };

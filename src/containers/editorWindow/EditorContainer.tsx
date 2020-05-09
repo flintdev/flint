@@ -16,6 +16,7 @@ import {NavigationSidebarConfig} from "../../constants/styles";
 import FileBrowser from "./FileBrowser";
 import Toast from "../../components/Toast";
 import DialogForm from "../../components/DialogForm";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 const styles = createStyles({
     root: {
@@ -98,7 +99,7 @@ class EditorContainer extends React.Component<Props, object> {
 
                         <Toast/>
                         <DialogForm/>
-
+                        <ConfirmationDialog/>
                     </div>
                     }
                 </ThemeProvider>

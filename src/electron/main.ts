@@ -223,6 +223,14 @@ app.on('ready', async () => {
         };
         action().then(r => {});
     });
+    ipcMain.on(CHANNEL.GIT_RESET, (event, args) => {
+        const {projectDir, commitId} = args;
+        const action = async () => {
+            await new GitHelper(projectDir).reset(commitId);
+            event.reply(CHANNEL.GIT_RESET_REPLY, {});
+        };
+        action().then(r => {});
+    });
 });
 
 app.on('window-all-closed', () => {
