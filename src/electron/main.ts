@@ -76,14 +76,12 @@ async function createEditorWindow(projectDir: string) {
         editorWindow.show();
     });
     editorWindow.on('close', event => {
+        editorWindow = null;
+        if (!!autoUpdater) autoUpdater.stop();
+        autoUpdater = null;
         // @ts-ignore
         if (!app.quiting) {
-            event.preventDefault();
-            editorWindow.hide();
-        } else {
-            editorWindow = null;
-            if (!!autoUpdater) autoUpdater.stop();
-            autoUpdater = null;
+            createStarterWindow();
         }
     });
     editorWindow.on('focus', () => {
