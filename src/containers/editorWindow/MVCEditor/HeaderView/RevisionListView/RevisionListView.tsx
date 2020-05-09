@@ -77,7 +77,7 @@ class RevisionListView extends React.Component<Props, object> {
         this.props.openConfirmationDialog(
             'warning',
             'Are you sure to rollback to the previous revision?',
-            `Revision saved time: ${revision.time}. Please note: all revisions records after this revision will be gone.`,
+            `Revision saved time: ${revision.time}. Please note: all revisions records after this revision will be cleaned up.`,
             'Rollback',
             () => {
                 this.mainProcessCommunicator.gitReset(projectDir, revision.id)
