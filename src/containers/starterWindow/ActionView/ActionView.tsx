@@ -13,6 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Alert from '@material-ui/lab/Alert';
 import {ProjectManager} from "../../../controllers/project/projectManager";
+import AddIcon from '@material-ui/icons/Add';
+import FolderOpenIcon from '@material-ui/icons/FolderOpen';
+import CloudDownloadOutlinedIcon from '@material-ui/icons/CloudDownloadOutlined';
 
 const styles = createStyles({
     root: {
@@ -35,7 +38,12 @@ const styles = createStyles({
     actionButton: {
         marginTop: 10,
         marginBottom: 10,
-        width: 300,
+        width: 280,
+        textAlign: 'left',
+        paddingLeft: 30,
+    },
+    actionButtonLabel: {
+        justifyContent: 'flex-start',
     },
     alert: {
         marginBottom: 20,
@@ -117,7 +125,9 @@ class ActionView extends React.Component<Props, object> {
                         className={classes.actionButton}
                         onClick={this.handleCreateButtonClick}
                         disabled={disabled}
+                        classes={{label: classes.actionButtonLabel}}
                     >
+                        <AddIcon/>&nbsp;&nbsp;
                         {StarterConfig.ActionView.action.create}
                     </Button><br/>
                     <Button
@@ -125,14 +135,18 @@ class ActionView extends React.Component<Props, object> {
                         className={classes.actionButton}
                         onClick={this.handleOpenButtonClick}
                         disabled={disabled}
+                        classes={{label: classes.actionButtonLabel}}
                     >
+                        <FolderOpenIcon/>&nbsp;&nbsp;
                         {StarterConfig.ActionView.action.open}
                     </Button><br/>
                     <Button
                         variant={"outlined"}
                         className={classes.actionButton}
                         disabled={disabled}
+                        classes={{label: classes.actionButtonLabel}}
                     >
+                        <CloudDownloadOutlinedIcon/>&nbsp;&nbsp;
                         {StarterConfig.ActionView.action.checkout}
                     </Button><br/>
                 </div>
