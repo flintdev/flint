@@ -44,6 +44,13 @@ export class ProjectManager {
         });
     };
 
+    static RemoveRecentProject = (projectDir: string) => {
+        let projectDirs = new LocalStorageManager().getRecentProjects();
+        const index = projectDirs.indexOf(projectDir);
+        projectDirs.splice(index, 1);
+        new LocalStorageManager().setRecentProjects(projectDirs);
+    };
+
     getProjectName = () => {
         const tempList = this.rootDir.split('/');
         return tempList[tempList.length - 1];

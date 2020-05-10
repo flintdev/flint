@@ -45,16 +45,17 @@ async function createStarterWindow() {
     starterMenuBuilder = new StarterMenuBuilder(starterWindow);
     starterMenuBuilder.build();
     //
+    ipcMain.on(CHANNEL.PREINSTALL_PLUGINS, async (event, args) => {
+        try {
+            await new PluginFileManager().checkAndFetchPluginsConfig();
+            await new PluginFileManager().preinstallPlugins()
+            event.reply(CHANNEL.PREINSTALL_PLUGINS_REPLY, {status: 'complete'});
+        } catch (e) {
+            console.log(e);
+            event.reply(CHANNEL.PREINSTALL_PLUGINS_REPLY, {status: 'error'});
+        }
+    });
     await starterWindow.loadFile(path.join(__dirname, 'starter.html'));
-    starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'loading'});
-    try {
-        await new PluginFileManager().checkAndFetchPluginsConfig();
-        await new PluginFileManager().preinstallPlugins()
-        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'complete'});
-    } catch (e) {
-        console.log(e);
-        starterWindow.webContents.send(CHANNEL.PREINSTALL_PLUGINS, {status: 'error'});
-    }
 }
 
 async function createEditorWindow(projectDir: string) {
@@ -138,96 +139,66 @@ app.on('ready', async () => {
                 event.reply(CHANNEL.SELECT_DIRECTORY_REPLY, result.filePaths);
             });
     });
-    ipcMain.on(CHANNEL.START_DEBUGGING, (event, args) => {
+    ipcMain.on(CHANNEL.START_DEBUGGING, async (event, args) => {
         const {dir, localStorageItems} = args;
         // startDebugging(dir).then(r => {});
-        createDebugWindow().then(r => {
-            new DebugHelper(debugWindow).loadLocalStorage(localStorageItems);
-        });
+        await createDebugWindow();
+        await new DebugHelper(debugWindow).loadLocalStorage(localStorageItems);
     });
-    ipcMain.on(CHANNEL.INSTALL_PLUGIN, (event, args) => {
+    ipcMain.on(CHANNEL.INSTALL_PLUGIN, async (event, args) => {
         const pluginData = args;
-        const action = async () => {
-            try {
-                await new PluginFileManager().downloadPluginWithoutProgress(pluginData);
-                event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.COMPLETE});
-            } catch (err) {
-                event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.FAILED});
-            }
-        };
-        action().then(r => {
-        });
+        try {
+            await new PluginFileManager().downloadPluginWithoutProgress(pluginData);
+            event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.COMPLETE});
+        } catch (err) {
+            event.reply(CHANNEL.INSTALL_PLUGIN_REPLY, {status: LOADING_STATUS.FAILED});
+        }
     });
-    ipcMain.on(CHANNEL.REMOVE_PLUGIN, (event, args) => {
+    ipcMain.on(CHANNEL.REMOVE_PLUGIN, async (event, args) => {
         const pluginData = args;
-        const action = async () => {
-            await new PluginFileManager().removePlugin(pluginData);
-            event.reply(CHANNEL.REMOVE_PLUGIN_REPLY);
-        };
-        action().then(r => {
-        });
+        await new PluginFileManager().removePlugin(pluginData);
+        event.reply(CHANNEL.REMOVE_PLUGIN_REPLY);
     });
     ipcMain.on(CHANNEL.RELAUNCH_EDITOR_WINDOW, () => {
         editorWindow.close();
         editorWindow = null;
         createEditorWindow(projectDir);
     });
-    ipcMain.on(CHANNEL.GET_INSTALLED_PLUGIN, (event, args) => {
-        const action = async () => {
-            const plugins = await new PluginFileManager().getInstalledPlugins();
-            event.reply(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, {plugins});
-        };
-        action().then(r => {
-        });
+    ipcMain.on(CHANNEL.GET_INSTALLED_PLUGIN, async (event, args) => {
+        const plugins = await new PluginFileManager().getInstalledPlugins();
+        event.reply(CHANNEL.GET_INSTALLED_PLUGIN_REPLY, {plugins});
     });
-    ipcMain.on(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS, (event, args) => {
+    ipcMain.on(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS, async (event, args) => {
         const pluginIdList = args;
-        const action = async () => {
-            const plugins = await new PluginFileManager().getUninstalledDependentPlugins(pluginIdList);
-            event.reply(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS_REPLY, {plugins});
-        };
-        action().then(r => {
-        });
+        const plugins = await new PluginFileManager().getUninstalledDependentPlugins(pluginIdList);
+        event.reply(CHANNEL.GET_UNINSTALLED_DEPENDENT_PLUGINS_REPLY, {plugins});
     });
-    ipcMain.on(CHANNEL.FETCH_ALL_PLUGINS, (event, args) => {
-        const action = async () => {
-            const pluginFileManager = new PluginFileManager();
-            await pluginFileManager.reloadPluginsConfigFromRegistry();
-            const {plugins} = await pluginFileManager.getPluginsConfigJson();
-            const installedPlugins = await pluginFileManager.getInstalledPlugins();
-            event.reply(CHANNEL.FETCH_ALL_PLUGINS_REPLY, {plugins, installedPlugins});
-        };
-        action().then(r => {
-        });
+    ipcMain.on(CHANNEL.FETCH_ALL_PLUGINS, async (event, args) => {
+        const pluginFileManager = new PluginFileManager();
+        await pluginFileManager.reloadPluginsConfigFromRegistry();
+        const {plugins} = await pluginFileManager.getPluginsConfigJson();
+        const installedPlugins = await pluginFileManager.getInstalledPlugins();
+        event.reply(CHANNEL.FETCH_ALL_PLUGINS_REPLY, {plugins, installedPlugins});
     });
-    ipcMain.on(CHANNEL.GIT_COMMIT, (event, args) => {
+    ipcMain.on(CHANNEL.GIT_COMMIT, async (event, args) => {
         const {projectDir} = args;
-        const action = async () => {
-            const gitHelper = new GitHelper(projectDir);
-            try {
-                await gitHelper.commitWithTimestamp();
-            } catch (e) {
-                console.log('git commit - err', e);
-            }
-            event.reply(CHANNEL.GIT_COMMIT_REPLY, {});
-        };
-        action().then(r => {});
+        const gitHelper = new GitHelper(projectDir);
+        try {
+            await gitHelper.commitWithTimestamp();
+        } catch (e) {
+            console.log('git commit - err', e);
+        }
+        event.reply(CHANNEL.GIT_COMMIT_REPLY, {});
     });
-    ipcMain.on(CHANNEL.GIT_LOG, (event, args) => {
+    ipcMain.on(CHANNEL.GIT_LOG, async (event, args) => {
         const {projectDir} = args;
-        const action = async () => {
-            const commits = await new GitHelper(projectDir).listCommits();
-            event.reply(CHANNEL.GIT_LOG_REPLY, {commits});
-        };
-        action().then(r => {});
+        const commits = await new GitHelper(projectDir).listCommits();
+        event.reply(CHANNEL.GIT_LOG_REPLY, {commits});
     });
-    ipcMain.on(CHANNEL.GIT_RESET, (event, args) => {
+    ipcMain.on(CHANNEL.GIT_RESET, async (event, args) => {
         const {projectDir, commitId} = args;
-        const action = async () => {
-            await new GitHelper(projectDir).reset(commitId);
-            event.reply(CHANNEL.GIT_RESET_REPLY, {});
-        };
-        action().then(r => {});
+        await new GitHelper(projectDir).reset(commitId);
+        event.reply(CHANNEL.GIT_RESET_REPLY, {});
     });
 });
 

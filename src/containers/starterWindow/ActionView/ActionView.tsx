@@ -68,15 +68,14 @@ class ActionView extends React.Component<Props, object> {
     };
 
     componentDidMount(): void {
-        new MainProcessCommunicator().addListenerForPreinstallPlugins((args) => {
-            const {status} = args;
-            this.setState({preinstallStatus: status});
-        });
+        this.initActions().then(r => {});
     }
 
-    componentWillUnmount(): void {
-        new MainProcessCommunicator().removeListenerForPreinstallPlugins();
-    }
+    initActions = async () => {
+        this.setState({preinstallStatus: 'loading'});
+        const status = await new MainProcessCommunicator().preinstallPlugins();
+        this.setState({preinstallStatus: status});
+    };
 
     handleCreateButtonClick = () => {
         this.props.createProjectDialogOpen();

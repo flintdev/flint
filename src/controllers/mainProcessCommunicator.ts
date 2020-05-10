@@ -111,6 +111,16 @@ export class MainProcessCommunicator {
         });
     };
 
+    preinstallPlugins = (): Promise<any> => {
+        return new Promise((resolve, reject) => {
+            ipcRenderer.once(CHANNEL.PREINSTALL_PLUGINS_REPLY, (event, args) => {
+                const {status} = args;
+                resolve(status);
+            });
+            ipcRenderer.send(CHANNEL.PREINSTALL_PLUGINS);
+        });
+    }
+
     relaunchEditorWindow = () => {
         ipcRenderer.send(CHANNEL.RELAUNCH_EDITOR_WINDOW);
     };
@@ -142,16 +152,6 @@ export class MainProcessCommunicator {
         ipcRenderer.once(CHANNEL.EDITOR_WINDOW_ON_ACTIVE, () => {
             onActive();
         })
-    };
-
-    addListenerForPreinstallPlugins = (statusUpdated: (args: any) => void) => {
-        ipcRenderer.on(CHANNEL.PREINSTALL_PLUGINS, (event, args) => {
-            statusUpdated(args);
-        });
-    }
-
-    removeListenerForPreinstallPlugins = () => {
-        ipcRenderer.removeListener(CHANNEL.PREINSTALL_PLUGINS, () => {});
     };
 
     addNewPluginsListener = (notificationsReceived: (plugins: PluginData[]) => void) => {
