@@ -12,5 +12,15 @@ export class LocalStorageManager {
     getProjectDir(): string {
         return localStorage.projectDir;
     }
+
+    setRecentProjects = (projectDirs: string[]) => {
+        localStorage.setItem('recentProjects', JSON.stringify(projectDirs));
+    };
+
+    getRecentProjects = (): string[] => {
+        let projectDirs = localStorage.getItem('recentProjects');
+        if (!projectDirs) return [];
+        return JSON.parse(projectDirs);
+    };
 }
 

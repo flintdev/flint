@@ -101,11 +101,14 @@ export interface ValidationDialogState {
     projectDirSelected: string,
 }
 
+export interface StarterState {
+    createProjectDialog: CreateProjectDialogState,
+    validationDialog: ValidationDialogState,
+    recentProjects: any[],
+}
+
 export interface StoreState {
-    starter: {
-        createProjectDialog: CreateProjectDialogState,
-        validationDialog: ValidationDialogState,
-    },
+    starter: StarterState,
     config: ConfigState,
     editor: EditorState,
     files: FilesState,
@@ -121,6 +124,7 @@ export const initState: StoreState = {
             open: false,
             projectDirSelected: '',
         },
+        recentProjects: [],
     },
     config: {
         projectDir: '',

@@ -6,6 +6,7 @@ import ActionView from "./ActionView";
 import CreateProjectDialog from "./CreateProjectDialog";
 import {theme} from "../../constants";
 import ValidationDialog from "./ValidationDialog/ValidationDialog";
+import ProjectListView from "./ProjectListView";
 
 const styles = createStyles({
     root: {
@@ -60,7 +61,7 @@ function StarterContainer(props: Props) {
                         </td>
                         <td valign={"top"} className={classes.tdRight}>
                             <div className={classes.projectsContainer}>
-
+                                <ProjectListView/>
                             </div>
                         </td>
                     </tr>

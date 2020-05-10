@@ -31,6 +31,10 @@ export function reducer(state: object, action: StarterAction) {
                     open: {$set: false}
                 }
             });
+        case types.SET_RECENT_PROJECTS:
+            return update(state, {
+                recentProjects: {$set: action.projects}
+            });
 
         default:
             return state;

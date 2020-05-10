@@ -1,6 +1,7 @@
 // src/controllers/project/projectManager.ts
 
 import {FSHelper} from "../utils/fsHelper";
+import {LocalStorageManager} from "../localStoreManager";
 
 export class ProjectManager {
     rootDir: string;
@@ -20,8 +21,27 @@ export class ProjectManager {
         return true;
     };
 
-    updateRecentProjects = () => {
+    static UpdateRecentProjects = (projectDir: string) => {
+        const projectDirs = new LocalStorageManager().getRecentProjects();
+        let newProjectDirs = [projectDir];
+        projectDirs.forEach(dir => {
+            if (dir !== projectDir) newProjectDirs.push(dir);
+        });
+        new LocalStorageManager().setRecentProjects(newProjectDirs);
+    };
 
+    static GetRecentProjects = () => {
+        const getProjectNameByPath = (projectDir: string) => {
+            const tempList = projectDir.split('/');
+            return tempList[tempList.length - 1];
+        };
+        const projectDirs = new LocalStorageManager().getRecentProjects();
+        return projectDirs.map(dir => {
+            return {
+                name: getProjectNameByPath(dir),
+                path: dir,
+            }
+        });
     };
 
     getProjectName = () => {
@@ -29,8 +49,5 @@ export class ProjectManager {
         return tempList[tempList.length - 1];
     };
 
-    private createConfigFile = () => {
-
-    };
 }
 

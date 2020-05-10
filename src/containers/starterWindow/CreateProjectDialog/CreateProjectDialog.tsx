@@ -23,6 +23,7 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles> {
     open?: boolean,
     createProjectDialogClose?: () => void,
+    setRecentProjects: (projects: any[]) => void,
 }
 
 class CreateProjectDialog extends React.Component<Props, object> {
@@ -50,15 +51,19 @@ class CreateProjectDialog extends React.Component<Props, object> {
         const {location} = this.state.params;
         const projectManager = new ProjectManager(location);
         try {
-            const result = await projectManager.createProjectDir();
+            await projectManager.createProjectDir();
+            // init .flint dir
+            await projectManager.initializeProjectFiles();
+            this.setState({submitLoading: false});
+            this.props.createProjectDialogClose();
+            await new MainProcessCommunicator().switchFromStarterToEditorWindow(location);
+            // update recent projects
+            ProjectManager.UpdateRecentProjects(location);
+            const recentProjects = ProjectManager.GetRecentProjects();
+            this.props.setRecentProjects(recentProjects);
         } catch (e) {
             console.log(e);
         }
-        // init .flint dir
-        await projectManager.initializeProjectFiles();
-        this.setState({submitLoading: false});
-        this.props.createProjectDialogClose();
-        await new MainProcessCommunicator().switchFromStarterToEditorWindow(location)
     };
 
     render() {
@@ -100,6 +105,8 @@ const mapStateToProps = (state: StoreState) => {
 const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
     return {
         createProjectDialogClose: () => dispatch(actions.createProjectDialogClose()),
+        setRecentProjects: (projects: any[]) => dispatch(actions.setRecentProjects(projects)),
+
     }
 };
 

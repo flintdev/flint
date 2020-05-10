@@ -12,6 +12,7 @@ import {MainProcessCommunicator} from "../../../controllers/mainProcessCommunica
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Alert from '@material-ui/lab/Alert';
+import {ProjectManager} from "../../../controllers/project/projectManager";
 
 const styles = createStyles({
     root: {
@@ -54,6 +55,7 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>{
     createProjectDialogOpen?: () => void,
     validationDialogOpen: (projectDir: string) => void,
+    setRecentProjects: (projects: any[]) => void,
 }
 
 interface State {
@@ -84,6 +86,9 @@ class ActionView extends React.Component<Props, object> {
         const communicator = new MainProcessCommunicator();
         const filePath = await communicator.selectDirectory();
         this.props.validationDialogOpen(filePath.toString());
+        ProjectManager.UpdateRecentProjects(filePath.toString());
+        const recentProjects = ProjectManager.GetRecentProjects();
+        this.props.setRecentProjects(recentProjects);
     };
 
     handleCheckoutButtonClick = () =>{
@@ -145,6 +150,8 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.StarterAction>) => {
     return {
         createProjectDialogOpen: () => dispatch(actions.createProjectDialogOpen()),
         validationDialogOpen: (projectDir: string) => dispatch(actions.validationDialogOpen(projectDir)),
+        setRecentProjects: (projects: any[]) => dispatch(actions.setRecentProjects(projects)),
+
     }
 };
 

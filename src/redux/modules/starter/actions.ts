@@ -20,7 +20,16 @@ export function validationDialogClose(): ValidationDialogClose {
     return { type: types.VALIDATION_DIALOG_CLOSE }
 }
 
+export function setRecentProjects(projects: any[]): SetRecentProjects {
+    return { type: types.SET_RECENT_PROJECTS, projects }
+}
+
 // interfaces
+
+export interface SetRecentProjects {
+    type: typeof types.SET_RECENT_PROJECTS,
+    projects: any[],
+}
 
 export interface ValidationDialogClose {
     type: typeof types.VALIDATION_DIALOG_CLOSE,
@@ -40,6 +49,7 @@ export interface CreateProjectDialogClose {
 }
 
 export type StarterAction =
+    SetRecentProjects |
     ValidationDialogOpen |
     ValidationDialogClose |
     CreateProjectDialogOpen |
