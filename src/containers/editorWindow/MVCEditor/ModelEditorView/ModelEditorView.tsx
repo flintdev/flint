@@ -24,6 +24,7 @@ import Fab from '@material-ui/core/Fab';
 import orange from "@material-ui/core/colors/orange";
 import SyncIcon from '@material-ui/icons/Sync';
 import {ToastType} from "../../../../components/interface";
+import {ModelEditorCanvas} from "@flintdev/model-editor-canvas";
 
 const styles = createStyles({
     root: {
@@ -140,7 +141,7 @@ class ModelEditorView extends React.Component<Props, object> {
         anchorEl: undefined
     };
     modelManager: ModelManager;
-
+    operations: any = {};
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.modelManager = new ModelManager(projectDir);
@@ -183,8 +184,20 @@ class ModelEditorView extends React.Component<Props, object> {
         this.props.setCurrentRevision(revision.editor, revision.source);
     };
 
+    onSaved = (editorData: any) => {
+
+    };
+
+    onBlockDbClick = (blockData: any) => {
+
+    };
+
+    onSchemaBtnClick = () => {
+
+    };
+
     render() {
-        const {classes, modelSelected, currentRevision} = this.props;
+        const {classes, modelSelected, currentRevision, editorData} = this.props;
         const {anchorEl} = this.state;
         return (
             <div className={classes.root}>
@@ -263,14 +276,13 @@ class ModelEditorView extends React.Component<Props, object> {
                                     </div>
                                     {/* Body view */}
                                     <div className={classes.bodyViewContainer}>
-                                        <Grid container spacing={0} className={classes.grid}>
-                                            <Grid item xs={6} className={classes.gridItem}>
-                                                <TreeEditor/>
-                                            </Grid>
-                                            <Grid item xs={6} className={classes.gridItem}>
-                                                <SchemaView/>
-                                            </Grid>
-                                        </Grid>
+                                        <ModelEditorCanvas
+                                            operations={this.operations}
+                                            editorData={editorData}
+                                            onSaved={this.onSaved}
+                                            onBlockDbClick={this.onBlockDbClick}
+                                            onSchemaBtnClick={this.onSchemaBtnClick}
+                                        />
                                     </div>
                                 </React.Fragment>
                                 }
