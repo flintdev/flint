@@ -62,9 +62,6 @@ export interface Props extends WithStyles<typeof styles>, ModelEditorState, Conf
     setModelList: (modelList: string[]) => void,
     selectModel: (value: string) => void,
     setEditorData: (editorData: EditorData) => void,
-    setDefaultEditorData: (editorData: EditorData) => void,
-    setSchemaData: (schemaData: SchemaData) => void,
-    setCurrentRevision: (editor: number, source: number) => void,
     openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
 }
 
@@ -113,14 +110,11 @@ class ModelListView extends React.Component<Props, object> {
 
     handleModelBoxClick = (modelName: string) => async () => {
         this.props.setEditorData(undefined);
-        this.props.setSchemaData(undefined);
         const editorData = await this.modelManager.getEditorData(modelName);
         // order of the 2 actions is important.
         this.props.setEditorData(editorData);
-        this.props.setDefaultEditorData(editorData);
         this.props.selectModel(modelName);
         const revision = await this.modelManager.getRevision(modelName);
-        this.props.setCurrentRevision(revision.editor, revision.source);
     };
 
     render() {
@@ -191,9 +185,6 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
         setModelList: (modelList: string[]) => dispatch(actions.modelEditor.setModelList(modelList)),
         selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
         setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
-        setDefaultEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setDefaultEditorData(editorData)),
-        setSchemaData: (schemaData: SchemaData) => dispatch(actions.modelEditor.setSchemaData(schemaData)),
-        setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
         openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
     }
 };

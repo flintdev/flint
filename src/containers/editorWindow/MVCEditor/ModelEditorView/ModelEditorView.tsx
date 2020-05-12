@@ -13,8 +13,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import Chip from "@material-ui/core/Chip";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Grid from '@material-ui/core/Grid';
-import TreeEditor from "./TreeEditor";
-import SchemaView from "./SchemaView";
 import {ModelManager} from "../../../../controllers/model/modelManager";
 import ConfirmPopover from "../../../../components/ConfirmPopover";
 import AccountTreeOutlinedIcon from '@material-ui/icons/AccountTreeOutlined';
@@ -22,9 +20,9 @@ import {themeColor} from "../../../../constants";
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import orange from "@material-ui/core/colors/orange";
-import SyncIcon from '@material-ui/icons/Sync';
 import {ToastType} from "../../../../components/interface";
 import {ModelEditorCanvas} from "@flintdev/model-editor-canvas";
+import BlockEditDialog from "./BlockEditDialog";
 
 const styles = createStyles({
     root: {
@@ -128,8 +126,8 @@ const styles = createStyles({
 
 export interface Props extends WithStyles<typeof styles>, ModelEditorState, ConfigState {
     deleteModel: (modelName: string) => void,
-    setCurrentRevision: (editor: number, source: number) => void,
     toastOpen: (toastType: ToastType, message: string) => void,
+    blockEditDialogOpen: (blockData: any) => void,
 }
 
 interface State {
@@ -142,32 +140,14 @@ class ModelEditorView extends React.Component<Props, object> {
     };
     modelManager: ModelManager;
     operations: any = {};
+
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.modelManager = new ModelManager(projectDir);
     }
 
-    handleConfirmDeletePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-        this.setState({anchorEl: event.currentTarget});
-    };
-
     handleConfirmDeletePopoverClose = () => {
         this.setState({anchorEl: undefined});
-    };
-
-    handleToastOpen = () => {
-        const {modelSelected} = this.props;
-        const message = `${modelSelected} is saved successfully`;
-        this.props.toastOpen('success', message);
-    };
-
-    handleSaveButtonClick = async () => {
-        const {projectDir, modelSelected, editorData} = this.props;
-        if (!modelSelected) return;
-        await new ModelManager(projectDir).saveEditorData(modelSelected, editorData);
-        const revision = await this.modelManager.getRevision(modelSelected);
-        this.props.setCurrentRevision(revision.editor, revision.source);
-        this.handleToastOpen();
     };
 
     handleDeleteButtonClick = async () => {
@@ -177,19 +157,13 @@ class ModelEditorView extends React.Component<Props, object> {
         this.props.deleteModel(modelSelected);
     };
 
-    handleSyncSourceButtonClick = async () => {
-        const {modelSelected, schemaData} = this.props;
-        await this.modelManager.generateSourceFiles(modelSelected, schemaData);
-        const revision = await this.modelManager.getRevision(modelSelected);
-        this.props.setCurrentRevision(revision.editor, revision.source);
-    };
-
     onSaved = (editorData: any) => {
 
     };
 
     onBlockDbClick = (blockData: any) => {
-
+        console.log('block data', blockData);
+        this.props.blockEditDialogOpen(blockData);
     };
 
     onSchemaBtnClick = () => {
@@ -197,7 +171,7 @@ class ModelEditorView extends React.Component<Props, object> {
     };
 
     render() {
-        const {classes, modelSelected, currentRevision, editorData} = this.props;
+        const {classes, modelSelected, editorData} = this.props;
         const {anchorEl} = this.state;
         return (
             <div className={classes.root}>
@@ -224,67 +198,15 @@ class ModelEditorView extends React.Component<Props, object> {
                                 </div>
                                 }
                                 {!!modelSelected &&
-                                <React.Fragment>
-                                    {/* Header View */}
-                                    <div className={classes.headerViewContainer}>
-                                        <table className={classes.table}>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div className={classes.headerTitle}>
-                                                        <Chip
-                                                            variant={"outlined"}
-                                                            label={modelSelected}
-                                                            color={"primary"}
-                                                            className={classes.chip}
-                                                        />
-                                                    </div>
-                                                </td>
-                                                <td className={classes.textRight}>
-                                                    <React.Fragment>
-                                                        {currentRevision.editor !== currentRevision.source &&
-                                                        <Fab
-                                                            variant={"extended"}
-                                                            className={classes.syncButton}
-                                                            onClick={this.handleSyncSourceButtonClick}
-                                                        >
-                                                            <SyncIcon/>&nbsp;
-                                                            Sync Source Files
-                                                        </Fab>
-                                                        }
-                                                        <Button
-                                                            variant={"outlined"}
-                                                            color={"secondary"}
-                                                            className={classes.actionButton}
-                                                            onClick={this.handleConfirmDeletePopoverOpen}
-                                                        >
-                                                            <DeleteOutlineIcon/>&nbsp;Delete
-                                                        </Button>
-                                                        <Button
-                                                            variant={"contained"}
-                                                            color={"primary"}
-                                                            className={classes.actionButton}
-                                                            onClick={this.handleSaveButtonClick}
-                                                        >
-                                                            <SaveIcon/>&nbsp;Save
-                                                        </Button>
-                                                    </React.Fragment>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    {/* Body view */}
-                                    <div className={classes.bodyViewContainer}>
-                                        <ModelEditorCanvas
-                                            operations={this.operations}
-                                            editorData={editorData}
-                                            onSaved={this.onSaved}
-                                            onBlockDbClick={this.onBlockDbClick}
-                                            onSchemaBtnClick={this.onSchemaBtnClick}
-                                        />
-                                    </div>
-                                </React.Fragment>
+                                <div className={classes.bodyViewContainer}>
+                                    <ModelEditorCanvas
+                                        operations={this.operations}
+                                        editorData={editorData}
+                                        onSaved={this.onSaved}
+                                        onBlockDbClick={this.onBlockDbClick}
+                                        onSchemaBtnClick={this.onSchemaBtnClick}
+                                    />
+                                </div>
                                 }
                             </td>
                         </tr>
@@ -301,6 +223,9 @@ class ModelEditorView extends React.Component<Props, object> {
                     onConfirm={this.handleDeleteButtonClick}
                 />
 
+                <BlockEditDialog
+                    operations={this.operations}
+                />
             </div>
         )
     }
@@ -310,11 +235,11 @@ const mapStateToProps = (state: StoreState) => {
     return {...state.editor.modelEditor, ...state.config};
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction|componentsActions.ComponentsAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | componentsActions.ComponentsAction>) => {
     return {
         deleteModel: (modelName: string) => dispatch(actions.modelEditor.deleteModel(modelName)),
-        setCurrentRevision: (editor: number, source: number) => dispatch(actions.modelEditor.setCurrentRevision(editor, source)),
         toastOpen: (toastType: ToastType, message: string) => dispatch(componentsActions.toastOpen(toastType, message)),
+        blockEditDialogOpen: (blockData: any) => dispatch(actions.modelEditor.blockEditDialogOpen(blockData)),
     }
 };
 

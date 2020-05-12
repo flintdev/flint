@@ -57,11 +57,9 @@ export interface ModelEditorState {
     modelList: Array<string>,
     modelSelected: string | undefined,
     editorData: EditorData | undefined,
-    defaultEditorData: EditorData | undefined,
-    schemaData: SchemaData | undefined,
-    currentRevision: {
-        editor: number | undefined,
-        source: number | undefined,
+    blockEditDialog: {
+        open: boolean,
+        blockData?: any,
     }
 }
 
@@ -144,11 +142,8 @@ export const initState: StoreState = {
             modelList: [],
             modelSelected: undefined,
             editorData: undefined,
-            defaultEditorData: undefined,
-            schemaData: undefined,
-            currentRevision: {
-                editor: undefined,
-                source: undefined
+            blockEditDialog: {
+                open: false,
             }
         },
         processEditor: {
