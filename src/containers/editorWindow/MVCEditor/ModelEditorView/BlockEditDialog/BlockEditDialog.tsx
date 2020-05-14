@@ -33,12 +33,9 @@ const styles = createStyles({
         paddingLeft: 10,
         paddingRight: 10,
     },
-    table: {
-        width: '100%'
-    },
     content: {
         marginTop: 10,
-        marginBottom: 10,
+        marginBottom: 0,
         marginLeft: 10,
         marginRight: 10,
     },
@@ -46,10 +43,15 @@ const styles = createStyles({
         minWidth: 300
     },
     tableContainer: {
+        width: 'auto',
         padding: 10,
     },
     actionsContainer: {
         textAlign: 'right',
+        paddingTop: 20,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        paddingRight: 10,
     }
 });
 
