@@ -1,6 +1,6 @@
 <p align="center">
   <img src="resources/img/logo-sm.png" style="max-width: 80px;"/><br/>
-  <h1 align="center">Flint</h1>
+  <h1 align="center"><a href="https://flintdev.github.io/docs">Flint</a></h1>
 </p>
 
 [![](https://img.shields.io/badge/download-Mac-brightgreen)](https://github.com/flintdev/flint/releases/latest)
@@ -10,7 +10,7 @@
 ![](https://img.shields.io/david/flintdev/flint)
 ![](https://img.shields.io/badge/platform-MacOS-orange)
 ![](https://img.shields.io/github/license/flintdev/flint)
-
+![](https://img.shields.io/github/package-json/dependency-version/flintdev/flint/dev/electron)
 ## Introduction
 
 Flint is a low-code development platform based on kubernetes architecture and corresponding ecosystem in open-source community. 
