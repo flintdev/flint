@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="resources/img/icon.png" style="max-width: 100px;"><br/>
+  <img src="resources/img/logo-md.png" style="max-width: 100px;"/><br/>
   <h1 align="center">Flint</h1>
 </p>
 
