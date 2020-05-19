@@ -17,6 +17,7 @@ import TextField from "@material-ui/core/TextField";
 import Chip from '@material-ui/core/Chip';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import TableFooter from '@material-ui/core/TableFooter';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
@@ -24,6 +25,7 @@ import TableRow from '@material-ui/core/TableRow';
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import AddIcon from '@material-ui/icons/Add';
 
 const styles = createStyles({
     root: {},
@@ -40,7 +42,7 @@ const styles = createStyles({
         marginRight: 10,
     },
     textField: {
-        minWidth: 300
+        width: '100%'
     },
     tableContainer: {
         width: 'auto',
@@ -63,12 +65,14 @@ export interface Props extends WithStyles<typeof styles>, ModelEditorState {
 interface State {
     blockNameInput: string,
     items: any[],
+    editingIndex: number,
 }
 
 class BlockEditDialog extends React.Component<Props, object> {
     state: State = {
         blockNameInput: '',
         items: [],
+        editingIndex: -1,
     };
 
     componentDidMount(): void {
@@ -91,18 +95,32 @@ class BlockEditDialog extends React.Component<Props, object> {
         });
     };
 
-    handleDeleteItemClick = (item: any) => () => {
-
+    handleAddFieldClick = () => {
+        let {items} = this.state;
+        items.push({
+            id: this.props.operations.getUUID(),
+            name: '',
+            dataType: 'string',
+            required: true,
+            indexed: false,
+        });
+        this.setState({items: [...items], editingIndex: items.length - 1});
     };
 
-    handleEditItemClick = (item: any) => () => {
+    handleDeleteItemClick = (index: number) => () => {
+        let items = this.state.items;
+        items.splice(index, 1);
+        this.setState({items: [...items]});
+    };
+
+    handleEditItemClick = (index: number) => () => {
 
     };
 
     handleSubmitClick = () => {
         let {blockData} = this.props.blockEditDialog;
         const {blockNameInput, items} = this.state;
-        items.push({name: "test1", dataType: 'string', required: true});
+        items.push({id: this.props.operations.getUUID(), name: "test1", dataType: 'string', required: true});
         blockData = {...blockData, name: blockNameInput, items};
         console.log('block data', blockData);
         this.props.operations.updateBlockData(blockData);
@@ -111,9 +129,8 @@ class BlockEditDialog extends React.Component<Props, object> {
 
     render() {
         const {classes, blockEditDialog} = this.props;
-        const {blockNameInput} = this.state;
+        const {blockNameInput, items, editingIndex} = this.state;
         const {open, blockData} = blockEditDialog;
-        const items: any[] = !!blockData && blockData.items ? blockData.items: [];
         return (
             <div className={classes.root}>
                 <Dialog
@@ -142,6 +159,7 @@ class BlockEditDialog extends React.Component<Props, object> {
                                         <TableCell>Field Name</TableCell>
                                         <TableCell>Data Type</TableCell>
                                         <TableCell align={"center"}>Required?</TableCell>
+                                        <TableCell align={"center"}>Indexed?</TableCell>
                                         <TableCell></TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -159,17 +177,20 @@ class BlockEditDialog extends React.Component<Props, object> {
                                                 <TableCell align={"center"}>
                                                     {!!item.required ? 'Y' : 'N'}
                                                 </TableCell>
+                                                <TableCell align={"center"}>
+                                                    {!!item.indexed ? 'Y' : 'N'}
+                                                </TableCell>
                                                 <TableCell align={"right"}>
                                                     <IconButton
                                                         size={"small"}
                                                         color={"primary"}
-                                                        onClick={this.handleEditItemClick(item)}
+                                                        onClick={this.handleEditItemClick(i)}
                                                     >
                                                         <EditIcon/>
                                                     </IconButton>
                                                     <IconButton
                                                         size={"small"}
-                                                        onClick={this.handleDeleteItemClick(item)}
+                                                        onClick={this.handleDeleteItemClick(i)}
                                                     >
                                                         <DeleteOutlineIcon fontSize={"small"}/>
                                                     </IconButton>
@@ -178,6 +199,19 @@ class BlockEditDialog extends React.Component<Props, object> {
                                         )
                                     })}
                                 </TableBody>
+                                <TableFooter>
+                                    <TableRow>
+                                        <TableCell colSpan={4} align={"center"}>
+                                            <Button
+                                                color={"primary"}
+                                                size={"small"}
+                                                onClick={this.handleAddFieldClick}
+                                            >
+                                                <AddIcon/>&nbsp;Add Field
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableFooter>
                             </Table>
                         </TableContainer>
                     </div>

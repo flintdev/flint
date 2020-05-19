@@ -76,7 +76,7 @@
   "dependencies": {
     "@flintdev/material-widgets": "0.0.71",
     "@flintdev/model-editor": "0.0.11",
-    "@flintdev/model-editor-canvas": "0.0.2",
+    "@flintdev/model-editor-canvas": "0.0.3",
     "@flintdev/process-editor": "0.0.7",
     "@flintdev/ui-editor": "0.0.50",
     "@material-ui/core": "^4.9.9",
