@@ -123,7 +123,6 @@ class BlockEditDialog extends React.Component<Props, object> {
     handleSubmitClick = () => {
         let {blockData} = this.props.blockEditDialog;
         const {blockNameInput, items} = this.state;
-        items.push({id: this.props.operations.getUUID(), name: "test1", dataType: 'string', required: true});
         blockData = {...blockData, name: blockNameInput, items};
         console.log('block data', blockData);
         this.props.operations.updateBlockData(blockData);

@@ -158,7 +158,11 @@ class ModelEditorView extends React.Component<Props, object> {
     };
 
     onSaved = (editorData: any) => {
-
+        console.log('editorData', editorData);
+        const {modelSelected} = this.props;
+        this.modelManager.saveEditorData(modelSelected, editorData).then(r => {
+            this.props.toastOpen('info', `Model ${modelSelected} is saved successfully.`);
+        });
     };
 
     onBlockDbClick = (blockData: any) => {
@@ -203,6 +207,7 @@ class ModelEditorView extends React.Component<Props, object> {
                                         operations={this.operations}
                                         editorData={editorData}
                                         onSaved={this.onSaved}
+                                        onDelete={this.handleDeleteButtonClick}
                                         onBlockDbClick={this.onBlockDbClick}
                                         onSchemaBtnClick={this.onSchemaBtnClick}
                                     />

@@ -78,20 +78,9 @@ export class ModelManager {
         return _.get(configJson, ['editorDataMap', modelName]);
     };
 
-    getRevision = async (modelName: string) => {
-        const configJson = await this.fetchConfigData();
-        const revision =  _.get(configJson, ['revision', modelName]);
-        const editor = !!revision?.editor ? revision.editor : 1;
-        const source = !!revision?.source ? revision.source : 0;
-        return {editor, source};
-    };
-
     saveEditorData = async (modelName: string, editorData: EditorData) => {
         let configJson = await this.fetchConfigData();
         _.set(configJson, ['editorDataMap', modelName], editorData);
-        let editorRevision = _.get(configJson, ['revision', modelName, 'editor']);
-        editorRevision = !!editorRevision ? editorRevision + 1 : 1;
-        _.set(configJson, ['revision', modelName, 'editor'], editorRevision);
         await this.saveConfigData(configJson);
     };
 
@@ -100,15 +89,6 @@ export class ModelManager {
         await this.checkAndCreateSourceDir();
         const filePath = `${this.sourceDirPath}/${modelName}.yaml`;
         await this.fsHelper.createFile(filePath, crdSpecYaml);
-        await this.syncSourceRevision(modelName);
-    };
-
-    private syncSourceRevision = async (modelName: string) => {
-        const configJson = await this.fetchConfigData();
-        const {editor} = await this.getRevision(modelName);
-        _.set(configJson, ['revision', modelName, 'editor'], editor);
-        _.set(configJson, ['revision', modelName, 'source'], editor);
-        await this.saveConfigData(configJson);
     };
 
     private checkAndCreateModelConfigFile = async () => {

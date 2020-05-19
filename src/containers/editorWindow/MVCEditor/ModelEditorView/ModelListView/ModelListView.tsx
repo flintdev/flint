@@ -111,10 +111,10 @@ class ModelListView extends React.Component<Props, object> {
     handleModelBoxClick = (modelName: string) => async () => {
         this.props.setEditorData(undefined);
         const editorData = await this.modelManager.getEditorData(modelName);
+        console.log('model box clicked - editor data', editorData);
         // order of the 2 actions is important.
         this.props.setEditorData(editorData);
         this.props.selectModel(modelName);
-        const revision = await this.modelManager.getRevision(modelName);
     };
 
     render() {
