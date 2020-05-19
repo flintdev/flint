@@ -43,3 +43,5 @@ export const AlwaysOutputs: Output[] = [
         }
     }
 ];
+
+export const ModelFieldDataTypes = ["string", "integer", "object", "boolean", "string[]", "integer[]", "$ref", "$ref[]"];

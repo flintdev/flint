@@ -26,6 +26,9 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import AddIcon from '@material-ui/icons/Add';
+import {ModelFieldDataTypes} from "../../../../../constants/editor";
+import MenuItem from '@material-ui/core/MenuItem';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const styles = createStyles({
     root: {},
@@ -114,7 +117,7 @@ class BlockEditDialog extends React.Component<Props, object> {
     };
 
     handleEditItemClick = (index: number) => () => {
-
+        this.setState({editingIndex: index});
     };
 
     handleSubmitClick = () => {
@@ -125,6 +128,143 @@ class BlockEditDialog extends React.Component<Props, object> {
         console.log('block data', blockData);
         this.props.operations.updateBlockData(blockData);
         this.props.blockEditDialogClose();
+    };
+
+    handleFieldNameChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let items = this.state.items;
+        items[index].name = event.target.value;
+        this.setState({items});
+    };
+
+    handleDataTypeChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let items = this.state.items;
+        items[index].dataType = event.target.value;
+        this.setState({items});
+    };
+
+    handleRequiredTypeChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let items = this.state.items;
+        items[index].required = event.target.value === 'Y';
+        this.setState({items});
+    };
+
+    handleIndexedTypeChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+        let items = this.state.items;
+        items[index].indexed = event.target.value === 'Y';
+        this.setState({items});
+    };
+
+    handleUpdateFieldClick = () => {
+        this.setState({editingIndex: -1});
+    };
+
+    renderEditingTableRow = (item: any, index: number) => {
+        return (
+            <TableRow>
+                <TableCell>
+                    <TextField
+                        autoFocus={true}
+                        value={item.name}
+                        onChange={this.handleFieldNameChange(index)}
+                        variant={"outlined"}
+                        size={"small"}
+                        fullWidth={true}
+                    />
+                </TableCell>
+                <TableCell>
+                    <TextField
+                        value={item.dataType}
+                        onChange={this.handleDataTypeChange(index)}
+                        variant={"outlined"}
+                        size={"small"}
+                        fullWidth={true}
+                        select
+                    >
+                        {ModelFieldDataTypes.map((option, i) => {
+                            return (
+                                <MenuItem key={i} value={option}>{option}</MenuItem>
+                            )
+                        })}
+                    </TextField>
+                </TableCell>
+                <TableCell>
+                    <TextField
+                        value={item.required ? 'Y' : 'N'}
+                        onChange={this.handleRequiredTypeChange(index)}
+                        variant={"outlined"}
+                        size={"small"}
+                        fullWidth={true}
+                        select
+                    >
+                        {['Y', 'N'].map((option, i) => {
+                            return (
+                                <MenuItem key={i} value={option}>{option}</MenuItem>
+                            )
+                        })}
+                    </TextField>
+                </TableCell>
+                <TableCell>
+                    <TextField
+                        value={item.indexed ? 'Y' : 'N'}
+                        onChange={this.handleIndexedTypeChange(index)}
+                        variant={"outlined"}
+                        size={"small"}
+                        fullWidth={true}
+                        select
+                    >
+                        {['Y', 'N'].map((option, i) => {
+                            return (
+                                <MenuItem key={i} value={option}>{option}</MenuItem>
+                            )
+                        })}
+                    </TextField>
+                </TableCell>
+                <TableCell align={"right"}>
+                    <IconButton
+                        size={"small"}
+                        color={"primary"}
+                        onClick={this.handleUpdateFieldClick}
+                    >
+                        <CheckCircleIcon/>
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+        )
+    };
+
+    renderFieldTableRow = (item: any, index: number) => {
+        return (
+            <TableRow >
+                <TableCell>{item.name}</TableCell>
+                <TableCell>
+                    <Chip
+                        size={"small"}
+                        label={item.dataType}
+                    />
+                </TableCell>
+                <TableCell align={"center"}>
+                    {!!item.required ? 'Y' : 'N'}
+                </TableCell>
+                <TableCell align={"center"}>
+                    {!!item.indexed ? 'Y' : 'N'}
+                </TableCell>
+                <TableCell align={"right"}>
+                    <IconButton
+                        size={"small"}
+                        color={"primary"}
+                        onClick={this.handleEditItemClick(index)}
+                    >
+                        <EditIcon/>
+                    </IconButton>
+                    <IconButton
+                        size={"small"}
+                        onClick={this.handleDeleteItemClick(index)}
+                    >
+                        <DeleteOutlineIcon fontSize={"small"}/>
+                    </IconButton>
+                </TableCell>
+            </TableRow>
+        )
     };
 
     render() {
@@ -166,42 +306,16 @@ class BlockEditDialog extends React.Component<Props, object> {
                                 <TableBody>
                                     {items.map((item, i) => {
                                         return (
-                                            <TableRow key={i}>
-                                                <TableCell>{item.name}</TableCell>
-                                                <TableCell>
-                                                    <Chip
-                                                        size={"small"}
-                                                        label={item.dataType}
-                                                    />
-                                                </TableCell>
-                                                <TableCell align={"center"}>
-                                                    {!!item.required ? 'Y' : 'N'}
-                                                </TableCell>
-                                                <TableCell align={"center"}>
-                                                    {!!item.indexed ? 'Y' : 'N'}
-                                                </TableCell>
-                                                <TableCell align={"right"}>
-                                                    <IconButton
-                                                        size={"small"}
-                                                        color={"primary"}
-                                                        onClick={this.handleEditItemClick(i)}
-                                                    >
-                                                        <EditIcon/>
-                                                    </IconButton>
-                                                    <IconButton
-                                                        size={"small"}
-                                                        onClick={this.handleDeleteItemClick(i)}
-                                                    >
-                                                        <DeleteOutlineIcon fontSize={"small"}/>
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
+                                            <React.Fragment key={i}>
+                                                {editingIndex === i && this.renderEditingTableRow(item, i)}
+                                                {editingIndex !== i && this.renderFieldTableRow(item, i)}
+                                            </React.Fragment>
                                         )
                                     })}
                                 </TableBody>
                                 <TableFooter>
                                     <TableRow>
-                                        <TableCell colSpan={4} align={"center"}>
+                                        <TableCell colSpan={5} align={"center"}>
                                             <Button
                                                 color={"primary"}
                                                 size={"small"}
