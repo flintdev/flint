@@ -56,7 +56,7 @@ export interface NavigationState {
 export interface ModelEditorState {
     modelList: Array<string>,
     modelSelected: string | undefined,
-    editorData: EditorData | undefined,
+    editorData?: any,
     blockEditDialog: {
         open: boolean,
         blockData?: any,

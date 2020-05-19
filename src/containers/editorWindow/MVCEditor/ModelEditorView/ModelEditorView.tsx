@@ -177,6 +177,7 @@ class ModelEditorView extends React.Component<Props, object> {
     render() {
         const {classes, modelSelected, editorData} = this.props;
         const {anchorEl} = this.state;
+        console.log('render - editorData', editorData);
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -205,7 +206,7 @@ class ModelEditorView extends React.Component<Props, object> {
                                 <div className={classes.bodyViewContainer}>
                                     <ModelEditorCanvas
                                         operations={this.operations}
-                                        editorData={editorData}
+                                        editorData={editorData?.canvasData}
                                         onSaved={this.onSaved}
                                         onDelete={this.handleDeleteButtonClick}
                                         onBlockDbClick={this.onBlockDbClick}
