@@ -92,6 +92,7 @@
     "m-react-splitters": "^1.2.0",
     "moment": "^2.25.3",
     "mustache": "^4.0.1",
+    "normalize.css": "^8.0.1",
     "react-ace": "^8.1.0",
     "react-hotkeys": "^2.0.0",
     "react-redux": "^7.2.0",

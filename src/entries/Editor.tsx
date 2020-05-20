@@ -8,6 +8,7 @@ import EditorContainer from "src/containers/editorWindow/EditorContainer";
 import 'typeface-roboto';
 import {MainProcessCommunicator} from "../controllers/mainProcessCommunicator";
 import ErrorBoundary from "../components/ErrorBoundary";
+import 'normalize.css';
 
 render(
     <Provider store={store}>
