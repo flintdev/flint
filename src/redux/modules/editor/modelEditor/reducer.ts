@@ -19,29 +19,20 @@ export function reducer(state: ModelEditorState, action: ModelEditorAction) {
             return update(state, {
                 editorData: {$set: action.editorData}
             });
-        case types.SET_DEFAULT_EDITOR_DATA:
+        case types.BLOCK_EDIT_DIALOG_OPEN:
             return update(state, {
-                defaultEditorData: {$set: action.editorData}
-            });
-        case types.SET_SCHEMA_DATA:
-            return update(state, {
-                schemaData: {$set: action.schemaData}
-            });
-        case types.DELETE_MODEL:
-            return update(state, {
-                editorData: {$set: undefined},
-                schemaData: {$set: undefined},
-                defaultEditorData: {$set: undefined},
-                modelSelected: {$set: undefined},
-                modelList: {$splice: [[state.modelList.indexOf(action.modelName), 1]]},
-            });
-        case types.SET_CURRENT_REVISION:
-            return update(state, {
-                currentRevision: {
-                    editor: {$set: action.editor},
-                    source: {$set: action.source},
+                blockEditDialog: {
+                    open: {$set: true},
+                    blockData: {$set: action.blockData},
                 }
             });
+        case types.BLOCK_EDIT_DIALOG_CLOSE:
+            return update(state, {
+                blockEditDialog: {
+                    open: {$set: false}
+                }
+            });
+
         default:
             return state;
     }
