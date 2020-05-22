@@ -9,8 +9,6 @@ import * as actions from "src/redux/modules/editor/actions";
 import * as componentsActions from 'src/redux/modules/components/actions';
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import {LOADING_STATUS, themeColor} from "../../../../../constants";
 import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
@@ -21,7 +19,6 @@ import {ConfirmationDialogSubmitFunc, DialogFormData, DialogFormSubmitFunc} from
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import {openConfirmationDialog} from "src/redux/modules/components/actions";
 
 const styles = createStyles({
     root: {

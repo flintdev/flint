@@ -28,6 +28,7 @@ Developers only need to design and update the state model to implement dynamic U
 The workflows in backend are always triggered by the update events of data models.
 * **Source code generation.** After the application is constructed, Flint will automatically generate the structured source code. Users can use the source code for secondary development, or 
 integrated with existing repo.
+* **Microservices architecture.** Backend follows the best practice of cloud native applications to build and deployment all the services in microservice architecture.
 * **Plugin Framework.** The UI components are installed as plugins of Flint. Users can choose the component libraries and install them on demand. Third-party developers can also develop and publish their components as plugins in Flint.
 * **Cloud native deployment solution.** Based on the Kubernetes ecosystem in open-source community, Flint provides complete solution to test and deployment applications to public or private cloud. 
 
