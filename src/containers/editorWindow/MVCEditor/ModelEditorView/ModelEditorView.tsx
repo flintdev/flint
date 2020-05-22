@@ -153,7 +153,6 @@ class ModelEditorView extends React.Component<Props, object> {
     handleDeleteButtonClick = async () => {
         const {modelSelected} = this.props;
         await this.modelManager.deleteModel(modelSelected);
-        this.handleConfirmDeletePopoverClose();
         this.props.deleteModel(modelSelected);
     };
 

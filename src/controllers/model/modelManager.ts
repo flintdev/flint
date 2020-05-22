@@ -54,15 +54,13 @@ export class ModelManager {
 
     deleteModel = async (modelName: string) => {
         let configJson = await this.fetchConfigData();
-        let {models, editorDataMap, revision} = configJson;
+        let {models, editorDataMap} = configJson;
         // remove from models
         _.remove(models, (model: string) => model === modelName);
         // remove from editorDataMap
         editorDataMap = _.omit(editorDataMap, [modelName]);
-        revision = _.omit(revision, [modelName]);
         _.set(configJson, ['editorDataMap'], editorDataMap);
         _.set(configJson, ['models'], models);
-        _.set(configJson, ['revision'], revision);
         await this.saveConfigData(configJson);
     };
 

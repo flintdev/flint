@@ -19,6 +19,12 @@ export function reducer(state: ModelEditorState, action: ModelEditorAction) {
             return update(state, {
                 editorData: {$set: action.editorData}
             });
+        case types.DELETE_MODEL:
+            return update(state, {
+                editorData: {$set: undefined},
+                modelSelected: {$set: undefined},
+                modelList: {$splice: [[state.modelList.indexOf(action.modelName), 1]]},
+            });
         case types.BLOCK_EDIT_DIALOG_OPEN:
             return update(state, {
                 blockEditDialog: {

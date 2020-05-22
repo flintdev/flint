@@ -17,7 +17,11 @@ import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
 import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
-import {DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
+import {ConfirmationDialogSubmitFunc, DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import {openConfirmationDialog} from "src/redux/modules/components/actions";
 
 const styles = createStyles({
     root: {
@@ -39,6 +43,15 @@ const styles = createStyles({
         padding: 10,
         cursor: 'pointer',
     },
+    paperActive: {
+        marginLeft: 0,
+        marginRight: 0,
+        marginTop: 15,
+        marginBottom: 15,
+        padding: 10,
+        cursor: 'pointer',
+        border: `3px solid ${themeColor.primary}`
+    },
     table: {
         width: '100%',
     },
@@ -55,19 +68,33 @@ const styles = createStyles({
     },
     textRight: {
         textAlign: 'right'
-    }
+    },
+    textActive: {
+      fontWeight: 'bold',
+    },
 });
 
 export interface Props extends WithStyles<typeof styles>, ModelEditorState, ConfigState {
     setModelList: (modelList: string[]) => void,
     selectModel: (value: string) => void,
     setEditorData: (editorData: EditorData) => void,
+    deleteModel: (modelName: string) => void,
     openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
+    openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => void,
+
+}
+
+interface State {
+    loadingStatus: LOADING_STATUS,
+    menuAnchorEl?: Element,
+    modelNameSelected: string
 }
 
 class ModelListView extends React.Component<Props, object> {
-    state = {
+    state: State = {
         loadingStatus: LOADING_STATUS.NOT_STARTED,
+        menuAnchorEl: undefined,
+        modelNameSelected: ''
     };
     modelManager: ModelManager;
 
@@ -117,10 +144,40 @@ class ModelListView extends React.Component<Props, object> {
         this.props.selectModel(modelName);
     };
 
+    handleModelMoreButtonClick = (modelName: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+        this.setState({
+            modelNameSelected: modelName,
+            menuAnchorEl: event.currentTarget
+        })
+    };
+
+    handleRemoveModelClick = async () => {
+        this.handleMenuClose();
+        const {modelNameSelected} = this.state;
+        this.props.openConfirmationDialog(
+            'warning',
+            'Remove Model',
+            `Are you sure to remove Model ${modelNameSelected}?`,
+            'REMOVE',
+            () => {
+                this.modelManager.deleteModel(modelNameSelected).then(r => {
+                    this.props.deleteModel(modelNameSelected);
+                })
+            }
+        )
+    };
+
+    handleMenuClose = () => {
+        this.setState({
+            menuAnchorEl: undefined
+        })
+    };
+
     render() {
         const {classes} = this.props;
         const {modelList, modelSelected} = this.props;
-        const {loadingStatus} = this.state;
+        const {loadingStatus, menuAnchorEl, modelNameSelected} = this.state;
         return (
             <div className={classes.root}>
                 <table className={classes.table}>
@@ -141,7 +198,7 @@ class ModelListView extends React.Component<Props, object> {
                     {loadingStatus === LOADING_STATUS.COMPLETE && modelList.map((modelName, i) => {
                         return (
                             <Paper
-                                className={classes.paper}
+                                className={modelName === modelSelected ? classes.paperActive : classes.paper}
                                 key={i}
                                 onClick={this.handleModelBoxClick(modelName)}
                             >
@@ -150,6 +207,7 @@ class ModelListView extends React.Component<Props, object> {
                                     <tr>
                                         <td>
                                             <Typography
+                                                className={modelName === modelSelected ? classes.textActive: undefined}
                                                 variant={"subtitle1"}
                                                 color={modelName === modelSelected ? "primary": "initial"}
                                             >
@@ -157,11 +215,12 @@ class ModelListView extends React.Component<Props, object> {
                                             </Typography>
                                         </td>
                                         <td className={classes.tdIcon}>
-                                            {modelSelected === modelName ?
-                                                <CheckCircleIcon className={classes.iconActive}/>
-                                                :
-                                                <RadioButtonUncheckedIcon className={classes.icon}/>
-                                            }
+                                            <IconButton
+                                                size={"small"}
+                                                onClick={this.handleModelMoreButtonClick(modelName)}
+                                            >
+                                                <MoreVertIcon/>
+                                            </IconButton>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -171,6 +230,23 @@ class ModelListView extends React.Component<Props, object> {
                         )
                     })}
                 </div>
+
+                <Menu
+                    anchorEl={menuAnchorEl}
+                    keepMounted
+                    open={Boolean(menuAnchorEl)}
+                    onClose={this.handleMenuClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'right',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}
+                >
+                    <MenuItem dense={true} onClick={this.handleRemoveModelClick}>Remove</MenuItem>
+                </Menu>
             </div>
         )
     }
@@ -185,7 +261,9 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
         setModelList: (modelList: string[]) => dispatch(actions.modelEditor.setModelList(modelList)),
         selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
         setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
+        deleteModel: (modelName: string) => dispatch(actions.modelEditor.deleteModel(modelName)),
         openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
+        openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => dispatch(componentsActions.openConfirmationDialog(type, title, description, submitLabel, onSubmit)),
     }
 };
 
