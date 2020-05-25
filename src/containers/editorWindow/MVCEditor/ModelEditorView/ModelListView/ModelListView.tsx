@@ -14,7 +14,7 @@ import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
-import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
+import {EditorData} from "@flintdev/model-editor/dist/interface";
 import {ConfirmationDialogSubmitFunc, DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
