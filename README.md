@@ -49,3 +49,4 @@ integrated with existing repo.
 ## Application Architecture
 
 ![](resources/docs/app-arch.png)
+
