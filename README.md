@@ -34,6 +34,18 @@ integrated with existing repo.
 
 > Please note: current stage of Flint is still alpha and we are in rapid iterations to deliver features in the roadmap. The beta version is planned to be released by the end of this year. It is not recommended to use Flint in production before beta.
 
+### UI Editor
+
+![](resources/img/sc-ui-editor.png)
+
+### Process Editor
+
+![](resources/img/sc-process-editor.png)
+
+### Model Editor
+
+![](resources/img/sc-model-editor.png)
+
 ## Application Architecture
 
 ![](resources/docs/app-arch.png)
