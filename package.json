@@ -17,7 +17,7 @@
     "install-process-editor": "npm install @flintdev/process-editor@latest",
     "install-ui-editor": "npm install @flintdev/ui-editor@latest",
     "install-material-widgets": "npm install @flintdev/material-widgets@latest",
-    "update-all": "npm install @flintdev/model-editor-canvas@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest",
+    "update-all": "npm install @flintdev/model-editor-canvas@latest @flintdev/react-field-selector@latest @flintdev/process-editor@latest @flintdev/ui-editor@latest @flintdev/material-widgets@latest",
     "pack-app": "electron-builder",
     "publish-app": "node build/scripts/publish.js",
     "pipeline-prod": "npm run build-prod && npm run pack-app && npm run publish-app"
@@ -78,6 +78,7 @@
     "@flintdev/model-editor": "0.0.11",
     "@flintdev/model-editor-canvas": "0.0.8",
     "@flintdev/process-editor": "0.0.7",
+    "@flintdev/react-field-selector": "0.0.4",
     "@flintdev/ui-editor": "0.0.50",
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
