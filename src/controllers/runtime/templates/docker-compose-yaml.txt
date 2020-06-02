@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  kind:
+    image: flintdev/flint-kind-dind
+    privileged: true
+    command: bash -c "while true; do echo hello; sleep 2; done"
+    volumes:
+      - root:/root
+    expose:
+      - 8000
+    networks:
+      - docker_network
+
+  ui-install-build:
+    image: flintdev/flint-ui
+    command: bash -c "npm install && npm run build-dev"
+    working_dir: /application/src/ui
+    networks:
+      - docker_network
+    volumes:
+      - ./:/application
+      - ~/.kube/config:/root/.kube/config
+
+  ui:
+    image: flintdev/flint-ui
+    command:  ./wait-for-ui-install-builder.sh -- node /application/dist/server.js
+    working_dir: /app
+    networks:
+      - docker_network
+    volumes:
+      - ./:/application
+      - ~/.kube/config:/root/.kube/config
+    depends_on:
+      - ui-install-build
+    ports:
+      - 9090:8080
+
+  workflow-engine:
+    image: flintdev/flint-workflow-engine
+    command: bash -c "go get github.com/githubnemo/CompileDaemon && CompileDaemon -directory=/application/src/controllers/workflowEngine -build='go build main.go' -command='./main'"
+    working_dir: /application/src/controllers/workflowEngine
+    networks:
+      - docker_network
+    volumes:
+      - ./:/application
+      - ~/.kube/config:/root/.kube/config
+
+  python-executor:
+    image: flintdev/flint-python-executor
+    command: python app.py
+    working_dir: /application/src/controllers/executors
+    environment:
+      DEBUG: "true"
+    networks:
+      - docker_network
+    expose:
+      - 8080
+    volumes:
+      - ./:/application
+      - root:/root
+
+  admin-service:
+    image: flintdev/flint-admin-service
+    command: python app.py
+    working_dir: /application/src/controllers/admin
+    environment:
+      DEBUG: "true"
+    networks:
+      - docker_network
+    expose:
+      - 8080
+    volumes:
+      - ./:/application
+      - root:/root
+
+  health-check:
+    image: flintdev/flint-service-health-check
+    volumes:
+      - ./:/application
+    networks:
+      - docker_network
+    working_dir: /application
+    command: python /app/watcher.py
+
+volumes:
+  root:
+
+networks:
+  docker_network:
+    driver: bridge
