@@ -34,7 +34,7 @@ services:
     depends_on:
       - ui-install-build
     ports:
-      - 9090:8080
+      - 9090:8000
 
   workflow-engine:
     image: flintdev/flint-workflow-engine
