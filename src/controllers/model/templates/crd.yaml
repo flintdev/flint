@@ -14,9 +14,7 @@ spec:
       # One and only one version must be marked as the storage version.
       storage: true
       schema:
-        openAPIV3Schema:
-          type: object
-          properties: $schemaData$
+        openAPIV3Schema: $schemaData$
   # either Namespaced or Cluster
   scope: Namespaced
   names:

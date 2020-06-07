@@ -1,6 +1,5 @@
 // src/controllers/model/specGenerator.ts
 
-import {SchemaData} from "@flintdev/model-editor/dist/interface";
 import * as yaml from 'js-yaml';
 import * as _ from 'lodash';
 import crdTemplate from './templates/crd.yaml';
@@ -11,7 +10,7 @@ export class SpecGenerator {
 
     }
 
-    renderCRDSpecYaml = (modelName: string, schemaData: SchemaData) => {
+    renderCRDSpecYaml = (modelName: string, schemaData: any) => {
         // modelName must be lowercase
         const plural = `${modelName.toLowerCase()}s`;
         const singular = modelName.toLowerCase();

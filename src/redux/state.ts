@@ -60,7 +60,8 @@ export interface ModelEditorState {
     blockEditDialog: {
         open: boolean,
         blockData?: any,
-    }
+    },
+    _mark: number
 }
 
 export interface ProcessEditorState {
@@ -144,7 +145,8 @@ export const initState: StoreState = {
             editorData: undefined,
             blockEditDialog: {
                 open: false,
-            }
+            },
+            _mark: 0
         },
         processEditor: {
             processList: [],

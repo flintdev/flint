@@ -64,7 +64,7 @@ export class ModelManager {
         await this.saveConfigData(configJson);
     };
 
-    getModelList = async () => {
+    getModelList = async (): Promise<string[]> => {
         const modelList: string[] = [];
         const configJson = await this.fetchConfigData();
         if (!configJson.models) return modelList;

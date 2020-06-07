@@ -29,6 +29,7 @@ import * as componentsActions from "../../../../redux/modules/components/actions
 import {SourceFileGenerator as UISourceFileGenerator} from "../../../../controllers/ui/sourceFileGenerator";
 import {SourceFileGenerator as ProcessSourceFileGenerator} from "../../../../controllers/process/sourceFileGenerator";
 import {SourceFileGenerator as RuntimeSourceFileGenerator} from "../../../../controllers/runtime/sourceFileGenerator";
+import {SourceFileGenerator as ModelSourceFileGenerator} from "../../../../controllers/model/sourceFileGenerator";
 import {MainProcessCommunicator} from "../../../../controllers/mainProcessCommunicator";
 import {UIDataManager} from "../../../../controllers/ui/uiDataManager";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -143,17 +144,19 @@ class HeaderView extends React.Component<Props, object> {
     uiSourceFileGenerator: UISourceFileGenerator;
     processSourceFileGenerator: ProcessSourceFileGenerator;
     runtimeSourceFileGenerator: RuntimeSourceFileGenerator;
+    modelSourceFileGenerator: ModelSourceFileGenerator;
     componentDidMount(): void {
         const {projectDir} = this.props;
         this.uiSourceFileGenerator = new UISourceFileGenerator(projectDir);
         this.processSourceFileGenerator = new ProcessSourceFileGenerator(projectDir);
         this.runtimeSourceFileGenerator = new RuntimeSourceFileGenerator(projectDir);
+        this.modelSourceFileGenerator = new ModelSourceFileGenerator(projectDir);
         new MainProcessCommunicator().addNewPluginsListener((plugins => {
             const notification: Notification = {
                 type: "widget-update",
                 title: `${plugins.length} widget(s) have new updates`,
                 subtitle: plugins.map(plugin => plugin.name).join(', ')
-            }
+            };
             let duplicated = false;
             for (const item of this.props.notifications) {
                 if (item.type === "widget-update") {
@@ -175,6 +178,7 @@ class HeaderView extends React.Component<Props, object> {
         await this.uiSourceFileGenerator.generate();
         await this.processSourceFileGenerator.generate();
         await this.runtimeSourceFileGenerator.generate();
+        await this.modelSourceFileGenerator.generate();
         this.props.toastOpen('success', 'Source code is generated successfully');
     };
 

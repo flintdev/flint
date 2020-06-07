@@ -17,7 +17,8 @@ export function reducer(state: ModelEditorState, action: ModelEditorAction) {
             });
         case types.SET_EDITOR_DATA:
             return update(state, {
-                editorData: {$set: action.editorData}
+                editorData: {$set: action.editorData},
+                _mark: {$set: state._mark + 1}
             });
         case types.DELETE_MODEL:
             return update(state, {

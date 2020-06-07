@@ -142,7 +142,7 @@ class ModelEditorView extends React.Component<Props, object> {
     operations: any = {};
 
     componentDidMount(): void {
-        const {projectDir} = this.props;
+        const {projectDir, editorData} = this.props;
         this.modelManager = new ModelManager(projectDir);
     }
 
@@ -160,7 +160,7 @@ class ModelEditorView extends React.Component<Props, object> {
         console.log('editorData', editorData);
         const {modelSelected} = this.props;
         this.modelManager.saveEditorData(modelSelected, editorData).then(r => {
-            this.props.toastOpen('info', `Model ${modelSelected} is saved successfully.`);
+            this.props.toastOpen('success', `Model ${modelSelected} is saved successfully.`);
         });
     };
 
