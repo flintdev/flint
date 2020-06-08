@@ -1,8 +1,5 @@
 // src/controllers/model/dataConverter.ts
 
-import {bool} from "prop-types";
-import {str} from "crc-32";
-
 interface BlockItem {
     id: string,
     name: string,

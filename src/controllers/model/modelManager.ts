@@ -2,8 +2,7 @@
 
 import {FSHelper} from "../utils/fsHelper";
 import * as _ from 'lodash';
-import {EditorData, SchemaData} from "@flintdev/model-editor/dist/interface";
-import {SpecGenerator} from "./specGenerator";
+import {getInitialEditorData} from '@flintdev/model-editor-canvas';
 
 interface Config {
     models: Array<object>
@@ -76,17 +75,16 @@ export class ModelManager {
         return _.get(configJson, ['editorDataMap', modelName]);
     };
 
-    saveEditorData = async (modelName: string, editorData: EditorData) => {
+    saveEditorData = async (modelName: string, editorData: any) => {
         let configJson = await this.fetchConfigData();
         _.set(configJson, ['editorDataMap', modelName], editorData);
         await this.saveConfigData(configJson);
     };
 
-    generateSourceFiles = async (modelName: string, schemaData: SchemaData) => {
-        const crdSpecYaml = new SpecGenerator().renderCRDSpecYaml(modelName, schemaData);
-        await this.checkAndCreateSourceDir();
-        const filePath = `${this.sourceDirPath}/${modelName}.yaml`;
-        await this.fsHelper.createFile(filePath, crdSpecYaml);
+    getInitialEditorData = (name: string) => {
+        const canvasData = getInitialEditorData(name);
+        const blockData: any = [{name, items:[]}];
+        return {canvasData, blockData};
     };
 
     private checkAndCreateModelConfigFile = async () => {

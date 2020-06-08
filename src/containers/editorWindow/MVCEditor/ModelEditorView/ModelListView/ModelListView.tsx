@@ -14,7 +14,6 @@ import IconButton from "@material-ui/core/IconButton";
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined';
 import {CreateModelParamsDef} from "./definition";
 import {ModelManager} from "../../../../../controllers/model/modelManager";
-import {EditorData} from "@flintdev/model-editor/dist/interface";
 import {ConfirmationDialogSubmitFunc, DialogFormData, DialogFormSubmitFunc} from "../../../../../components/interface";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
@@ -74,11 +73,10 @@ const styles = createStyles({
 export interface Props extends WithStyles<typeof styles>, ModelEditorState, ConfigState {
     setModelList: (modelList: string[]) => void,
     selectModel: (value: string) => void,
-    setEditorData: (editorData: EditorData) => void,
+    setEditorData: (editorData: any) => void,
     deleteModel: (modelName: string) => void,
     openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => void,
     openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => void,
-
 }
 
 interface State {
@@ -94,7 +92,6 @@ class ModelListView extends React.Component<Props, object> {
         modelNameSelected: ''
     };
     modelManager: ModelManager;
-
     componentDidMount(): void {
         this.initActions().then(r => {});
     }
@@ -119,6 +116,9 @@ class ModelListView extends React.Component<Props, object> {
                     const name: string = values.name as string;
                     await this.modelManager.createModel(name);
                     await this.reloadModelList();
+                    const editorData = this.modelManager.getInitialEditorData(name);
+                    console.log('initial editor data', editorData);
+                    await this.modelManager.saveEditorData(name, editorData);
                 };
                 action().then(r => {});
             });
@@ -257,7 +257,7 @@ const mapDispatchToProps = (dispatch: Dispatch<actions.EditorAction | components
     return {
         setModelList: (modelList: string[]) => dispatch(actions.modelEditor.setModelList(modelList)),
         selectModel: (value: string) => dispatch((actions.modelEditor.selectModel(value))),
-        setEditorData: (editorData: EditorData) => dispatch(actions.modelEditor.setEditorData(editorData)),
+        setEditorData: (editorData: any) => dispatch(actions.modelEditor.setEditorData(editorData)),
         deleteModel: (modelName: string) => dispatch(actions.modelEditor.deleteModel(modelName)),
         openDialogForm: (initValues: any, data: DialogFormData, onSubmit: DialogFormSubmitFunc) => dispatch(componentsActions.openDialogForm(initValues, data, onSubmit)),
         openConfirmationDialog: (type: string, title: string, description?: string, submitLabel?: string, onSubmit?: ConfirmationDialogSubmitFunc) => dispatch(componentsActions.openConfirmationDialog(type, title, description, submitLabel, onSubmit)),
