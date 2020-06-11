@@ -51,6 +51,7 @@ export interface Props extends WithStyles<typeof styles>, UIEditorState, ConfigS
 interface State {
     actions: ActionData[],
     stateUpdaters: StateUpdaterData[],
+    schemaEditorData: any,
     initialState: string,
     components: ComponentData[],
     settings: SettingsData,
@@ -62,6 +63,7 @@ class UIEditorView extends React.Component<Props, object> {
     state: State = {
         actions: [],
         stateUpdaters: [],
+        schemaEditorData: undefined,
         initialState: '',
         components: [],
         settings: {},
@@ -135,6 +137,10 @@ class UIEditorView extends React.Component<Props, object> {
         }
     };
 
+    handleSchemaEditorDataUpdate = (schemaEditorData: any) => {
+        this.setState({schemaEditorData});
+    };
+
     handleInitialStateChange = (value: string) => {
         this.setState({initialState: value});
     };
@@ -183,7 +189,7 @@ class UIEditorView extends React.Component<Props, object> {
 
     render() {
         const {classes} = this.props;
-        const {actions, stateUpdaters, initialState, components, settings, perspectives, plugins} = this.state;
+        const {actions, stateUpdaters, schemaEditorData, initialState, components, settings, perspectives, plugins} = this.state;
         return (
             <div className={classes.root}>
                 <div className={classes.content}>
@@ -192,6 +198,8 @@ class UIEditorView extends React.Component<Props, object> {
                         plugins={plugins}
                         initialState={initialState}
                         stateUpdaters={stateUpdaters}
+                        schemaEditorData={schemaEditorData}
+                        schemaEditorDataOnUpdate={this.handleSchemaEditorDataUpdate}
                         initialStateOnChange={this.handleInitialStateChange}
                         stateUpdaterOnUpdate={this.handleStateUpdatersOnUpdate}
                         actions={actions}

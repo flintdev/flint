@@ -16,6 +16,7 @@ const INITIAL_CONFIG = {};
 export interface UIData {
     actions: ActionData[],
     stateUpdaters: StateUpdaterData[],
+    schemaEditorData: any, // the editor data to define data structure of global state.
     initialState: string,
     components: ComponentData[],
     settings: SettingsData,

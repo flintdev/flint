@@ -66,7 +66,7 @@ const styles = createStyles({
         textAlign: 'right'
     },
     textActive: {
-      fontWeight: 'bold',
+        fontWeight: 'bold',
     },
 });
 
@@ -92,8 +92,10 @@ class ModelListView extends React.Component<Props, object> {
         modelNameSelected: ''
     };
     modelManager: ModelManager;
+
     componentDidMount(): void {
-        this.initActions().then(r => {});
+        this.initActions().then(r => {
+        });
     }
 
     initActions = async () => {
@@ -120,8 +122,10 @@ class ModelListView extends React.Component<Props, object> {
                     console.log('initial editor data', editorData);
                     await this.modelManager.saveEditorData(name, editorData);
                 };
-                action().then(r => {});
-            });
+                action().then(r => {
+                });
+            }
+        );
     };
 
     reloadModelList = async () => {
@@ -204,9 +208,9 @@ class ModelListView extends React.Component<Props, object> {
                                     <tr>
                                         <td>
                                             <Typography
-                                                className={modelName === modelSelected ? classes.textActive: undefined}
+                                                className={modelName === modelSelected ? classes.textActive : undefined}
                                                 variant={"subtitle1"}
-                                                color={modelName === modelSelected ? "primary": "initial"}
+                                                color={modelName === modelSelected ? "primary" : "initial"}
                                             >
                                                 {modelName}
                                             </Typography>
